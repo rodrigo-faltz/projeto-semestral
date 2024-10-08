@@ -1,5 +1,7 @@
 import javax.swing.*;
 
+import cliente.TelaInicial;
+
 public class Teste {
         public static void main(String[] args) {
             
