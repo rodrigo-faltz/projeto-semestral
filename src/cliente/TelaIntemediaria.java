@@ -2,24 +2,37 @@ package cliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import servidor.Grid;
-
 import java.awt.*;
+import java.io.*;
+import java.net.*;
 
 public class TelaIntemediaria {
 
     JFrame frame;
+    Player player;
+    Grid grid;
+    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
+    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
+    Socket socket;
 
-    public TelaIntemediaria() {
+    public TelaIntemediaria(Grid grid, Socket socket) {
         Imagens imgs = new Imagens();
         frame = new JFrame("Batalha Espacial - Transição");
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
         JButton next = new JButton();
         JLabel imagem = new JLabel();
-        Grid gridInstance = Grid.getInstance();
-
+        String msgplayer;
+        this.socket = socket;
+        iniciarThreadRecepcao();
+        
+        
+        if(player.getNumero() == 1){
+            msgplayer = "2";
+        }
+        else{
+            msgplayer = "1";
+        }
         // Configurações do frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(600, 300));
@@ -33,11 +46,11 @@ public class TelaIntemediaria {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText("Agora é a vez do player " + gridInstance.getPlayer());
+        titulo.setText("Agora é a vez do player " + msgplayer);
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem
-        if(gridInstance.getPlayer()==1){
+        if(player.getNumero()==1){
             imagem.setIcon(imgs.republica);
         }
         else{
@@ -62,7 +75,7 @@ public class TelaIntemediaria {
             public void actionPerformed(ActionEvent e)
             {
                 frame.dispose();
-                new TelaDeAtaque();
+                new TelaDeAtaque(grid, socket);
             }
         });
         // Adicionando componentes ao painel principal
@@ -74,7 +87,36 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
+
+        
     }
+
+    private void iniciarThreadRecepcao() {
+        new Thread(() -> {
+            try {
+                // Loop que fica ouvindo as mensagens do servidor
+                while (true) {
+                    String tipo = (String) in.readObject();
+
+                    if (tipo.equals("VEZ")) {
+                        int vez = (int) in.readObject();
+                        System.out.println("Vez do jogador: " + vez);
+
+                        if (vez == player.getNumero()) {
+                            new TelaDeAtaque(grid, socket);
+                            break;
+                        } else {
+                            //habilitarControlesDoJogador(false); //ideia boa
+                        }
+                    } 
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    
 
 
 }

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import cliente.Grid;
+
 public class RecebeDoDB {
 
     // Defina as informações de conexão com o banco de dados
@@ -20,7 +22,7 @@ public class RecebeDoDB {
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        Grid gridInstance = Grid.getInstance();
+        Grid gridInstance = new Grid();
         int[][] valoresDoP1 = new int[10][10];
         //System.arraycopy(gridInstance.getGridDoPlayer1(), 0, valoresDoP1, 0, valoresDoP1.length); // ESSE EH O GRID DO P1, ONDE OS NAVIOS DO P1 ESTAO
 
@@ -43,7 +45,7 @@ public class RecebeDoDB {
             }
 
             //gridInstance.setGridDoPlayer1(valoresDoP1);
-            System.arraycopy(valoresDoP1, 0, gridInstance.getGridDoPlayer1(), 0, valoresDoP1.length);
+            System.arraycopy(valoresDoP1, 0, gridInstance.getGridDoPlayer(), 0, valoresDoP1.length);
             //------ Insere o Grid do player 2 ----------
             pstmt = conn.prepareStatement(gridp2);
             rs = pstmt.executeQuery();
@@ -55,23 +57,23 @@ public class RecebeDoDB {
                 valoresDoP2[coluna][linha] = valor;
             }
             //gridInstance.setGridDoPlayer2(valoresDoP2);
-            System.arraycopy(valoresDoP2, 0, gridInstance.getGridDoPlayer2(), 0, valoresDoP2.length);
+           
 
             //------ Insere a quantidade de acertos de cada nave --------
             pstmt = conn.prepareStatement(acertos);
             rs = pstmt.executeQuery();
             rs.next();
-            gridInstance.setPlayer(rs.getInt(1));
-            gridInstance.setNumeroDeAcertosPlayer1(rs.getInt(2));
-            gridInstance.setNumeroDeAcertosPlayer2(rs.getInt(3));
-            gridInstance.setAcertosNave2P1(rs.getInt(4));
-            gridInstance.setAcertosNave2P2(rs.getInt(5));
-            gridInstance.setAcertosNave3P1(rs.getInt(6));
-            gridInstance.setAcertosNave3P2(rs.getInt(7));
-            gridInstance.setAcertosNave4P1(rs.getInt(8));
-            gridInstance.setAcertosNave4P2(rs.getInt(9));
-            gridInstance.setAcertosNave5P1(rs.getInt(10));
-            gridInstance.setAcertosNave5P2(rs.getInt(11));
+            
+            gridInstance.setNumeroDeAcertosPlayer(rs.getInt(2));
+            
+            gridInstance.setAcertosNave2(rs.getInt(4));
+            
+            gridInstance.setAcertosNave3(rs.getInt(6));
+            
+            gridInstance.setAcertosNave4(rs.getInt(8));
+            
+            gridInstance.setAcertosNave5(rs.getInt(10));
+            
         } catch (SQLException se) {
             // Handle errors for JDBC
             se.printStackTrace();

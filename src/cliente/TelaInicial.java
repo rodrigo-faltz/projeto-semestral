@@ -1,28 +1,26 @@
 package cliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Connection;
-
-
-
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.net.*;
 
-public class TelaInicial extends JFrame implements ActionListener{
+public class TelaInicial extends JFrame implements ActionListener {
     private JButton novoJogoButton, continuarButton, comoJogarButton;
     private JPanel painel1, painel2, painel3, painel4;
     private JLabel vezDeQuem;
     Imagens imgs;
-    public TelaInicial(){
+    Player player;
+    private static final String ENDERECO_SERVIDOR = "localhost"; // ou IP do servidor
+    private static final int PORTA = 12345;
+
+    public TelaInicial() {
         super("Batalha Espacial - Tela de Início");
         
         imgs = new Imagens();
         Container caixa = getContentPane();
-        caixa.setLayout(new GridLayout(4,1));
+        caixa.setLayout(new GridLayout(4, 1));
 
         painel1 = new JPanel(new FlowLayout());
         painel2 = new JPanel(new FlowLayout());
@@ -65,50 +63,62 @@ public class TelaInicial extends JFrame implements ActionListener{
         painel3.setBackground(imgs.corDoFundo);
         painel4.setBackground(imgs.corDoFundo);
 
-
-        setSize(500,800);
+        setSize(500, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        setLocation(dim.width/2-this.getSize().width/2, 0);
+        setLocation(dim.width / 2 - this.getSize().width / 2, 0);
     }
 
-    public void actionPerformed(ActionEvent e)
-    {
-        if(e.getSource() == novoJogoButton){
-            dispose();
-            new TelaDeSetup();
-        }
-        if(e.getSource() == continuarButton){
-            try{
-                
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/batalha_naval", "Batalha", "1234");
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == novoJogoButton) {
+            
+            player = new Player(); // Inicializa o player
 
-                DatabaseMetaData dado = conn.getMetaData();
-                ResultSet tabelas = dado.getTables( "batalha_naval", null, "%", new String[] {"TABLE"});
-
-                if(!tabelas.next()){
-                }
-                else{
-                    dispose();
-                    new RecebeDoDB();
-                    new TelaDeAtaque();
-                }
-                    
+            try (Socket socket = new Socket(ENDERECO_SERVIDOR, PORTA);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+                {
                 
-            } catch (SQLException se) {
-                // Handle errors for JDBC
-                se.printStackTrace();
+                
+                player.setNumero((Integer) in.readObject()); // Desserializa o objeto
+                System.out.println(player.getNumero());
+                System.out.println("Conectado");
+
+                // Envia um grid inicial (pode ser um grid vazio)
+                Grid gridInicial = new Grid(); // Cria um grid
+                out.writeObject(gridInicial); // Envia o grid para o servidor
+
+                new TelaDeSetup(player, socket); // Abre a tela de setup
+            } catch (IOException erro) {
+                erro.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Erro ao conectar ao servidor: " + erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                dispose();
+            } catch (ClassNotFoundException e1) {
+                e1.printStackTrace();
             }
+        }
 
+        if (e.getSource() == continuarButton) {
+            // Aqui você pode implementar uma lógica para verificar se o segundo jogador está conectado
+            JOptionPane.showMessageDialog(this, "Funcionalidade de continuar não implementada.", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+        }
 
-    }
-    if(e.getSource() == comoJogarButton){
-        dispose();
-        new TelaComoJogar();
-    }
-
+        if (e.getSource() == comoJogarButton) {
+            dispose();
+            //new TelaComoJogar();
+            try (Socket socket = new Socket(ENDERECO_SERVIDOR, PORTA);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream()))
+                {
+            
+            } catch (IOException erro) {
+                erro.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Erro ao conectar ao servidor: " + erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                dispose();
+            } 
+        }
     }
 }

@@ -4,10 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.*;
 import javax.swing.*;
 
-import servidor.Grid;
+
 
 import java.awt.*;
 
@@ -21,25 +24,34 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     double ant, answ;
     int x[][];
     Imagens imgs;
-	public TelaDeAtaque()
+    Player player;
+    Grid grid;
+    Socket socket;
+
+    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
+    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
+
+
+	@SuppressWarnings("static-access")
+    public TelaDeAtaque(Grid grid, Socket socket)
     {
 		super("Batalha Espacial - Tela de Ataque");
-
+        player.getInstance();
         x = new int[10][10];
         imgs = new Imagens();
         numeroDeNavios = 0;
-        Grid gridInstance = Grid.getInstance();
-        if(gridInstance.getPlayer() == 1){
-            System.arraycopy(gridInstance.getGridDoPlayer2(), 0, x, 0, x.length);
+        this.grid = grid;
+        this.socket = socket;
+        
+        try {
+            this.in = new ObjectInputStream(socket.getInputStream());
+            this.out = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        else if (gridInstance.getPlayer() == 2){
-            System.arraycopy(gridInstance.getGridDoPlayer1(), 0, x, 0, x.length);
-        }
         
+        System.arraycopy(grid.getGridDoPlayer(), 0, x, 0, x.length);
         
-        
-        
-
         Container caixa = getContentPane();
         caixa.setLayout(new BorderLayout());
         painel1 = new JPanel(new GridLayout(10,10));
@@ -69,21 +81,16 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
+
+        
     }    
 
     public void actionPerformed(ActionEvent e)
     {   
-        if(e.getSource() == botao1){
-            JOptionPane.showMessageDialog(null, "Salvo!");
-            new CriaDBs();
-            new EnviaProDB();
-            System.exit(0);
-            
-        }
         for (int j = 0; j<10;j++){
             for (int i = 0; i<10;i++){
                 if(e.getSource()==botoes[j][i]){
-                    Grid gridInstance = Grid.getInstance();
+                    
                     if(x[j][i] > 1){
                         botoes[j][i].setDisabledIcon(imgs.acerto);
                         botoes[j][i].setOpaque(false);
@@ -91,45 +98,45 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                         botoes[j][i].setBorderPainted(false);
                         botoes[j][i].setEnabled(false);
                         
-                        if(gridInstance.getPlayer() == 1){
+                        
                             
-                            gridInstance.calculaNumeroDeAcertosPlayer1();
-                            verificaQualNaveAcertouP1(botoes ,x, j, i, gridInstance);
-                            if(gridInstance.getNumeroDeAcertosPlayer1()==14){
-                                dispose();
-                                new TelaVitoria();
+                        grid.calculaNumeroDeAcertosPlayer();
+                        verificaQualNaveAcertouP1(botoes ,x, j, i, grid);
+                        if(grid.getNumeroDeAcertosPlayer()==14){
+                            try {
+                                // Quando o jogador detectar vitória, enviar para o servidor
+                            out.writeObject("VITORIA");
+                            out.flush();
 
+                            } catch (IOException error) {
+                                error.printStackTrace();
                             }
+                            dispose();
+                            new TelaVitoria();
                         }
-                        else if(gridInstance.getPlayer() == 2){
-                            gridInstance.calculaNumeroDeAcertosPlayer2();
-                            verificaQualNaveAcertouP2(botoes ,x, j, i, gridInstance);
-                            if(gridInstance.getNumeroDeAcertosPlayer2()==14){
-                                dispose();
-                                new TelaVitoria();
-
-                            }
+                        
+                        
                         }
 
 
                     }
                     else{
-                        if(gridInstance.getPlayer() == 1){
-                            gridInstance.setGridDoPlayer2(x);
-                            gridInstance.setPlayer(2);
-                        }
-                        else if(gridInstance.getPlayer() == 2){
-                            gridInstance.setGridDoPlayer1(x);
-                            gridInstance.setPlayer(1);
-                        }
+                        
                         x[j][i] = -1;
+                        try {
+                            // Envia a mensagem de "troca de turno" para o servidor
+                            out.writeObject("TROCA_TURNO");
+                            out.flush();
+                        } catch (IOException error) {
+                            error.printStackTrace();
+                        }
                         dispose();
-                        new TelaIntemediaria();
+                        new TelaIntemediaria(grid, socket);
                     }
                 }
             }
         }
-    }
+    
     public void mouseEntered(MouseEvent e) {
             for (int j = 0; j<10;j++){
                 for (int i = 0; i<10;i++){ 
@@ -142,7 +149,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     public void mouseExited(MouseEvent e) {
                 for (int o = 0; o<10;o++){
                     for (int p = 0; p<10;p++){
-                        if((e.getSource()==botoes[o][p]) && x[o][p] != -1){ //Acho q isso daqui da pra simplifica ent vou comentar dps
+                        if((e.getSource()==botoes[o][p]) && x[o][p] != -1){ //Quando sai da tela ele volta para imagem original
                             botoes[o][p].setIcon(imgs.fundo);
                         }
                     }
@@ -160,7 +167,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     // ------------------- Funcoes ------------------- //
 
     public void criaGrid(JButton buttons[][], JPanel panel, int x[][]){
-        Grid gridInstance = Grid.getInstance();
+        
         for(int i = 0; i < 10; i++){
             for(int j = 0; j<10;j++){
                 buttons[i][j] = new JButton(imgs.fundo);
@@ -186,11 +193,11 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         }
         for(int i = 0; i < 10; i++){
             for(int j = 0; j<10;j++){
-                if(gridInstance.getPlayer() == 1){
-                    recolocaNavesDestruidasP1(buttons, x, j, i, gridInstance);
+                if(player.getNumero() == 1){
+                    recolocaNavesDestruidasP2(buttons, x, j, i, grid, player); // tem que inverter porque o grid que o cliente tem é o do outro
                 }
                 else{
-                    recolocaNavesDestruidasP2(buttons, x, j, i, gridInstance);
+                    recolocaNavesDestruidasP1(buttons, x, j, i, grid, player);
                 }
             }
         }    
@@ -198,9 +205,9 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
     public void verificaQualNaveAcertouP1(JButton gridDeBotoes[][], int grid[][], int coluna, int linha, Grid gridDosNavios){
         if(grid[coluna][linha] == 2){
-            gridDosNavios.calculaAcertosNave2P1();
+            gridDosNavios.calculaAcertosNave2();
             x[coluna][linha] = -2;
-            if(gridDosNavios.getAcertosNave2P1() == 0){
+            if(gridDosNavios.getAcertosNave2() == 0){
                 //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 2");
                 naveDestruidas(gridDeBotoes, grid, 2, imgs.impNave2VerticalD, imgs.impNave2HorizontalD);
                 
@@ -208,27 +215,27 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
             
         }
         if(grid[coluna][linha] == 3){
-            gridDosNavios.calculaAcertosNave3P1();
+            gridDosNavios.calculaAcertosNave3();
             x[coluna][linha] = -3;
-            if(gridDosNavios.getAcertosNave3P1() == 0){
+            if(gridDosNavios.getAcertosNave3() == 0){
                 //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 3");
                 naveDestruidas(gridDeBotoes, grid, 3, imgs.impNave3VerticalD, imgs.impNave3HorizontalD);
             }
             
         }
         if(grid[coluna][linha] == 4){
-            gridDosNavios.calculaAcertosNave4P1();
+            gridDosNavios.calculaAcertosNave4();
             x[coluna][linha] = -4;
-            if(gridDosNavios.getAcertosNave4P1() == 0){
+            if(gridDosNavios.getAcertosNave4() == 0){
                 //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 4");
                 naveDestruidas(gridDeBotoes, grid, 4, imgs.impNave4VerticalD, imgs.impNave4HorizontalD);
             }
             
         }
         if(grid[coluna][linha] == 5){
-            gridDosNavios.calculaAcertosNave5P1();
+            gridDosNavios.calculaAcertosNave5();
             x[coluna][linha] = -5;
-            if(gridDosNavios.getAcertosNave5P1() == 0){
+            if(gridDosNavios.getAcertosNave5() == 0){
                 //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
                 naveDestruidas(gridDeBotoes, grid, 5, imgs.impNave5VerticalD, imgs.impNave5HorizontalD);
             }
@@ -236,44 +243,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         }
     }
 
-    public void verificaQualNaveAcertouP2(JButton gridDeBotoes[][],int grid[][], int coluna, int linha, Grid gridDosNavios){
-        if(grid[coluna][linha] == 2){
-            gridDosNavios.calculaAcertosNave2P2();
-            x[coluna][linha] = -2;
-            if(gridDosNavios.getAcertosNave2P2() == 0){
-                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 2");
-                naveDestruidas(gridDeBotoes, grid, 2, imgs.republicaNave2VerticalD, imgs.republicaNave2HorizontalD);
-            }
-            
-        }
-        if(grid[coluna][linha] == 3){
-            gridDosNavios.calculaAcertosNave3P2();
-            x[coluna][linha] = -3;
-            if(gridDosNavios.getAcertosNave3P2() == 0){
-                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 3");
-                naveDestruidas(gridDeBotoes, grid, 3, imgs.republicaNave3VerticalD, imgs.republicaNave3HorizontalD);
-            }
-            
-        }
-        if(grid[coluna][linha] == 4){
-            gridDosNavios.calculaAcertosNave4P2();
-            x[coluna][linha] = -4;
-            if(gridDosNavios.getAcertosNave4P2() == 0){
-                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 4");
-                naveDestruidas(gridDeBotoes, grid, 4, imgs.republicaNave4VerticalD, imgs.republicaNave4HorizontalD);
-            }
-            
-        }
-        if(grid[coluna][linha] == 5){
-            gridDosNavios.calculaAcertosNave5P2();
-            x[coluna][linha] = -5;
-            if(gridDosNavios.getAcertosNave5P2() == 0){
-                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
-                naveDestruidas(gridDeBotoes, grid, 5, imgs.republicaNave5VerticalD, imgs.republicaNave5HorizontalD);
-            }
-            
-        }
-    }
+    
     public void naveDestruidas(JButton gridDeBotoes[][],int x[][], int tamanhoDaNave, ImageIcon imgVertical[], ImageIcon imgHorizontal[]){
         int imagemDaNave = 0;
         int[] colunasDosAcertos = new int[tamanhoDaNave];
@@ -302,44 +272,46 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
     }
 
-    public void recolocaNavesDestruidasP1(JButton gridDeBotoes[][], int grid[][], int coluna, int linha, Grid gridDosNavios){
-        if(gridDosNavios.getAcertosNave2P1() == 0){
+    public void recolocaNavesDestruidasP1(JButton gridDeBotoes[][], int grid[][], int coluna, int linha, Grid gridDosNavios, Player player){
+        if(gridDosNavios.getAcertosNave2() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 2");
             naveDestruidas(gridDeBotoes, grid, 2, imgs.impNave2VerticalD, imgs.impNave2HorizontalD);
             
         }
-        if(gridDosNavios.getAcertosNave3P1() == 0){
+        if(gridDosNavios.getAcertosNave3() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 3");
             naveDestruidas(gridDeBotoes, grid, 3, imgs.impNave3VerticalD, imgs.impNave3HorizontalD);
         }
-        if(gridDosNavios.getAcertosNave4P1() == 0){
+        if(gridDosNavios.getAcertosNave4() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 4");
             naveDestruidas(gridDeBotoes, grid, 4, imgs.impNave4VerticalD, imgs.impNave4HorizontalD);
         }
-        if(gridDosNavios.getAcertosNave5P1() == 0){
+        if(gridDosNavios.getAcertosNave5() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
             naveDestruidas(gridDeBotoes, grid, 5, imgs.impNave5VerticalD, imgs.impNave5HorizontalD);
         }
     }
 
-    public void recolocaNavesDestruidasP2(JButton gridDeBotoes[][],int grid[][], int coluna, int linha, Grid gridDosNavios){
-        if(gridDosNavios.getAcertosNave2P2() == 0){
+    public void recolocaNavesDestruidasP2(JButton gridDeBotoes[][],int grid[][], int coluna, int linha, Grid gridDosNavios, Player player){
+        if(gridDosNavios.getAcertosNave2() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 2");
             naveDestruidas(gridDeBotoes, grid, 2, imgs.republicaNave2VerticalD, imgs.republicaNave2HorizontalD);
         }
     
-        if(gridDosNavios.getAcertosNave3P2() == 0){
+        if(gridDosNavios.getAcertosNave3() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 3");
             naveDestruidas(gridDeBotoes, grid, 3, imgs.republicaNave3VerticalD, imgs.republicaNave3HorizontalD);
         }
-        if(gridDosNavios.getAcertosNave4P2() == 0){
+        if(gridDosNavios.getAcertosNave4() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 4");
             naveDestruidas(gridDeBotoes, grid, 4, imgs.republicaNave4VerticalD, imgs.republicaNave4HorizontalD);
         }
         
-        if(gridDosNavios.getAcertosNave5P2() == 0){
+        if(gridDosNavios.getAcertosNave5() == 0){
             //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
             naveDestruidas(gridDeBotoes, grid, 5, imgs.republicaNave5VerticalD, imgs.republicaNave5HorizontalD);
         }
     }
+
+    
 }

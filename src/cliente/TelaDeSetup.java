@@ -4,16 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-
 import javax.swing.*;
-
-import servidor.Grid;
-
 import java.awt.*;
+import java.io.*;
+import java.net.*;
+
 
 public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 {
+    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
+    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
 	private JButton botoesDoGrid[][], botaoDeBaixo;
     private JPanel painel1, painel2;
     String ultimoString, antString, answString, op ;
@@ -21,10 +21,15 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     double ant, answ;
     Imagens imgs;
     int x[][];
-    //Grid gridInstance;
-	public TelaDeSetup()
+    private Grid gridInstance;
+    Player player;
+    
+	@SuppressWarnings("static-access")
+    public TelaDeSetup(Player player, Socket socket)
     {
+        
 		super("Batalha Espacial - Preparação das Naves");
+        this.player = player;
         JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro");
         imgs = new Imagens();
         x = new int[10][10]; 
@@ -68,20 +73,23 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     public void actionPerformed(ActionEvent e)
     {   
         if((e.getSource() == botaoDeBaixo)&&(numeroDeNavios ==4)){
-            Grid gridInstance = Grid.getInstance();
+            
 
-            if(gridInstance.getPlayer() == 1){
-            gridInstance.setGridDoPlayer1(x);
-            gridInstance.setPlayer(2);
+            if(player.getNumero() == 1){
+            gridInstance.setGridDoPlayer(x);
+            
             dispose();
-            new TelaAposSetup();
+            //new TelaAposSetup();
+            //envia para o servidor o grid
+            try {
+                // Envia a mensagem de "troca de turno" para o servidor
+                out.writeObject(gridInstance);
+                out.flush();
+            } catch (IOException error) {
+                error.printStackTrace();
             }
-            else{
-                gridInstance.setGridDoPlayer2(x);
-                gridInstance.setPlayer(1);
-                dispose();
-                new TelaIntemediaria();
             }
+            
         }
         else if((e.getSource() == botaoDeBaixo)){
             JOptionPane.showMessageDialog(null, "Coloque todas as naves");
@@ -385,8 +393,8 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     }
 
     public ImageIcon[] imagemCertaHorizontal(int tamanhoDaNave){
-        Grid gridInstance = Grid.getInstance();
-        if(gridInstance.getPlayer() == 1){
+        
+        if(player.getNumero() == 1){
             switch (tamanhoDaNave) {
                 case 2:
                     return imgs.republicaNave2Horizontal;
@@ -417,8 +425,8 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     }
 
     public ImageIcon[] imagemCertaVertical(int tamanhoDaNave){
-        Grid gridInstance = Grid.getInstance();
-        if(gridInstance.getPlayer() == 1){
+        
+        if(player.getNumero() == 1){
             switch (tamanhoDaNave) {
                 case 2:
                     return imgs.republicaNave2Vertical;

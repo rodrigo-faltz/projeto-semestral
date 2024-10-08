@@ -5,21 +5,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import servidor.Grid;
+
 
 
 public class TelaVitoria {
     TelaVitoria()
     {
             Imagens imgs = new Imagens();
-            Grid gridInstance = Grid.getInstance();
-            //ImageIcon image = new ImageIcon("pitoes.png"); // Exemplo de imagem principal
-            //ImageIcon exitIcon = new ImageIcon("portugal.png"); // Exemplo de ícone do botão próximo
             JFrame frame = new JFrame("Batalha Espacial - Vitória!");
             JLabel titulo = new JLabel();
             JPanel painel = new JPanel(new BorderLayout());
             JButton exit = new JButton();
             JLabel imagem = new JLabel();
+            int player = 0;
+            
     
             // Configurações do frame
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +37,7 @@ public class TelaVitoria {
             titulo.setPreferredSize(new Dimension(600, 50));
     
             // Configurações da imagem
-            if(gridInstance.getPlayer() == 1){
+            if(player == 1){
                 titulo.setText("Parabéns! Você eliminou o Império" );
                 imagem.setIcon(imgs.vitoria1); 
             }
