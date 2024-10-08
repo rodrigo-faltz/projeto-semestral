@@ -91,55 +91,42 @@ class ClienteHandler implements Runnable {
     }
 
     @Override
-    public void run() {
-        try {
-            // Inicializa os streams de entrada e saída uma única vez
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+public void run() {
+    try {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
 
-            // Envia o número do player ao cliente
-            out.writeObject(playerNumber);
-            out.flush();
+        out.writeObject(playerNumber);
+        out.flush();
 
-            System.out.println("Player " + playerNumber + " está conectado.");
+        System.out.println("Player " + playerNumber + " está conectado.");
 
-            // Loop para ficar recebendo dados do cliente
-            while (!socket.isClosed()) {
-                // Recebe o objeto enviado pelo cliente
-                Object recebido = in.readObject();
-
-                if (recebido instanceof String && recebido.equals("VITORIA")) {
-                    Servidor.verificarVitoria(playerNumber);
-                }
-
-                if (recebido instanceof String){
-                String msg = (String) recebido;
-                if (msg.equals("TROCA_TURNO")) {
-                    Servidor.mudarVez();
-                }
-            }
-
-                if (recebido instanceof Grid) {
-                    // Se o objeto for um grid, repassa para o outro jogador
-                    System.out.println("Grid recebido do Player " + playerNumber);
-                    Servidor.enviarParaOutroCliente(recebido, playerNumber);
-                    Servidor.mudarVez(); // Muda a vez após o grid ser enviado
-                } else {
-                    System.out.println("Objeto não esperado: " + recebido);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        while (!socket.isClosed()) {
             try {
-                in.close();
-                out.close();
-                socket.close();
+                if (in.available() > 0) {
+                    Object recebido = in.readObject();
+                    processarRecebido(recebido);
+                }
+            } catch (EOFException e) {
+                System.out.println("Conexão fechada pelo cliente: " + playerNumber);
+                break; // Sai do loop
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("Erro de I/O: " + e.getMessage());
+                break; // Sai do loop
             }
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (in != null) in.close();
+            if (out != null) out.close();
+            if (socket != null) socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+}
 
     // Método para enviar dados ao cliente
     public void enviarDado(String tipo, Object dado) {
@@ -149,6 +136,20 @@ class ClienteHandler implements Runnable {
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void processarRecebido(Object recebido) {
+        if ("VITORIA".equals(recebido)) {
+            Servidor.verificarVitoria(playerNumber);
+        } else if ("TROCA_TURNO".equals(recebido)) {
+            Servidor.mudarVez();
+        } else if (recebido instanceof Grid) {
+            System.out.println("Grid recebido do Player " + playerNumber);
+            Servidor.enviarParaOutroCliente(recebido, playerNumber);
+            Servidor.mudarVez();
+        } else {
+            System.out.println("Objeto não esperado: " + recebido);
         }
     }
 }
