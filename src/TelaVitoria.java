@@ -6,6 +6,9 @@ import javax.swing.*;
 
 
 public class TelaVitoria {
+
+    
+
     TelaVitoria()
     {
             Imagens imgs = new Imagens();

@@ -30,37 +30,37 @@ public class Imagens {
 
     public Imagens(){
 
+        // imagens que dependem de idioma
         String selectedLanguage = LanguageManager.getCurrentLocale().getLanguage();
-        //System.out.println(selectedLanguage);
-        String imagePath = "lib\\" + selectedLanguage + "\\comoJogar2.jpg";
-        //System.out.println(imagePath);
 
+        comojogar = new ImageIcon[] {
+            comojogar1 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogarTelaInicial.jpg"),
+            comojogar2 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar2.jpg"),
+            comojogar3 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar3.jpg"),
+            comojogar4 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar4.jpg"),
+            comojogar5 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar5.jpg"),
+            comojogar6 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar6.jpg"),
+            comojogar7 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar7.jpg"),
+            comojogar8 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar8.jpg")
+        };
+
+        batalha = new ImageIcon("lib\\" + selectedLanguage + "\\Bataalha.jpg");
+        botaoSair = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSair.png");
+        botaoProximo = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProximo.png");
+        botaoSalvar = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSalvar.png");
+        botaoCarregar = new ImageIcon("lib\\" + selectedLanguage + "\\carregarJogo.png");
+        botaoNovoJogo = new ImageIcon("lib\\" + selectedLanguage + "\\novoJogoButton.png");
+        botaoComoJogar = new ImageIcon("lib\\" + selectedLanguage + "\\comoJogarButton.png");
+        botaoProsseguir = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProsseguir.png");
+
+        corDoFundo = new Color(7,8,28);
+
+        // Imagens que independem de idioma
         vitoria1 = new ImageIcon("lib\\img\\vitoria2.gif");
         vitoria2 = new ImageIcon("lib\\img\\vitoria1.gif");
         republica = new ImageIcon("lib\\img\\republica.png");
         imperio = new ImageIcon("lib\\img\\imperio.png");
-        comojogar1 = new ImageIcon("lib\\pt\\comoJogarTelaInicial.jpg");
-        
-        comojogar2 = new ImageIcon(imagePath);
-        //comojogar2 = new ImageIcon("lib\\pt\\comoJogar2.jpg");
-        comojogar3 = new ImageIcon("lib\\pt\\comoJogar3.jpg");
-        comojogar4 = new ImageIcon("lib\\pt\\comoJogar4.jpg");
-        comojogar5 = new ImageIcon("lib\\pt\\comoJogar5.jpg");
-        comojogar6 = new ImageIcon("lib\\pt\\comoJogar6.jpg");
-        comojogar7 = new ImageIcon("lib\\pt\\comoJogar7.jpg");
-        comojogar8 = new ImageIcon("lib\\pt\\comoJogar8.jpg");
 
-        comojogar = new ImageIcon[]{comojogar1, comojogar2, comojogar3, comojogar4, comojogar5, comojogar6, comojogar7, comojogar8};
-        batalha = new ImageIcon("lib\\pt\\Bataalha.jpg");
-        corDoFundo = new Color(7,8,28);
-        // fundo = new ImageIcon("lib\\Untitled-1.jpg");
-        botaoSair = new ImageIcon("lib\\pt\\BotaoSair.png");
-        botaoProximo = new ImageIcon("lib\\pt\\BotaoProximo.png");
-        botaoSalvar = new ImageIcon("lib\\pt\\BotaoSalvar.png");
-        botaoCarregar = new ImageIcon("lib\\pt\\carregarJogo.png");
-        botaoNovoJogo = new ImageIcon("lib\\pt\\novoJogoButton.png");
-        botaoComoJogar = new ImageIcon("lib\\pt\\comoJogarButton.png");
-        botaoProsseguir = new ImageIcon("lib\\pt\\BotaoProsseguir.png");
         acerto = new ImageIcon("lib\\img\\explodiu.jpg");
         erro = new ImageIcon("lib\\img\\Errou.jpg");
         fundo = new ImageIcon("lib\\img\\VSFD.jpg");

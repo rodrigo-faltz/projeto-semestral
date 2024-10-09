@@ -20,7 +20,7 @@ public class TelaInicial extends JFrame implements ActionListener{
     ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     public TelaInicial(){
-        setTitle(bundle.getString("titleInicio")); // mudar para mensagem do properties
+        setTitle(bundle.getString("titleInicio"));
         
         imgs = new Imagens();
         Container caixa = getContentPane();
