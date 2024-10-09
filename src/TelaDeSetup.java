@@ -20,8 +20,8 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     //Grid gridInstance;
 	public TelaDeSetup()
     {
-		super("Batalha Espacial - Preparação das Naves");
-        JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro");
+		super("Batalha Espacial - Preparação das Naves"); // mudar para mensagem do properties
+        JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro"); // mudar para mensagem do properties
         imgs = new Imagens();
         x = new int[10][10]; 
         numeroDeNavios = 0; //Numero de navios ja colocados
@@ -80,7 +80,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             }
         }
         else if((e.getSource() == botaoDeBaixo)){
-            JOptionPane.showMessageDialog(null, "Coloque todas as naves");
+            JOptionPane.showMessageDialog(null, "Coloque todas as naves"); // mudar para mensagem do properties
         }
         for (int coluna = 0; coluna<10;coluna++){
         for (int linha = 0; linha<10;linha++){
@@ -96,7 +96,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                         tamnhoDoNavioAtual++;
                     }
                     else if(numeroDeNavios >= 4){
-                        JOptionPane.showMessageDialog(null, "Atingiu o limite de naves");
+                        JOptionPane.showMessageDialog(null, "Atingiu o limite de naves"); // mudar para mensagem do properties
                     }
                 }
         }

@@ -17,7 +17,7 @@ public class TelaInicial extends JFrame implements ActionListener{
     private JLabel vezDeQuem;
     Imagens imgs;
     public TelaInicial(){
-        super("Batalha Espacial - Tela de Início");
+        super("Batalha Espacial - Tela de Início"); // mudar para mensagem do properties
         
         imgs = new Imagens();
         Container caixa = getContentPane();

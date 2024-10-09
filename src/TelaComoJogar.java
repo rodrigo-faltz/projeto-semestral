@@ -10,7 +10,7 @@ public class TelaComoJogar extends JFrame implements ActionListener{
     Imagens imgs;
     int i = 1;
     public TelaComoJogar(){
-        super("Batalha Espacial - Como Jogar");
+        super("Batalha Espacial - Como Jogar"); // mudar para mensagem do properties
 
         imgs = new Imagens();
         Container caixa = getContentPane();

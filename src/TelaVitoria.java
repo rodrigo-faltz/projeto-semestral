@@ -12,7 +12,7 @@ public class TelaVitoria {
             Grid gridInstance = Grid.getInstance();
             //ImageIcon image = new ImageIcon("pitoes.png"); // Exemplo de imagem principal
             //ImageIcon exitIcon = new ImageIcon("portugal.png"); // Exemplo de ícone do botão próximo
-            JFrame frame = new JFrame("Batalha Espacial - Vitória!");
+            JFrame frame = new JFrame("Batalha Espacial - Vitória!"); // mudar para mensagem do properties
             JLabel titulo = new JLabel();
             JPanel painel = new JPanel(new BorderLayout());
             JButton exit = new JButton();
@@ -36,11 +36,11 @@ public class TelaVitoria {
     
             // Configurações da imagem
             if(gridInstance.getPlayer() == 1){
-                titulo.setText("Parabéns! Você eliminou o Império" );
+                titulo.setText("Parabéns! Você eliminou o Império" ); // mudar para mensagem do properties
                 imagem.setIcon(imgs.vitoria1); 
             }
             else{
-                titulo.setText("Parabéns! Você eliminou os Rebeldes" );
+                titulo.setText("Parabéns! Você eliminou os Rebeldes" ); // mudar para mensagem do properties
                 imagem.setIcon(imgs.vitoria2); 
             }
             

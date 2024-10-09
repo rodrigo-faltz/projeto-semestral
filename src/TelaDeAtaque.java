@@ -19,7 +19,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     Imagens imgs;
 	public TelaDeAtaque()
     {
-		super("Batalha Espacial - Tela de Ataque");
+		super("Batalha Espacial - Tela de Ataque"); // mudar para mensagem do properties
 
         x = new int[10][10];
         imgs = new Imagens();
@@ -70,7 +70,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e)
     {   
         if(e.getSource() == botao1){
-            JOptionPane.showMessageDialog(null, "Salvo!");
+            JOptionPane.showMessageDialog(null, "Salvo!"); // mudar para mensagem do properties
             new CriaDBs();
             new EnviaProDB();
             System.exit(0);
