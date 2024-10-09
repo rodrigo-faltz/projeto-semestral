@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 
-
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +16,11 @@ public class TelaInicial extends JFrame implements ActionListener{
     private JPanel painel1, painel2, painel3, painel4;
     private JLabel vezDeQuem;
     Imagens imgs;
+
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
     public TelaInicial(){
-        super("Batalha Espacial - Tela de Início"); // mudar para mensagem do properties
+        setTitle(bundle.getString("titleInicio")); // mudar para mensagem do properties
         
         imgs = new Imagens();
         Container caixa = getContentPane();
@@ -110,4 +113,24 @@ public class TelaInicial extends JFrame implements ActionListener{
     }
 
     }
+
+    /* metodo de update do idioma
+    
+    private void updateLanguage(int languageIndex) {
+        Locale selectedLocale = (languageIndex == 0) ? new Locale("pt", "BR") : new Locale("en", "US");
+        LanguageManager.setCurrentLocale(selectedLocale);
+        ResourceBundle messages = LanguageManager.getResourceBundle();
+
+        loginText.setText(messages.getString("login"));
+        passwordText.setText(messages.getString("password"));
+        button1.setText(messages.getString("proceed"));
+        button2.setText(messages.getString("exit"));
+    } 
+    
+    chamar usando updateLanguage(languageSelector.getSelectedIndex()); no caso de um combobox
+    
+    para JMenuItem, fazer manualmente a troca de idioma ou criar array interno para simular um combobox e reutilizar o metodo acima
+
+    */
+
 }
