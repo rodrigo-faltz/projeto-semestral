@@ -6,16 +6,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
-
+import projeto.Message.Action;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
 
+import java.util.logging.*;
+
 
 public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 {
-    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
-    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
+    
 	private JButton botoesDoGrid[][], botaoDeBaixo;
     private JPanel painel1, painel2;
     String ultimoString, antString, answString, op ;
@@ -25,15 +26,21 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     int x[][];
     private Grid gridInstance;
     Player player;
+    private Socket socket;
+    private ClienteService service;
+    private Message message;
+    
     
 
 	
-    public TelaDeSetup(Player player, Grid gridInstance, Socket socket)
+    public TelaDeSetup(Player player, Grid gridInstance, Socket socket, ClienteService service)
     {
         
 		super("Batalha Espacial - Preparação das Naves");
         this.player = player;
         this.gridInstance = gridInstance;
+        this.socket = socket;
+        this.service = service;
         
         
         
@@ -81,20 +88,19 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     {   
         if((e.getSource() == botaoDeBaixo)&&(numeroDeNavios ==4)){
             
-
-            if(player.getNumero() == 1){
+            Message message = new Message();
+            
             gridInstance.setGridDoPlayer(x);
             
             //dispose();
+            message.setGrid(gridInstance);
+            message.setAction(Action.ENVIA_GRID);
+            message.setPlayer(player);
+            service.envia(message);
+            new Thread(new ListenerSocket(this.socket)).start();
+            new TelaAposSetup(gridInstance, socket);
             
-            new TelaAposSetup(gridInstance);
-            }
-            else{
-                gridInstance.setGridDoPlayer(x);
-                //dispose();
-                new TelaIntemediaria(gridInstance);
-
-            }
+            dispose();
             
         }
         else if((e.getSource() == botaoDeBaixo)){
@@ -458,6 +464,62 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                 default:
                     return imgs.republicaNave3Vertical;
             }
+        }
+
+        
+    }
+
+    private class ListenerSocket implements Runnable
+    {
+        private ObjectInputStream input;
+
+        public ListenerSocket(Socket socket)
+        {
+            try {
+                this.input = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException e) {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+        }
+
+        @Override
+        public void run()
+        {
+            Message message = null;
+            try
+                {
+                    while ((message = (Message) input.readObject())!=null)
+                        {
+                            Action action = message.getAction();
+
+                            if(action.equals(Action.ENVIA_PLAYER))
+                            {
+                                player.setNumero(message.getNumeroDoPlayer());
+                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                            }
+
+                            if(action.equals(Action.ENVIA_GRID))
+                            {
+                                gridInstance =message.getGrid();
+                            }
+
+                            if(action.equals(Action.ENVIA_VITÓRIA))
+                            {
+                                System.out.println("Como que recebe vitória se nem começou?");
+                            }
+
+                        }
+
+                }
+            catch(IOException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+
         }
     }
     

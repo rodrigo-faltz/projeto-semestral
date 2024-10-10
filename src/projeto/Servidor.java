@@ -14,6 +14,8 @@ public class Servidor {
     private static boolean jogoFinalizado = false;
     private static Grid gridCliente1 = null;
     private static Grid gridCliente2 = null;
+
+    // Essa classe é inútil
     
 
     public static void main(String[] args) {

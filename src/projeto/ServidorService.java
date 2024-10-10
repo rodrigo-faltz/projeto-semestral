@@ -89,7 +89,17 @@ public class ServidorService {
                     } else if (action.equals(Action.DISCONNECT)) {
                         // Lógica para desconectar, se necessário
                     } else if (action.equals(Action.ENVIA_GRID)) {
-                        // Lógica para enviar grid
+                        System.out.println("Grid recebido");
+
+                        if(message.getPlayer().getNumero() == 1)
+                        {
+                            enviarMensagemParaCliente(2, message);
+                        }
+
+                        if(message.getPlayer().getNumero() == 2)
+                        {
+                            enviarMensagemParaCliente(1, message);
+                        }
                     } else if (action.equals(Action.ENVIA_PLAYER)) {
                         // Lógica para enviar jogador
                     } else if (action.equals(Action.ENVIA_VITÓRIA)) {

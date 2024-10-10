@@ -91,11 +91,12 @@ public class TelaInicial extends JFrame implements ActionListener {
             this.message.setAction(Action.CONNECT);
             this.service = new ClienteService();
             this.socket = this.service.connect();
-            
+            Grid grid = new Grid();
             
             new Thread(new ListenerSocket(this.socket)).start();
             System.out.println(player.getNumero());
-            new TelaDeSetup(player, null, socket);
+            new TelaDeSetup(player, grid, socket, service);
+            dispose();
         }
 
         if (e.getSource() == continuarButton) {
