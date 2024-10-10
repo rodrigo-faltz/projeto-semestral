@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
-
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -17,11 +17,67 @@ public class TelaInicial extends JFrame implements ActionListener{
     private JLabel vezDeQuem;
     Imagens imgs;
 
+    JMenuItem pt, en, es, ja, de;
+    JMenu idioma;
+    JMenuBar menuBar;
+
     ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     public TelaInicial(){
         setTitle(bundle.getString("titleInicio")); // muda com o idioma
         
+        menuBar = new JMenuBar();
+        idioma = new JMenu(bundle.getString("selectLanguage")); // muda com o idioma
+        pt = new JMenuItem("Português");
+        en = new JMenuItem("English");
+        es = new JMenuItem("Español");
+        ja = new JMenuItem("日本語");
+        de = new JMenuItem("Deutsch");
+
+        pt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(0);
+            }
+        });
+
+        en.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(1);
+            }
+        });
+
+        es.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(2);
+            }
+        });
+
+        ja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(3);
+            }
+        });
+
+        de.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(4);
+            }
+        });
+
+        idioma.add(pt);
+        idioma.add(en);
+        idioma.add(es);
+        idioma.add(ja);
+        idioma.add(de);
+
+        menuBar.add(idioma);
+        setJMenuBar(menuBar);
+
         imgs = new Imagens();
         Container caixa = getContentPane();
         caixa.setLayout(new GridLayout(4,1));
@@ -114,23 +170,24 @@ public class TelaInicial extends JFrame implements ActionListener{
 
     }
 
-    /* metodo de update do idioma
-    
     private void updateLanguage(int languageIndex) {
-        Locale selectedLocale = (languageIndex == 0) ? new Locale("pt", "BR") : new Locale("en", "US");
+        Locale selectedLocale = LanguageManager.getSupportedLocales()[languageIndex];
         LanguageManager.setCurrentLocale(selectedLocale);
         ResourceBundle messages = LanguageManager.getResourceBundle();
 
-        loginText.setText(messages.getString("login"));
-        passwordText.setText(messages.getString("password"));
-        button1.setText(messages.getString("proceed"));
-        button2.setText(messages.getString("exit"));
-    } 
-    
-    chamar usando updateLanguage(languageSelector.getSelectedIndex()); no caso de um combobox
-    
-    para JMenuItem, fazer manualmente a troca de idioma ou criar array interno para simular um combobox e reutilizar o metodo acima
+        setTitle(messages.getString("titleInicio"));
+        idioma.setText(messages.getString("selectLanguage"));
 
-    */
+        // Atualiza as imagens conforme o novo idioma
+        imgs.loadImages(selectedLocale);
+
+        // Atualiza os botões e labels com as novas imagens
+        novoJogoButton.setIcon(imgs.botaoNovoJogo);
+        continuarButton.setIcon(imgs.botaoCarregar);
+        comoJogarButton.setIcon(imgs.botaoComoJogar);
+        vezDeQuem.setIcon(imgs.batalha);
+
+        repaint(); // Repinta a janela para refletir as mudanças visuais
+    } 
 
 }

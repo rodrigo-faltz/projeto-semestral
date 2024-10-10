@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
 public class Imagens {
     
     public ImageIcon imperio, republica, batalha, botaoProximo, botaoComoJogar, botaoNovoJogo, botaoCarregar, botaoSalvar, botaoProsseguir, botaoSair, acerto, erro, mira, fundo, naoPode, vitoria1, vitoria2,
@@ -30,30 +31,7 @@ public class Imagens {
 
     public Imagens(){
 
-        // imagens que dependem de idioma
-        String selectedLanguage = LanguageManager.getCurrentLocale().getLanguage();
-
-        comojogar = new ImageIcon[] {
-            comojogar1 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogarTelaInicial.jpg"),
-            comojogar2 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar2.jpg"),
-            comojogar3 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar3.jpg"),
-            comojogar4 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar4.jpg"),
-            comojogar5 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar5.jpg"),
-            comojogar6 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar6.jpg"),
-            comojogar7 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar7.jpg"),
-            comojogar8 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar8.jpg")
-        };
-
-        batalha = new ImageIcon("lib\\" + selectedLanguage + "\\Bataalha.jpg");
-        botaoSair = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSair.png");
-        botaoProximo = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProximo.png");
-        botaoSalvar = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSalvar.png");
-        botaoCarregar = new ImageIcon("lib\\" + selectedLanguage + "\\carregarJogo.png");
-        botaoNovoJogo = new ImageIcon("lib\\" + selectedLanguage + "\\novoJogoButton.png");
-        botaoComoJogar = new ImageIcon("lib\\" + selectedLanguage + "\\comoJogarButton.png");
-        botaoProsseguir = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProsseguir.png");
-
-        corDoFundo = new Color(7,8,28);
+        loadImages(LanguageManager.getResourceBundle().getLocale()); // Imagens que dependem de idioma
 
         // Imagens que independem de idioma
         vitoria1 = new ImageIcon("lib\\img\\vitoria2.gif");
@@ -244,5 +222,32 @@ public class Imagens {
         impNave5Vertical5D = new ImageIcon("lib\\img\\impNaveP5Vertical5D.jpg");
         impNave5VerticalD = new ImageIcon[]{impNave5Vertical1D, impNave5Vertical2D, impNave5Vertical3D, impNave5Vertical4D, impNave5Vertical5D};
 
+    }
+
+    public void loadImages(Locale selectedLocale) {
+        String selectedLanguage = selectedLocale.getLanguage();
+        //System.out.println(selectedLanguage);
+
+        comojogar = new ImageIcon[] {
+            comojogar1 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogarTelaInicial.jpg"),
+            comojogar2 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar2.jpg"),
+            comojogar3 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar3.jpg"),
+            comojogar4 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar4.jpg"),
+            comojogar5 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar5.jpg"),
+            comojogar6 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar6.jpg"),
+            comojogar7 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar7.jpg"),
+            comojogar8 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar8.jpg")
+        };
+
+        batalha = new ImageIcon("lib\\" + selectedLanguage + "\\Bataalha.jpg");
+        botaoSair = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSair.png");
+        botaoProximo = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProximo.png");
+        botaoSalvar = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSalvar.png");
+        botaoCarregar = new ImageIcon("lib\\" + selectedLanguage + "\\carregarJogo.png");
+        botaoNovoJogo = new ImageIcon("lib\\" + selectedLanguage + "\\novoJogoButton.png");
+        botaoComoJogar = new ImageIcon("lib\\" + selectedLanguage + "\\comoJogarButton.png");
+        botaoProsseguir = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProsseguir.png");
+
+        corDoFundo = new Color(7,8,28);
     }
 }

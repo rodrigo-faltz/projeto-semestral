@@ -15,4 +15,14 @@ public class LanguageManager {
     public static ResourceBundle getResourceBundle() {
         return ResourceBundle.getBundle("messages", currentLocale);
     }
+
+    public static Locale[] getSupportedLocales() {
+        return new Locale[] {
+            new Locale("pt", "BR"),
+            new Locale("en", "US"),
+            new Locale("es", "ES"),
+            new Locale("ja", "JP"),
+            new Locale("de", "DE")
+        };
+    }
 }
