@@ -3,21 +3,22 @@ package projeto;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
+import projeto.Message.Action;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TelaIntemediaria {
 
     JFrame frame;
     Player player;
     Grid grid;
-    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
-    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
     Socket socket;
+    ClienteService service;
 
-    public TelaIntemediaria(Grid grid) {
+    public TelaIntemediaria(Grid grid, Player player, ClienteService service, Socket socket) {
         Imagens imgs = new Imagens();
         frame = new JFrame("Batalha Espacial - Transição");
         JLabel titulo = new JLabel();
@@ -26,7 +27,7 @@ public class TelaIntemediaria {
         JLabel imagem = new JLabel();
         String msgplayer;
 
-        iniciarThreadRecepcao();
+        
         
 
         
@@ -78,7 +79,7 @@ public class TelaIntemediaria {
             public void actionPerformed(ActionEvent e)
             {
                 frame.dispose();
-                new TelaDeAtaque(grid);
+                new TelaDeAtaque(grid, player, service, socket);
             }
         });
         // Adicionando componentes ao painel principal
@@ -94,39 +95,61 @@ public class TelaIntemediaria {
         
     }
 
-    private void iniciarThreadRecepcao() {
-        new Thread(() -> {
+    private class ListenerSocket implements Runnable
+    {
+        private ObjectInputStream input;
 
-            try {
-                this.in = new ObjectInputStream(socket.getInputStream());
-                this.out = new ObjectOutputStream(socket.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                // Loop que fica ouvindo as mensagens do servidor
-                while (true) {
-                    String tipo = (String) in.readObject();
+        public ListenerSocket(Socket socket)
+        {
+            
+                this.input = service.getInput();
+            
+        }
 
-                    if (tipo.equals("VEZ")) {
-                        int vez = (int) in.readObject();
-                        System.out.println("Vez do jogador: " + vez);
+        @Override
+        public void run()
+        {
+            Message message = null;
+            try
+                {
+                    while ((message = (Message) input.readObject())!=null)
+                        {
+                            Action action = message.getAction();
 
-                        if (vez == player.getNumero()) {
-                            new TelaDeAtaque(grid);
-                            break;
-                        } else {
-                            //habilitarControlesDoJogador(false); //ideia boa
+                            if(action.equals(Action.ENVIA_PLAYER))
+                            {
+                                player.setNumero(message.getNumeroDoPlayer());
+                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                break;
+                            }
+
+                            
+
+                            if(action.equals(Action.ENVIA_VITÓRIA))
+                            {
+                                System.out.println("Perdeu");
+                                break;
+                            }
+
+                            if(action.equals(Action.VEZ_DO_PLAYER))
+                            {
+                                new TelaDeAtaque(grid, player, service, socket);
+                            }
+
                         }
-                    } 
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
 
-    
+                }
+            catch(IOException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+
+        }
+    }
 
 
 }

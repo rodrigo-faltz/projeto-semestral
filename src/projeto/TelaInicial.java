@@ -116,11 +116,9 @@ public class TelaInicial extends JFrame implements ActionListener {
 
         public ListenerSocket(Socket socket)
         {
-            try {
-                this.input = new ObjectInputStream(socket.getInputStream());
-            } catch (IOException e) {
-                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
-            }
+            
+            this.input = service.getInput();
+           
         }
 
         @Override
@@ -137,16 +135,19 @@ public class TelaInicial extends JFrame implements ActionListener {
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                break;
                             }
 
                             if(action.equals(Action.ENVIA_GRID))
                             {
                                 System.out.println("Recebeu o grid, ta errado");
+                                break;
                             }
 
                             if(action.equals(Action.ENVIA_VITÓRIA))
                             {
                                 System.out.println("Como que recebe vitória se nem começou?");
+                                break;
                             }
 
                         }

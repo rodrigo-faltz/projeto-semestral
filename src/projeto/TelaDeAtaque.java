@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 import javax.swing.*;
 
+import projeto.Message.Action;
+
 import java.awt.*;
 
 public class TelaDeAtaque extends JFrame implements ActionListener, MouseListener
@@ -26,28 +28,24 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     Player player;
     Grid grid;
     Socket socket;
+    ClienteService service;
 
-    private ObjectInputStream in; // Stream de entrada para receber dados do servidor
-    private ObjectOutputStream out; // Stream de saída para enviar dados ao servidor
+    
 
 
-	@SuppressWarnings("static-access")
-    public TelaDeAtaque(Grid grid)
+
+    public TelaDeAtaque(Grid grid, Player player, ClienteService service, Socket socket)
     {
 		super("Batalha Espacial - Tela de Ataque");
-        player.getInstance();
+        
         x = new int[10][10];
         imgs = new Imagens();
         numeroDeNavios = 0;
         this.grid = grid;
         this.socket = socket;
+        this.service = service;
         
-        try {
-            this.in = new ObjectInputStream(socket.getInputStream());
-            this.out = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
         
         System.arraycopy(grid.getGridDoPlayer(), 0, x, 0, x.length);
         
@@ -102,18 +100,11 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                         grid.calculaNumeroDeAcertosPlayer();
                         verificaQualNaveAcertouP1(botoes ,x, j, i, grid);
                         if(grid.getNumeroDeAcertosPlayer()==14){
-                            try {
-                                // Quando o jogador detectar vitória, enviar para o servidor
-                            out.writeObject("VITORIA");
-                            out.flush();
-
-                            } catch (IOException error) {
-                                error.printStackTrace();
-                            }
+                            Message message = new Message();
+                            message.setAction(Action.ENVIA_VITÓRIA);
                             dispose();
                             new TelaVitoria();
                         }
-                        
                         
                         }
 
@@ -122,15 +113,11 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                     else{
                         
                         x[j][i] = -1;
-                        try {
-                            // Envia a mensagem de "troca de turno" para o servidor
-                            out.writeObject("TROCA_TURNO");
-                            out.flush();
-                        } catch (IOException error) {
-                            error.printStackTrace();
-                        }
+                        Message message = new Message();
+                        message.setAction(Action.VEZ_DO_PLAYER);
+                        service.envia(message);
                         dispose();
-                        new TelaIntemediaria(grid);
+                        new TelaIntemediaria(grid, player, service, socket);
                     }
                 }
             }

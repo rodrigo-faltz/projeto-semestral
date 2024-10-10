@@ -97,10 +97,11 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             message.setAction(Action.ENVIA_GRID);
             message.setPlayer(player);
             service.envia(message);
-            new Thread(new ListenerSocket(this.socket)).start();
-            new TelaAposSetup(gridInstance, socket);
-            
             dispose();
+            new TelaAposSetup(gridInstance, socket, service, player);
+
+            
+            
             
         }
         else if((e.getSource() == botaoDeBaixo)){
@@ -475,11 +476,9 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 
         public ListenerSocket(Socket socket)
         {
-            try {
-                this.input = new ObjectInputStream(socket.getInputStream());
-            } catch (IOException e) {
-                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
-            }
+            
+                this.input = service.getInput();
+            
         }
 
         @Override
@@ -496,16 +495,19 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                break;
                             }
 
                             if(action.equals(Action.ENVIA_GRID))
                             {
-                                gridInstance =message.getGrid();
+                                gridInstance = message.getGrid();
+                                break;
                             }
 
                             if(action.equals(Action.ENVIA_VITÓRIA))
                             {
                                 System.out.println("Como que recebe vitória se nem começou?");
+                                break;
                             }
 
                         }

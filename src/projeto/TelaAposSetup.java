@@ -17,15 +17,19 @@ public class TelaAposSetup {
     private Grid grid;
     private String tipo;
     private Socket socket;
+    private Player player;
+    private ClienteService service;
+    JFrame frame = new JFrame("Batalha Espacial - Aguarde");
     
 
-    public TelaAposSetup(Grid grid, Socket socket) {
-        JFrame frame = new JFrame("Batalha Espacial - Aguarde");
+    public TelaAposSetup(Grid grid, Socket socket, ClienteService service, Player player) {
+        
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
-        this.grid = grid;
+        this.grid = null;
         JLabel imagem = new JLabel();
         this.socket = socket;
+        this.service = service;
         tipo = "";
 
         // Configurações do frame
@@ -52,10 +56,97 @@ public class TelaAposSetup {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
+        System.out.println(player.getNumero());
         
-      
+        new Thread(new ListenerSocket(this.socket)).start();
         
+
+        if (this.grid == null) {
+            System.out.println("Grid recebido está vazio.");
+        } else {
+            System.out.println("Grid recebido: ");
+        }
+        
+
+    
     }
+
+    private class ListenerSocket implements Runnable {
+        private ObjectInputStream input;
+        
+    
+        public ListenerSocket(Socket socket) {
+            
+            
+                if (socket != null && socket.isConnected() && !socket.isClosed()) {
+                    System.out.println("Criando ObjectInputStream...");
+                    this.input = service.getInput();
+                    System.out.println("ObjectInputStream criado com sucesso.");
+                } else {
+                    System.out.println("Socket está nulo, não conectado ou fechado.");
+                }
+            }
+        
+    
+        @Override
+        public void run() {
+            if (this.input == null) {
+                System.out.println("InputStream está nulo. Não pode continuar.");
+                return; // Impede que o código continue se o input não for inicializado
+            }
+    
+            Message message = null;
+            try {
+                while (true) {
+                    message = (Message) input.readObject();
+                    Action action = message.getAction();
+                    System.out.println("Mensagem recebida: " + action);
+    
+                    if (action.equals(Action.ENVIA_PLAYER)) {
+                        player.setNumero(message.getNumeroDoPlayer());
+                        System.out.println("Recebeu o player: " + message.getNumeroDoPlayer());
+                        break;
+                    }
+    
+                    if (action.equals(Action.ENVIA_GRID)) {
+                        grid = message.getGrid();
+                        System.out.println("Grid recebido.");
+                        
+                    }
+    
+                    if (action.equals(Action.ENVIA_VITÓRIA)) {
+                        System.out.println("Recebeu vitória.");
+                        break;
+                    }
+
+                    if(action.equals(Action.COMECAR_JOGO))
+                    {
+                        if(player.getNumero() == 1)
+                        {
+                            new TelaDeAtaque(grid, player, service, socket);
+                            System.out.println("Player 1 recebeu começar jogo");
+                            frame.dispose();
+                        }
+
+                        if(player.getNumero() == 2)
+                        {
+                            new TelaIntemediaria(grid, player, service, socket);
+                            System.out.println("Player 2 recebeu começar jogo");
+                            frame.dispose();
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Erro na leitura de objeto: " + e.getMessage());
+                Logger.getLogger(TelaAposSetup.class.getName()).log(Level.SEVERE, "Erro na leitura de objeto", e);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Classe não encontrada: " + e.getMessage());
+                Logger.getLogger(TelaAposSetup.class.getName()).log(Level.SEVERE, "Classe não encontrada", e);
+            }
+        }
+    }
+    
+    
 
    
 
