@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 import java.awt.*;
 
 public class TelaAposSetup {
 
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
     public TelaAposSetup() {
-        //ImageIcon image = new ImageIcon("pitoes.png"); // Exemplo de imagem principal
-        //ImageIcon nextIcon = new ImageIcon("portugal.png"); // Exemplo de ícone do botão próximo
         Imagens imgs = new Imagens();
-        JFrame frame = new JFrame("Batalha Espacial - Transição"); // mudar para mensagem do properties
+        JFrame frame = new JFrame(bundle.getString("titleApos")); // muda com o idioma
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
         JButton next = new JButton();
@@ -28,7 +29,7 @@ public class TelaAposSetup {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText("Agora é a vez do player 2 de colocar as naves" ); // mudar para mensagem do properties
+        titulo.setText(bundle.getString("messageApos") ); // muda com o idioma
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem

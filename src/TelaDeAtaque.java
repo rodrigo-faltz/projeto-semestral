@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,9 +18,12 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     double ant, answ;
     int x[][];
     Imagens imgs;
+
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
 	public TelaDeAtaque()
     {
-		super("Batalha Espacial - Tela de Ataque"); // mudar para mensagem do properties
+		setTitle(bundle.getString("titleAtaque")); // muda com o idioma
 
         x = new int[10][10];
         imgs = new Imagens();
@@ -70,7 +74,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e)
     {   
         if(e.getSource() == botao1){
-            JOptionPane.showMessageDialog(null, "Salvo!"); // mudar para mensagem do properties
+            JOptionPane.showMessageDialog(null, bundle.getString("messageSalvar"), bundle.getString("titleSalvar"), JOptionPane.INFORMATION_MESSAGE); // muda com o idioma
             new CriaDBs();
             new EnviaProDB();
             System.exit(0);

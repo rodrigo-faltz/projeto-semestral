@@ -1,21 +1,20 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 
 
 public class TelaVitoria {
 
-    
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     TelaVitoria()
     {
             Imagens imgs = new Imagens();
             Grid gridInstance = Grid.getInstance();
-            //ImageIcon image = new ImageIcon("pitoes.png"); // Exemplo de imagem principal
-            //ImageIcon exitIcon = new ImageIcon("portugal.png"); // Exemplo de ícone do botão próximo
-            JFrame frame = new JFrame("Batalha Espacial - Vitória!"); // mudar para mensagem do properties
+            JFrame frame = new JFrame(bundle.getString("titleVitoria")); // mudar para mensagem do properties
             JLabel titulo = new JLabel();
             JPanel painel = new JPanel(new BorderLayout());
             JButton exit = new JButton();
@@ -39,11 +38,11 @@ public class TelaVitoria {
     
             // Configurações da imagem
             if(gridInstance.getPlayer() == 1){
-                titulo.setText("Parabéns! Você eliminou o Império" ); // mudar para mensagem do properties
+                titulo.setText(bundle.getString("messageVitoria1") ); // mudar para mensagem do properties
                 imagem.setIcon(imgs.vitoria1); 
             }
             else{
-                titulo.setText("Parabéns! Você eliminou os Rebeldes" ); // mudar para mensagem do properties
+                titulo.setText(bundle.getString("messageVitoria2") ); // mudar para mensagem do properties
                 imagem.setIcon(imgs.vitoria2); 
             }
             

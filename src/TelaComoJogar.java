@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,8 +11,11 @@ public class TelaComoJogar extends JFrame implements ActionListener{
     private JLabel imagemExplicativa;
     Imagens imgs;
     int i = 1;
+
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
     public TelaComoJogar(){
-        super("Batalha Espacial - Como Jogar"); // mudar para mensagem do properties
+        setTitle(bundle.getString("titleComoJogar")); // muda com o idioma
 
         imgs = new Imagens();
         Container caixa = getContentPane();

@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.util.ResourceBundle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +18,13 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     Imagens imgs;
     int x[][];
     //Grid gridInstance;
+
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
 	public TelaDeSetup()
     {
-		super("Batalha Espacial - Preparação das Naves"); // mudar para mensagem do properties
-        JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro"); // mudar para mensagem do properties
+        setTitle(bundle.getString("titleSetUp")); // muda com o idioma
+        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp1"), bundle.getString("titleMessageSetUp1"), JOptionPane.INFORMATION_MESSAGE); // muda com o idioma
         imgs = new Imagens();
         x = new int[10][10]; 
         numeroDeNavios = 0; //Numero de navios ja colocados
@@ -80,7 +83,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             }
         }
         else if((e.getSource() == botaoDeBaixo)){
-            JOptionPane.showMessageDialog(null, "Coloque todas as naves"); // mudar para mensagem do properties
+            JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp2"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE); // muda com o idioma
         }
         for (int coluna = 0; coluna<10;coluna++){
         for (int linha = 0; linha<10;linha++){
@@ -96,7 +99,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                         tamnhoDoNavioAtual++;
                     }
                     else if(numeroDeNavios >= 4){
-                        JOptionPane.showMessageDialog(null, "Atingiu o limite de naves"); // mudar para mensagem do properties
+                        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp3"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE); // muda com o idioma
                     }
                 }
         }

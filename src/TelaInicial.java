@@ -20,7 +20,7 @@ public class TelaInicial extends JFrame implements ActionListener{
     ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     public TelaInicial(){
-        setTitle(bundle.getString("titleInicio"));
+        setTitle(bundle.getString("titleInicio")); // muda com o idioma
         
         imgs = new Imagens();
         Container caixa = getContentPane();

@@ -1,15 +1,18 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class TelaIntemediaria {
 
     JFrame frame;
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     public TelaIntemediaria() {
         Imagens imgs = new Imagens();
-        frame = new JFrame("Batalha Espacial - Transição"); // mudar para mensagem do properties
+        frame = new JFrame(bundle.getString("titleIntermediaria")); // muda com o idioma
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
         JButton next = new JButton();
@@ -29,7 +32,7 @@ public class TelaIntemediaria {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText("Agora é a vez do player " + gridInstance.getPlayer()); // mudar para mensagem do properties
+        titulo.setText(bundle.getString("messageIntermediaria") + gridInstance.getPlayer()); // muuda com o idioma
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem
