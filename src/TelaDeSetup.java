@@ -94,12 +94,13 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 
                     if(player == 2){
                         new TelaIntemediaria(connection, opponentGrid);
+                        dispose();
                     }
                     else{
                         new TelaDeAtaque(connection, opponentGrid);
+                        dispose();
                     }
-                    new TelaDeAtaque(connection, opponentGrid);
-                    dispose();
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "Unexpected server message: " + serverMessage);
                 }

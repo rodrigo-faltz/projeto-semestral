@@ -65,6 +65,7 @@ public class Server {
         private int clientNumber;
         private ObjectInputStream objIn;
         private ObjectOutputStream objOut;
+        int i = 0;
 
 
         public ClientHandler(Socket socket, int clientNumber) {
@@ -168,24 +169,39 @@ public class Server {
                     }
 
                     while (true) {
-                        System.out.println("Entro no loop");
-                        String message = client1.reader.readLine();
-                        //String message2 = client1.reader.readLine();
-                        System.out.println("Received1: " + message);
-                        System.out.println("Received2: " + message);
-                            
-                            System.out.println("Received message: " + message);
+                        if(i == 0){
+                            String message = client1.reader.readLine();
+                            System.out.println("Received1: " + message);
                             if (message.equals("TROCAR_TURNO")) {
                                 synchronized (lock) {
                                     System.out.println("Trocar turno");
                                     client2.writer.println("YOUR_TURN");
-
+                                    i = 1;
                                     // Further handling based on game state
                                 }
                             }
-                            // Additional message handling here
+                        }
+                        else{
+                            String message = client2.reader.readLine();
+                            System.out.println("Received2: " + message);
+                            if (message.equals("TROCAR_TURNO")) {
+                                synchronized (lock) {
+                                    System.out.println("Trocar turno");
+                                    client1.writer.println("YOUR_TURN");
+                                    i = 0;
+                                    // Further handling based on game state
+                                }
+                            }
+                        }
+                
+                        
+                        //String message2 = client1.reader.readLine();
+                        
+                        System.out.println("Received2: " + message);
+                            
 
-                        // Handle other messages if needed
+
+
                     }
                 }
 
