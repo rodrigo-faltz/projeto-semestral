@@ -130,7 +130,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
                         x[j][i] = -1;
                         dispose();
-                        new TelaIntemediaria(connection, x);
+                        new TelaInter3(connection, x);
                     }
                 }
             }

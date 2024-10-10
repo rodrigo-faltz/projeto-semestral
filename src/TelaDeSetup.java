@@ -93,8 +93,9 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                     int[][] opponentGrid = connection.receiveGrid();
 
                     if(player == 2){
-                        new TelaIntemediaria(connection, opponentGrid);
                         dispose();
+
+                        new TelaInter3(connection, opponentGrid);
                     }
                     else{
                         new TelaDeAtaque(connection, opponentGrid);

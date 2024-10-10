@@ -167,41 +167,47 @@ public class Server {
                             lock.wait();
                         }
                     }
-
+                    
+                    
                     while (true) {
                         if(i == 0){
-                            String message = client1.reader.readLine();
-                            System.out.println("Received1: " + message);
-                            if (message.equals("TROCAR_TURNO")) {
-                                synchronized (lock) {
-                                    System.out.println("Trocar turno");
-                                    client2.writer.println("YOUR_TURN");
-                                    i = 1;
-                                    // Further handling based on game state
+                            
+                            try {
+                                String message = client1.reader.readLine();
+                                // Process the message
+                                System.out.println("Received1: " + message);
+                                if (message.equals("TROCAR_TURNO")) {
+                                    synchronized (lock) {
+                                        System.out.println("Trocar turno");
+                                        client2.writer.println("YOUR_TURN");
+                                        i = 1;
+                                        // Further handling based on game state
+                                    }
                                 }
+                            } catch (SocketTimeoutException e) {
+                                // Handle the timeout (e.g., retry, log, etc.)
+                                System.out.println("Read timed out, no data received.");
                             }
+
                         }
                         else{
-                            String message = client2.reader.readLine();
-                            System.out.println("Received2: " + message);
-                            if (message.equals("TROCAR_TURNO")) {
-                                synchronized (lock) {
-                                    System.out.println("Trocar turno");
-                                    client1.writer.println("YOUR_TURN");
-                                    i = 0;
-                                    // Further handling based on game state
+                            try {
+                                String message2 = client2.reader.readLine();
+                                System.out.println("Received2: " + message2);
+                                if (message2.equals("TROCAR_TURNO")) {
+                                    synchronized (lock) {
+                                        System.out.println("Trocar turno");
+                                        client1.writer.println("YOUR_TURN");
+                                        i = 0;
+                                        // Further handling based on game state
+                                    }
                                 }
+                            } catch (SocketTimeoutException e) {
+                                // Handle the timeout (e.g., retry, log, etc.)
+                                System.out.println("Read timed out, no data received.");
                             }
+
                         }
-                
-                        
-                        //String message2 = client1.reader.readLine();
-                        
-                        System.out.println("Received2: " + message);
-                            
-
-
-
                     }
                 }
 

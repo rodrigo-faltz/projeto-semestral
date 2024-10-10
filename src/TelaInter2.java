@@ -12,19 +12,10 @@ public class TelaInter2 {
     JFrame frame;
     ClientConnection connection;
     int[][] grid;
-    private Timer timer;
-    private BufferedReader reader;
-    private BufferedReader in;
     private Socket socket;
 
     public TelaInter2(ClientConnection connection, int[][] grid) {
-        try {
-            reader = new BufferedReader(new InputStreamReader(connection.getSocket().getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Connection error.");
-            System.exit(0);
-        }
+
         Imagens imgs = new Imagens();
         frame = new JFrame("Batalha Espacial - Transição");
         JLabel titulo = new JLabel();

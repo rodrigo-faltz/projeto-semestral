@@ -91,6 +91,11 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
+        try {
+            Thread.sleep(2000); // Delay for 2000 milliseconds (2 seconds)
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         waitForMessage();
     }
 
