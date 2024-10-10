@@ -1,2 +1,2 @@
 # projeto-semestral
-Projeto semestral LP 1º semestre 2024
+Projeto semestral LP 2º semestre 2024
