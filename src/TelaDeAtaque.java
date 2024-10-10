@@ -33,15 +33,9 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
         System.out.println(Arrays.deepToString(grid));
 
-        
-        if(gridInstance.getPlayer() == 1){
-            gridInstance.setGridDoPlayer2(grid);
-            System.arraycopy(gridInstance.getGridDoPlayer2(), 0, x, 0, x.length);
-        }
-        else if (gridInstance.getPlayer() == 2){
-            gridInstance.setGridDoPlayer1(grid);
-            System.arraycopy(gridInstance.getGridDoPlayer1(), 0, x, 0, x.length);
-        }
+
+        System.arraycopy(grid, 0, x, 0, x.length);
+    
         
         
         

@@ -99,8 +99,9 @@ public class TelaIntemediaria {
         try {
             String line = connection.receiveMessage();
             System.out.println("Received message: " + line);
-            if ("TROCAR_TURNO".equals(line)) {
-                JOptionPane.showMessageDialog(null, "FOI PORRA");
+            if ("YOUR_TURN".equals(line)) {
+                frame.dispose();
+                new TelaDeAtaque(connection, grid);
             }
 
 

@@ -78,21 +78,26 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             try {
                 // Send the grid to the server
                 connection.sendGrid(x);
-                System.out.println("Teste 1: "+connection.testSocketConnetion());
+                
                 
                 // Show waiting screen
-                JOptionPane.showMessageDialog(this, "Waiting for other player to finish...");
-                
+                //JOptionPane.showMessageDialog(this, "Waiting for other player to finish...");
+                System.out.println("Waiting for other player to finish...");
                 // Wait for server confirmation
-                System.out.println("Teste 2: "+connection.testSocketConnetion());
+                
                 String serverMessage = connection.receiveMessage();
-                System.out.println("Teste 2.5: "+serverMessage);
+                
 
                 if ("START_GAME".equals(serverMessage)) {
                     // Proceed to attack screen
                     int[][] opponentGrid = connection.receiveGrid();
 
-                    System.out.println("Teste 3: "+connection.testSocketConnetion());
+                    if(player == 2){
+                        new TelaIntemediaria(connection, opponentGrid);
+                    }
+                    else{
+                        new TelaDeAtaque(connection, opponentGrid);
+                    }
                     new TelaDeAtaque(connection, opponentGrid);
                     dispose();
                 } else {
