@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 
 import javax.swing.*;
@@ -17,8 +18,12 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     double ant, answ;
     Imagens imgs;
     int x[][];
+    ClientConnection connection;
+    private int player;
     //Grid gridInstance;
-	public TelaDeSetup()
+	public TelaDeSetup(ClientConnection connection)
+
+
     {
 		super("Batalha Espacial - Preparação das Naves");
         JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro");
@@ -26,9 +31,11 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
         x = new int[10][10]; 
         numeroDeNavios = 0; //Numero de navios ja colocados
         tamnhoDoNavioAtual = 2;
-
+        this.connection = connection;
         orientacao = 0; // Orientacao de como a nave vai ser colocada (0 = horizontal, 1 = vertical)
-
+        this.player = connection.getClientNumber();
+        Grid gridInstance = Grid.getInstance();
+        gridInstance.setPlayer(player);
 
         //Inicializa o GUI
         Container caixa = getContentPane();
@@ -64,19 +71,36 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     public void actionPerformed(ActionEvent e)
     {   
         if((e.getSource() == botaoDeBaixo)&&(numeroDeNavios ==4)){
-            Grid gridInstance = Grid.getInstance();
+            
 
-            if(gridInstance.getPlayer() == 1){
-            gridInstance.setGridDoPlayer1(x);
-            gridInstance.setPlayer(2);
-            dispose();
-            new TelaAposSetup();
-            }
-            else{
-                gridInstance.setGridDoPlayer2(x);
-                gridInstance.setPlayer(1);
-                dispose();
-                new TelaIntemediaria();
+
+
+            try {
+                // Send the grid to the server
+                connection.sendGrid(x);
+                System.out.println("Teste 1: "+connection.testSocketConnetion());
+                
+                // Show waiting screen
+                JOptionPane.showMessageDialog(this, "Waiting for other player to finish...");
+                
+                // Wait for server confirmation
+                System.out.println("Teste 2: "+connection.testSocketConnetion());
+                String serverMessage = connection.receiveMessage();
+                System.out.println("Teste 2.5: "+serverMessage);
+
+                if ("START_GAME".equals(serverMessage)) {
+                    // Proceed to attack screen
+                    int[][] opponentGrid = connection.receiveGrid();
+
+                    System.out.println("Teste 3: "+connection.testSocketConnetion());
+                    new TelaDeAtaque(connection, opponentGrid);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Unexpected server message: " + serverMessage);
+                }
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Connection error.");
             }
         }
         else if((e.getSource() == botaoDeBaixo)){

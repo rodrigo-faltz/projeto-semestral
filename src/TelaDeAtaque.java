@@ -3,9 +3,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.*; // Replace 'your.package.name' with the actual package name
 
 public class TelaDeAtaque extends JFrame implements ActionListener, MouseListener
 {
@@ -17,18 +20,26 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     double ant, answ;
     int x[][];
     Imagens imgs;
-	public TelaDeAtaque()
+    ClientConnection connection;
+	public TelaDeAtaque(ClientConnection connection, int[][] grid)
     {
 		super("Batalha Espacial - Tela de Ataque");
-
+        JOptionPane.showMessageDialog(null, "Esse eh o player "+ connection.getClientNumber());
         x = new int[10][10];
         imgs = new Imagens();
         numeroDeNavios = 0;
+        this.connection = connection;
         Grid gridInstance = Grid.getInstance();
+
+        System.out.println(Arrays.deepToString(grid));
+
+        
         if(gridInstance.getPlayer() == 1){
+            gridInstance.setGridDoPlayer2(grid);
             System.arraycopy(gridInstance.getGridDoPlayer2(), 0, x, 0, x.length);
         }
         else if (gridInstance.getPlayer() == 2){
+            gridInstance.setGridDoPlayer1(grid);
             System.arraycopy(gridInstance.getGridDoPlayer1(), 0, x, 0, x.length);
         }
         
@@ -65,6 +76,10 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
+
+        if(connection.getClientNumber() == 2){
+            JOptionPane.showMessageDialog(null, "Agora é a vez do player 1 de atacar");
+        }
     }    
 
     public void actionPerformed(ActionEvent e)
@@ -110,17 +125,18 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
 
                     }
                     else{
-                        if(gridInstance.getPlayer() == 1){
-                            gridInstance.setGridDoPlayer2(x);
-                            gridInstance.setPlayer(2);
+                        System.out.println("Errou");
+                        System.out.println("Teste 1: "+connection.testSocketConnetion());
+                        try {
+                            PrintWriter writer = new PrintWriter(connection.getSocket().getOutputStream(), true);
+                            writer.println("TROCAR_TURNO");
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
-                        else if(gridInstance.getPlayer() == 2){
-                            gridInstance.setGridDoPlayer1(x);
-                            gridInstance.setPlayer(1);
-                        }
+
                         x[j][i] = -1;
                         dispose();
-                        new TelaIntemediaria();
+                        new TelaIntemediaria(connection, x);
                     }
                 }
             }
@@ -339,3 +355,9 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         }
     }
 }
+
+
+
+
+
+

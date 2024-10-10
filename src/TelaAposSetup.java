@@ -49,7 +49,7 @@ public class TelaAposSetup {
             public void actionPerformed(ActionEvent e)
             {
                 frame.dispose();
-                new TelaDeSetup();
+                new TelaDeSetup(connection);
             }
         });
 

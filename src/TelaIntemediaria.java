@@ -2,12 +2,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.Socket;
 
 public class TelaIntemediaria {
 
     JFrame frame;
+    ClientConnection connection;
+    int[][] grid;
+    private Timer timer;
+    private BufferedReader reader;
+    private BufferedReader in;
+    private Socket socket;
 
-    public TelaIntemediaria() {
+    public TelaIntemediaria(ClientConnection connection, int[][] grid) {
+        try {
+            reader = new BufferedReader(new InputStreamReader(connection.getSocket().getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Connection error.");
+            System.exit(0);
+        }
         Imagens imgs = new Imagens();
         frame = new JFrame("Batalha Espacial - Transição");
         JLabel titulo = new JLabel();
@@ -15,6 +32,10 @@ public class TelaIntemediaria {
         JButton next = new JButton();
         JLabel imagem = new JLabel();
         Grid gridInstance = Grid.getInstance();
+        this.connection = connection;
+
+        this.grid = grid;
+        this.socket = connection.getSocket();
 
         // Configurações do frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +79,7 @@ public class TelaIntemediaria {
             public void actionPerformed(ActionEvent e)
             {
                 frame.dispose();
-                new TelaDeAtaque();
+                new TelaDeAtaque(connection, grid);
             }
         });
         // Adicionando componentes ao painel principal
@@ -70,7 +91,25 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
+        waitForMessage();
     }
+
+
+    private void waitForMessage() {
+        try {
+            String line = connection.receiveMessage();
+            System.out.println("Received message: " + line);
+            if ("TROCAR_TURNO".equals(line)) {
+                JOptionPane.showMessageDialog(null, "FOI PORRA");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Optionally, handle errors such as connection issues
+        }
+    }
+
 
 
 }

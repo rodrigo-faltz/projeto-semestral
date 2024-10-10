@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
+import java.io.IOException;
 
 
 
@@ -16,9 +17,11 @@ public class TelaInicial extends JFrame implements ActionListener{
     private JPanel painel1, painel2, painel3, painel4;
     private JLabel vezDeQuem;
     Imagens imgs;
-    public TelaInicial(){
+    private ClientConnection connection;
+
+    public TelaInicial() {
         super("Batalha Espacial - Tela de Início");
-        
+
         imgs = new Imagens();
         Container caixa = getContentPane();
         caixa.setLayout(new GridLayout(4,1));
@@ -76,9 +79,32 @@ public class TelaInicial extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e)
     {
-        if(e.getSource() == novoJogoButton){
-            dispose();
-            new TelaDeSetup();
+        if (e.getSource() == novoJogoButton) {
+            
+            
+            try {
+
+
+                // Establish connection to the server
+                connection = new ClientConnection("localhost", 12345);
+        
+                // Show waiting screen
+                JOptionPane.showMessageDialog(this, "Waiting for another player to connect...");
+        
+                // Wait for server message
+                String serverMessage = connection.receiveMessage();
+                if ("START_SETUP".equals(serverMessage)) {
+                    // Proceed to setup screen
+                    new TelaDeSetup(connection);
+                    dispose();
+                    
+                } else {
+                    JOptionPane.showMessageDialog(this, "Unexpected server message: " + serverMessage);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Failed to connect to server.");
+            }
         }
         if(e.getSource() == continuarButton){
             try{
@@ -93,7 +119,7 @@ public class TelaInicial extends JFrame implements ActionListener{
                 else{
                     dispose();
                     new RecebeDoDB();
-                    new TelaDeAtaque();
+                    //new TelaDeAtaque(connection)  ;
                 }
                     
                 
