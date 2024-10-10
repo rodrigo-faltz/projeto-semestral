@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.Socket;
 
-public class TelaIntemediaria {
+public class TelaInter2 {
 
     JFrame frame;
     ClientConnection connection;
@@ -17,7 +17,7 @@ public class TelaIntemediaria {
     private BufferedReader in;
     private Socket socket;
 
-    public TelaIntemediaria(ClientConnection connection, int[][] grid) {
+    public TelaInter2(ClientConnection connection, int[][] grid) {
         try {
             reader = new BufferedReader(new InputStreamReader(connection.getSocket().getInputStream()));
         } catch (IOException e) {
@@ -91,28 +91,11 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
-        waitForMessage();
     }
 
-
-    private void waitForMessage() {
-        try {
-            String line = connection.receiveMessage();
-            System.out.println("Received message: " + line);
-            if ("YOUR_TURN".equals(line)) {
-                frame.dispose();
-                new TelaDeAtaque(connection, grid);
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Optionally, handle errors such as connection issues
+    public void disposeFrame() {
+        if (frame != null) {
+            frame.dispose();
         }
     }
-
-    
-
-
-
 }
