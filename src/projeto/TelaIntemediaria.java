@@ -22,7 +22,6 @@ public class TelaIntemediaria {
         frame = new JFrame("Batalha Espacial - Transição");
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
-        JButton next = new JButton();
         JLabel imagem = new JLabel();
         String msgplayer;
         this.service = service;
@@ -67,22 +66,16 @@ public class TelaIntemediaria {
         imagem.setPreferredSize(new Dimension(600, 250));
 
         // Configurações do botão next
-        next.setIcon(imgs.botaoProsseguir);
-        next.setPreferredSize(new Dimension(170, 50));
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(new Color(7, 8, 28)); // Definindo a cor de fundo do painel do botão
-        buttonPanel.add(next); // Adicionando o botão ao painel do botão
 
 
 
-        next.setContentAreaFilled(false);
-        next.setBorderPainted(false);
+
+
         
         
         // Adicionando componentes ao painel principal
         painel.add(titulo, BorderLayout.NORTH);
         painel.add(imagem, BorderLayout.CENTER);
-        painel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Adicionando painel ao frame
         frame.add(painel);
