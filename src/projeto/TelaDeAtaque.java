@@ -5,9 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.*;
 import javax.swing.*;
 
@@ -100,7 +97,14 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                         
                             
                         grid.calculaNumeroDeAcertosPlayer();
-                        verificaQualNaveAcertouP1(botoes ,x, j, i, grid);
+
+                        if(player.getNumero() == 1){
+                            verificaQualNaveAcertouP1(botoes ,x, j, i, grid);
+                        }
+                        else{
+                            verificaQualNaveAcertouP2(botoes ,x, j, i, grid);
+                        }
+                        
                         if(grid.getNumeroDeAcertosPlayer()==14){
                             Message message = new Message();
                             message.setAction(Action.ENVIA_VITÓRIA);
@@ -185,7 +189,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         }
         for(int i = 0; i < 10; i++){
             for(int j = 0; j<10;j++){
-                if(player.getNumero() == 1){
+                if(player.getNumero() == 2){
                     recolocaNavesDestruidasP2(buttons, x, j, i, grid, player); // tem que inverter porque o grid que o cliente tem é o do outro
                 }
                 else{
@@ -230,6 +234,46 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
             if(gridDosNavios.getAcertosNave5() == 0){
                 //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
                 naveDestruidas(gridDeBotoes, grid, 5, imgs.impNave5VerticalD, imgs.impNave5HorizontalD);
+            }
+            
+        }
+    }
+
+    public void verificaQualNaveAcertouP2(JButton gridDeBotoes[][], int grid[][], int coluna, int linha, Grid gridDosNavios){
+        if(grid[coluna][linha] == 2){
+            gridDosNavios.calculaAcertosNave2();
+            x[coluna][linha] = -2;
+            if(gridDosNavios.getAcertosNave2() == 0){
+                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 2");
+                naveDestruidas(gridDeBotoes, grid, 2, imgs.republicaNave2VerticalD, imgs.republicaNave2HorizontalD);
+                
+            }
+            
+        }
+        if(grid[coluna][linha] == 3){
+            gridDosNavios.calculaAcertosNave3();
+            x[coluna][linha] = -3;
+            if(gridDosNavios.getAcertosNave3() == 0){
+                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 3");
+                naveDestruidas(gridDeBotoes, grid, 3, imgs.republicaNave3VerticalD, imgs.republicaNave3HorizontalD);
+            }
+            
+        }
+        if(grid[coluna][linha] == 4){
+            gridDosNavios.calculaAcertosNave4();
+            x[coluna][linha] = -4;
+            if(gridDosNavios.getAcertosNave4() == 0){
+                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 4");
+                naveDestruidas(gridDeBotoes, grid, 4, imgs.republicaNave4VerticalD, imgs.republicaNave4HorizontalD);
+            }
+            
+        }
+        if(grid[coluna][linha] == 5){
+            gridDosNavios.calculaAcertosNave5();
+            x[coluna][linha] = -5;
+            if(gridDosNavios.getAcertosNave5() == 0){
+                //JOptionPane.showMessageDialog(null, "Vc destroiu a nave de tamanho 5");
+                naveDestruidas(gridDeBotoes, grid, 5, imgs.republicaNave5VerticalD, imgs.republicaNave5HorizontalD);
             }
             
         }
