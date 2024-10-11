@@ -38,7 +38,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     public TelaDeAtaque(Grid grid, Player player, ClienteService service, Socket socket)
     {
 		super("Batalha Espacial - Tela de Ataque");
-        
+        System.out.println("Player TelaDeAtaque0.5: "+player.getNumero());
         x = new int[10][10];
         imgs = new Imagens();
         numeroDeNavios = 0;
@@ -81,7 +81,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
 
-        
+        System.out.println("Player TelaDeAtaque: "+player.getNumero());
     }    
 
     public void actionPerformed(ActionEvent e)
@@ -109,18 +109,22 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                         }
                         
                         }
-
-
-                    }
-                    else{
+                        else{
                         
-                        x[j][i] = -1;
-                        Message message = new Message();
-                        message.setAction(Action.VEZ_DO_PLAYER);
-                        service.envia(message);
-                        dispose();
-                        new TelaIntemediaria(grid, player, service, socket);
+                            x[j][i] = -1;
+                            Message message = new Message();
+                            message.setAction(Action.VEZ_DO_PLAYER);
+                            System.out.println("MANDOU PORRA");
+                            message.setNumeroDoPlayer(player.getNumero());
+                            service.envia(message);
+                            grid.printGrid();
+                            dispose();
+                            new TelaIntemediaria(grid, player, service, socket);
+                        }
+
+
                     }
+
                 }
             }
         }

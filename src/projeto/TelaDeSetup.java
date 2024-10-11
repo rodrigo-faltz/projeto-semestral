@@ -82,6 +82,8 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
+
+        System.out.println("Player TelaSetup: "+player.getNumero());
     }    
 
     public void actionPerformed(ActionEvent e)

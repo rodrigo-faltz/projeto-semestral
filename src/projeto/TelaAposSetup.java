@@ -72,7 +72,7 @@ public class TelaAposSetup {
         }
         
 
-    
+        System.out.println("Player TelaAposSetup: "+player.getNumero());
     }
 
     private class ListenerSocket implements Runnable {
@@ -101,10 +101,10 @@ public class TelaAposSetup {
     
             Message message = null;
             try {
-                while (true) {
+                while ((message = (Message) input.readObject()) != null) {
                     System.out.println(service.getSocket().isClosed());
                     System.out.println(player.getNumero());
-                    message = (Message) input.readObject();
+                    //message = (Message) input.readObject();
                     
                     Action action = message.getAction();
                     System.out.println("Mensagem recebida: " + action);
@@ -118,7 +118,7 @@ public class TelaAposSetup {
                     if (action.equals(Action.ENVIA_GRID)) {
                         grid = message.getGrid();
                         System.out.println("Grid recebido.");
-                        message.setAction(Action.ERROU);
+                        message.setAction(Action.COMECAR_JOGO);
                         
                     }
     
@@ -132,10 +132,11 @@ public class TelaAposSetup {
                         System.out.println(player.getNumero());
                         if(player.getNumero() == 1)
                         {
-                            System.out.println(grid.getGridDoPlayer());
+                            //System.out.println(grid.getGridDoPlayer());
                             new TelaDeAtaque(grid, player, service, socket);
                             System.out.println("Player 1 recebeu começar jogo");
                             frame.dispose();
+                            break;
                         }
 
                         if(player.getNumero() == 2)
@@ -143,6 +144,7 @@ public class TelaAposSetup {
                             new TelaIntemediaria(grid, player, service, socket);
                             System.out.println("Player 2 recebeu começar jogo");
                             frame.dispose();
+                            break;
                         }
 
                     }

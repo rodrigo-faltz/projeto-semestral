@@ -88,8 +88,8 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
-
-        new Thread(new ListenerSocket(service.getSocket()));
+        System.out.println("Teste 0.4");
+        new Thread(new ListenerSocket(service.getSocket())).start();
 
         
     }
@@ -111,10 +111,13 @@ public class TelaIntemediaria {
             Message message = null;
             try
                 {
-                    while ((message = (Message) input.readObject())!=null)
+                    System.out.println("Teste 1");
+                    while (true)
                         {
+                            message = (Message) input.readObject();
+                            System.out.println("Teste 2");
                             Action action = message.getAction();
-
+                            System.out.println(action);
                             if(action.equals(Action.ENVIA_PLAYER))
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
@@ -131,8 +134,12 @@ public class TelaIntemediaria {
                             }
 
                             if(action.equals(Action.VEZ_DO_PLAYER))
-                            {
+                            {   
+                                System.out.println(message.getAction());
                                 new TelaDeAtaque(grid, player, service, socket);
+                                frame.dispose();
+                                break;
+                                
                             }
 
                         }

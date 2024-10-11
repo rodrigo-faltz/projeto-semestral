@@ -95,5 +95,13 @@ public class Grid implements Serializable{
     public int getAcertosNave5() {
         return AcertosNave5;
     }
-    
+
+    public void printGrid() {
+        System.out.println("Grid:");
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                System.out.print(grid[i][j] + " ");}
+            System.out.println(); // Quebra de linha após cada linha do grid}}
+            }
+    }
 }

@@ -84,6 +84,8 @@ public class ServidorService {
         @Override
         public void run() {
             try {
+                
+                int i = 0;
                 while (true) {
                     Message message = (Message) input.readObject();
                     Action action = message.getAction();
@@ -125,7 +127,20 @@ public class ServidorService {
                     } else if (action.equals(Action.ENVIA_VITÓRIA)) {
                         
                         
+                    } else if (action.equals(Action.VEZ_DO_PLAYER)){
+                        int numDoPlayer = message.getNumeroDoPlayer();
+                        if(numDoPlayer == 1)
+                        {
+                            message.setNumeroDoPlayer(2);
+                            enviarMensagemParaCliente(2, message);
+                        }
+                        else if(numDoPlayer == 2)
+                        {
+                            message.setNumeroDoPlayer(1);
+                            enviarMensagemParaCliente(1, message);
+                        }
                     }
+                    
                 }
             } catch (EOFException e) {
                 System.out.println("Cliente " + currentPlayerNumber + " desconectado.");
