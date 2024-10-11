@@ -4,6 +4,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.sql.Connection;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -136,6 +137,12 @@ public class TelaInicial extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e)
     {
         if(e.getSource() == novoJogoButton){
+            LocaleDate ld = new LocaleDate();
+            try {
+                ld.printDate(LanguageManager.getCurrentLocale());
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
             dispose();
             new TelaDeSetup();
         }
