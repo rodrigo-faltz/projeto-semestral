@@ -26,7 +26,7 @@ public class Imagens {
     impNave3HorizontalD[], impNave3Vertical1D, impNave3Vertical2D, impNave3Vertical3D, impNave3VerticalD[], impNave4Vertical1D, impNave4Vertical2D, impNave4Vertical3D,
     impNave4Vertical4D, impNave4VerticalD[], impNave4Horizontal1D, impNave4Horizontal2D, impNave4Horizontal3D, impNave4Horizontal4D, impNave4HorizontalD[],
     impNave5Horizontal1D, impNave5Horizontal2D, impNave5Horizontal3D, impNave5Horizontal4D, impNave5Horizontal5D, impNave5HorizontalD[], impNave5Vertical1D, impNave5Vertical2D,
-    impNave5Vertical3D, impNave5Vertical4D, impNave5Vertical5D, impNave5VerticalD[];
+    impNave5Vertical3D, impNave5Vertical4D, impNave5Vertical5D, impNave5VerticalD[], atkRep, atkImp;
 
     public Color corDoFundo;
 
@@ -34,6 +34,8 @@ public class Imagens {
 
         vitoria1 = new ImageIcon("lib\\vitoria2.gif");
         vitoria2 = new ImageIcon("lib\\vitoria1.gif");
+        atkRep = new ImageIcon("lib\\AtacaRep.gif");
+        atkImp = new ImageIcon("lib\\AtacaImp.gif");
         republica = new ImageIcon("lib\\republica.png");
         imperio = new ImageIcon("lib\\imperio.png");
         comojogar1 = new ImageIcon("lib\\comoJogarTelaInicial.jpg");

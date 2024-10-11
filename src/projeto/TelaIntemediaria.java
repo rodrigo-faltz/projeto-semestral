@@ -34,10 +34,10 @@ public class TelaIntemediaria {
 
         
         if(player.getNumero() == 1){
-            msgplayer = "2";
+            msgplayer = "Protejam-se! O Império está atacando!";
         }
         else{
-            msgplayer = "1";
+            msgplayer = "Protejam-se! Os Rebeldes estão atacando!";
         }
         // Configurações do frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,15 +52,15 @@ public class TelaIntemediaria {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText("Agora é a vez do player " + msgplayer);
+        titulo.setText(msgplayer);
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem
         if(player.getNumero()==1){
-            imagem.setIcon(imgs.republica);
+            imagem.setIcon(imgs.atkImp);
         }
         else{
-            imagem.setIcon(imgs.imperio);
+            imagem.setIcon(imgs.atkRep);
         }
         imagem.setHorizontalAlignment(SwingConstants.CENTER);
         imagem.setPreferredSize(new Dimension(600, 250));
