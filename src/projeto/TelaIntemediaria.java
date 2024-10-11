@@ -127,9 +127,11 @@ public class TelaIntemediaria {
 
                             
 
-                            if(action.equals(Action.ENVIA_VITÓRIA))
+                            if(action.equals(Action.ENVIA_VITORIA))
                             {
                                 System.out.println("Perdeu");
+                                new TelaVitoria(); // Criar tela de derrota
+                                frame.dispose();
                                 break;
                             }
 

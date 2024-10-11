@@ -506,7 +506,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                                 break;
                             }
 
-                            if(action.equals(Action.ENVIA_VITÓRIA))
+                            if(action.equals(Action.ENVIA_VITORIA))
                             {
                                 System.out.println("Como que recebe vitória se nem começou?");
                                 break;

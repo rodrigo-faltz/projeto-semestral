@@ -146,7 +146,7 @@ public class TelaInicial extends JFrame implements ActionListener {
                                 break;
                             }
 
-                            if(action.equals(Action.ENVIA_VITÓRIA))
+                            if(action.equals(Action.ENVIA_VITORIA))
                             {
                                 System.out.println("Como que recebe vitória se nem começou?");
                                 break;

@@ -107,7 +107,9 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                         
                         if(grid.getNumeroDeAcertosPlayer()==14){
                             Message message = new Message();
-                            message.setAction(Action.ENVIA_VITÓRIA);
+                            message.setNumeroDoPlayer(player.getNumero());
+                            message.setAction(Action.ENVIA_VITORIA);
+                            service.envia(message);
                             dispose();
                             new TelaVitoria();
                         }
@@ -118,7 +120,6 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                             x[j][i] = -1;
                             Message message = new Message();
                             message.setAction(Action.VEZ_DO_PLAYER);
-                            System.out.println("MANDOU PORRA");
                             message.setNumeroDoPlayer(player.getNumero());
                             service.envia(message);
                             grid.printGrid();

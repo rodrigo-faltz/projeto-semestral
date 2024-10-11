@@ -45,7 +45,7 @@ public class Message implements Serializable {
     }
 
     public enum Action {
-        ENVIA_GRID, ENVIA_PLAYER, ENVIA_VITÓRIA, CONNECT, DISCONNECT, COMECAR_JOGO, VEZ_DO_PLAYER, ERROU
+        ENVIA_GRID, ENVIA_PLAYER, ENVIA_VITORIA, CONNECT, DISCONNECT, COMECAR_JOGO, VEZ_DO_PLAYER, ERROU
     }
 
     

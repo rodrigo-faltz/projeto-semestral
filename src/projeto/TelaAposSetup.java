@@ -118,12 +118,13 @@ public class TelaAposSetup {
                     if (action.equals(Action.ENVIA_GRID)) {
                         grid = message.getGrid();
                         System.out.println("Grid recebido.");
-                        message.setAction(Action.COMECAR_JOGO);
+                        message.setAction(Action.COMECAR_JOGO); // band aid
                         
                     }
     
-                    if (action.equals(Action.ENVIA_VITÓRIA)) {
+                    if (action.equals(Action.ENVIA_VITORIA)) {
                         System.out.println("Recebeu vitória.");
+
                         break;
                     }
 

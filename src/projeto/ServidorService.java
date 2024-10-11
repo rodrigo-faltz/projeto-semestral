@@ -89,6 +89,8 @@ public class ServidorService {
                 while (true) {
                     Message message = (Message) input.readObject();
                     Action action = message.getAction();
+                    System.out.println("Mensagem recebida: " + action);
+                    System.err.println("Player: "+ message.getNumeroDoPlayer());
 
                     if (action.equals(Action.CONNECT)) {
                         connect(); // Reconecta se necessário
@@ -124,8 +126,22 @@ public class ServidorService {
                         }
                     } else if (action.equals(Action.ENVIA_PLAYER)) {
                         // Lógica para enviar jogador
-                    } else if (action.equals(Action.ENVIA_VITÓRIA)) {
-                        
+                    } else if (action.equals(Action.ENVIA_VITORIA)) {
+                        int numDoPlayer = message.getNumeroDoPlayer();
+
+                        System.out.println("Mensagem recebida: " + action);
+                        System.err.println("Player: "+ numDoPlayer);
+
+                        if(numDoPlayer == 1)
+                        {
+                            message.setNumeroDoPlayer(2);
+                            enviarMensagemParaCliente(2, message);
+                        }
+                        else if(numDoPlayer == 2)
+                        {
+                            message.setNumeroDoPlayer(1);
+                            enviarMensagemParaCliente(1, message);
+                        }
                         
                     } else if (action.equals(Action.VEZ_DO_PLAYER)){
                         int numDoPlayer = message.getNumeroDoPlayer();
@@ -170,19 +186,6 @@ public class ServidorService {
 
     private void enviaComecar(Message message) {
         message.setAction(Action.COMECAR_JOGO);
-        
-        
-        new Thread(() -> {
-            try {
-                // Aguarda 5 segundos antes de iniciar a ListenerSocket
-                Thread.sleep(1000);
-                message.setAction(Action.COMECAR_JOGO);
-                
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Restaura o estado de interrupção
-                System.out.println("Thread interrompida: " + e.getMessage());
-            }
-        }).start();
                 
                 // Enviar para ambos os clientes
         enviarMensagemParaCliente(1, message);
