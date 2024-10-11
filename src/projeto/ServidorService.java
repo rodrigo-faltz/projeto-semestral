@@ -114,7 +114,8 @@ public class ServidorService {
                         if (grid1 != null && grid2 != null) {
                             
                             System.out.println("Começar jogo...");
-                            enviaComecar(message, output);
+                            enviaComecar(message);
+                            
                             // Envia a mensagem de início do jogo para ambos os clientes
                             
                             
@@ -152,17 +153,31 @@ public class ServidorService {
         // Implementação se necessário
     }
 
-    private void enviaComecar(Message message, ObjectOutputStream output) {
-        try {
-            message.setAction(Action.COMECAR_JOGO);
-            output.writeObject(message);
-            output.flush();
-        } catch (IOException e) {
-            System.out.println("Erro ao enviar começar jogo: " + e.getMessage());
-            e.printStackTrace(); // Para obter mais detalhes sobre a exceção
-        }
+    private void enviaComecar(Message message) {
+        message.setAction(Action.COMECAR_JOGO);
+        
+        
+        new Thread(() -> {
+            try {
+                // Aguarda 5 segundos antes de iniciar a ListenerSocket
+                Thread.sleep(1000);
+                message.setAction(Action.COMECAR_JOGO);
+                
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restaura o estado de interrupção
+                System.out.println("Thread interrompida: " + e.getMessage());
+            }
+        }).start();
+                
+                // Enviar para ambos os clientes
+        enviarMensagemParaCliente(1, message);
+        System.out.println("Enviando começar jogo para Cliente 1");
+
+        enviarMensagemParaCliente(2, message);
+        System.out.println("Enviando começar jogo para Cliente2");
+
+        
     }
-    
 
     public void enviarMensagemParaCliente(int clienteId, Message message) {
         try {

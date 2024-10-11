@@ -30,6 +30,7 @@ public class TelaAposSetup {
         JLabel imagem = new JLabel();
         this.socket = socket;
         this.service = service;
+        this.player = player;
         tipo = "";
 
         // Configurações do frame
@@ -59,6 +60,9 @@ public class TelaAposSetup {
         System.out.println(player.getNumero());
         
         new Thread(new ListenerSocket(this.socket)).start();
+
+       
+        
         
 
         if (this.grid == null) {
@@ -98,7 +102,10 @@ public class TelaAposSetup {
             Message message = null;
             try {
                 while (true) {
+                    System.out.println(service.getSocket().isClosed());
+                    System.out.println(player.getNumero());
                     message = (Message) input.readObject();
+                    
                     Action action = message.getAction();
                     System.out.println("Mensagem recebida: " + action);
     
@@ -111,6 +118,7 @@ public class TelaAposSetup {
                     if (action.equals(Action.ENVIA_GRID)) {
                         grid = message.getGrid();
                         System.out.println("Grid recebido.");
+                        message.setAction(Action.ERROU);
                         
                     }
     
@@ -121,8 +129,10 @@ public class TelaAposSetup {
 
                     if(action.equals(Action.COMECAR_JOGO))
                     {
+                        System.out.println(player.getNumero());
                         if(player.getNumero() == 1)
                         {
+                            System.out.println(grid.getGridDoPlayer());
                             new TelaDeAtaque(grid, player, service, socket);
                             System.out.println("Player 1 recebeu começar jogo");
                             frame.dispose();
@@ -134,6 +144,7 @@ public class TelaAposSetup {
                             System.out.println("Player 2 recebeu começar jogo");
                             frame.dispose();
                         }
+
                     }
                 }
             } catch (IOException e) {

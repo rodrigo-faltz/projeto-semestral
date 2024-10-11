@@ -1,7 +1,6 @@
 package projeto;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import projeto.Message.Action;
 import java.awt.*;
@@ -26,6 +25,10 @@ public class TelaIntemediaria {
         JButton next = new JButton();
         JLabel imagem = new JLabel();
         String msgplayer;
+        this.service = service;
+        this.player = player;
+        this.grid = grid;
+        this.socket = socket;
 
         
         
@@ -74,14 +77,8 @@ public class TelaIntemediaria {
 
         next.setContentAreaFilled(false);
         next.setBorderPainted(false);
-        next.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                frame.dispose();
-                new TelaDeAtaque(grid, player, service, socket);
-            }
-        });
+        
+        
         // Adicionando componentes ao painel principal
         painel.add(titulo, BorderLayout.NORTH);
         painel.add(imagem, BorderLayout.CENTER);
@@ -91,6 +88,8 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
+
+        new Thread(new ListenerSocket(service.getSocket()));
 
         
     }

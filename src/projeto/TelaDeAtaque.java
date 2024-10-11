@@ -29,6 +29,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     Grid grid;
     Socket socket;
     ClienteService service;
+    
 
     
 
@@ -44,6 +45,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         this.grid = grid;
         this.socket = socket;
         this.service = service;
+        this.player = player;
         
         
         
