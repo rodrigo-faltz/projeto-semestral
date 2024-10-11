@@ -9,8 +9,8 @@ import javax.swing.*;
 
 
 
-public class TelaVitoria {
-    TelaVitoria(int quemGanhou)
+public class TelaDerrota {
+    TelaDerrota(int quemGanhou)
     {
             Imagens imgs = new Imagens();
             JFrame frame = new JFrame("Batalha Espacial - Vitória!");
@@ -38,12 +38,12 @@ public class TelaVitoria {
             titulo.setPreferredSize(new Dimension(600, 50));
     
             // Configurações da imagem
-            if(player == 1){
-                titulo.setText("Parabéns! Você eliminou o Império" );
+            if(player == 2){
+                titulo.setText("Você Falhou... Os Rebeldes Venceram" );
                 imagem.setIcon(imgs.vitoria1); 
             }
             else{
-                titulo.setText("Parabéns! Você eliminou os Rebeldes" );
+                titulo.setText("Você Falhou... O Império Venceu" );
                 imagem.setIcon(imgs.vitoria2); 
             }
             

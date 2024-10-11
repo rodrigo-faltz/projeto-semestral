@@ -129,8 +129,9 @@ public class TelaIntemediaria {
 
                             if(action.equals(Action.ENVIA_VITORIA))
                             {
+                                
                                 System.out.println("Perdeu");
-                                new TelaVitoria(); // Criar tela de derrota
+                                new TelaDerrota(message.getNumeroDoPlayer()); // Criar tela de derrota
                                 frame.dispose();
                                 break;
                             }

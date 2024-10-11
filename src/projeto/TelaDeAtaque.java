@@ -111,7 +111,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                             message.setAction(Action.ENVIA_VITORIA);
                             service.envia(message);
                             dispose();
-                            new TelaVitoria();
+                            new TelaVitoria(player.getNumero());
                         }
                         
                         }
