@@ -14,70 +14,57 @@ public class RecebeDoDB {
     private static final String URL = "jdbc:mysql://localhost:3306/batalha_naval";
     private static final String USER = "Batalha";
     private static final String PASSWORD = "1234";
+    private boolean checaLogin;
 
     // Método para conectar ao banco de dados
-    public RecebeDoDB(){
-        String gridp1 = "SELECT linha, coluna, valor FROM gridp1";
-        String gridp2 = "SELECT linha, coluna, valor FROM gridp2";
-        String acertos = "SELECT player, numeroDeAcertosPlayer1, numeroDeAcertosPlayer2, AcertosNave2P1, AcertosNave2P2, AcertosNave3P1, AcertosNave3P2, AcertosNave4P1, AcertosNave4P2, AcertosNave5P1, AcertosNave5P2 FROM acertos";
+    public RecebeDoDB(String loginUsuario, String senhaUsuario){
+        String Login = "SELECT Users, Password FROM Login WHERE Login = ? && WHERE Password = ?";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        Grid gridInstance = new Grid();
-        int[][] valoresDoP1 = new int[10][10];
-        //System.arraycopy(gridInstance.getGridDoPlayer1(), 0, valoresDoP1, 0, valoresDoP1.length); // ESSE EH O GRID DO P1, ONDE OS NAVIOS DO P1 ESTAO
-
-        int[][] valoresDoP2 = new int[10][10];
-        //System.arraycopy(gridInstance.getGridDoPlayer2(), 0, valoresDoP2, 0, valoresDoP2.length); // ESSE EH O GRID DO P1, ONDE OS NAVIOS DO P1 ESTAO
-
+        ResultSet rs = null;
         try {
 
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
-            //------ Recebe o Grid do player 1 ----------
-            pstmt = conn.prepareStatement(gridp1);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int linha = rs.getInt(1);
-                int coluna = rs.getInt(2);
-                int valor = rs.getInt(3);
+            
+            pstmt = conn.prepareStatement(Login);
+            pstmt.setString(1, loginUsuario);
+            rs = pstmt.executeQuery();
 
-                valoresDoP1[coluna][linha] = valor;
+            if (rs.next()) {
+                String login = rs.getString("Login");
+                String password = rs.getString("Password");
+                System.out.println("Login: " + login + ", Password: " + password);
+                setChecaLogin(true);
+            } else {
+                System.out.println("Nenhum resultado encontrado.");
+                setChecaLogin(false);
             }
 
-            //gridInstance.setGridDoPlayer1(valoresDoP1);
-            System.arraycopy(valoresDoP1, 0, gridInstance.getGridDoPlayer(), 0, valoresDoP1.length);
-            //------ Insere o Grid do player 2 ----------
-            pstmt = conn.prepareStatement(gridp2);
-            rs = pstmt.executeQuery();
-            while (rs.next()) {
-                int linha = rs.getInt(1);
-                int coluna = rs.getInt(2);
-                int valor = rs.getInt(3);
-
-                valoresDoP2[coluna][linha] = valor;
-            }
-            //gridInstance.setGridDoPlayer2(valoresDoP2);
-           
-
-            //------ Insere a quantidade de acertos de cada nave --------
-            pstmt = conn.prepareStatement(acertos);
-            rs = pstmt.executeQuery();
-            rs.next();
-            
-            gridInstance.setNumeroDeAcertosPlayer(rs.getInt(2));
-            
-            gridInstance.setAcertosNave2(rs.getInt(4));
-            
-            gridInstance.setAcertosNave3(rs.getInt(6));
-            
-            gridInstance.setAcertosNave4(rs.getInt(8));
-            
-            gridInstance.setAcertosNave5(rs.getInt(10));
-            
         } catch (SQLException se) {
-            // Handle errors for JDBC
             se.printStackTrace();
+        } finally {
+            // Fecha os recursos
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
         }
+        
     }
-}
+
+    public void setChecaLogin(boolean checaLogin) {
+        this.checaLogin = checaLogin;
+    }
+
+    public boolean getChecaLogin()
+    {
+        return checaLogin;
+    }
+    
+    }
+

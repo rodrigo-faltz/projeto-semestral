@@ -24,8 +24,13 @@ public class ServidorService {
     private Grid grid2;
 
     public ServidorService() {
+        
+        new CriaDBs();
+        new EnviaProDB();
+
         try {
             serverSocket = new ServerSocket(12345);
+            System.out.println("Aguardando a conexão do cliente");
 
             while (playerNumber.get() <= 2) { // Permite até 2 jogadores
                 Socket socket = serverSocket.accept();

@@ -12,15 +12,12 @@ public class LimpaTabelasDoDB {
 
     // Defina as informações de conexão com o banco de dados
     private static final String URL = "jdbc:mysql://localhost:3306/batalha_naval";
-    private static final String USER = "Batalha";
-    private static final String PASSWORD = "1234";
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
 
     // Método para conectar ao banco de dados
     public LimpaTabelasDoDB(){
-        String droppaAcertos = "drop Table acertos";
-
-        String droppaGridP1 = "drop TABLE GridP1";
-        String droppaGridP2 = "drop TABLE GridP2";
+        String dropaLogin = "drop Table Users";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -29,14 +26,10 @@ public class LimpaTabelasDoDB {
 
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
-            pstmt = conn.prepareStatement(droppaAcertos);
+            pstmt = conn.prepareStatement(dropaLogin);
             pstmt.executeUpdate();
 
-            pstmt = conn.prepareStatement(droppaGridP1);
-            pstmt.executeUpdate();
-
-            pstmt = conn.prepareStatement(droppaGridP2);
-            pstmt.executeUpdate();
+            
 
 
         } catch (SQLException se) {
