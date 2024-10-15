@@ -16,10 +16,11 @@ public class TelaInicial extends JFrame implements ActionListener {
     private JPanel painel1, painel2, painel3, painel4;
     private JLabel vezDeQuem;
     Imagens imgs;
-    Player player;
+    private Player player;
     private Socket socket;
     private Message message;
     private ClienteService service; 
+    private Grid grid;
 
 
 
@@ -28,6 +29,11 @@ public class TelaInicial extends JFrame implements ActionListener {
         
         imgs = new Imagens();
         Container caixa = getContentPane();
+        grid = new Grid();
+        message = new Message();
+        player = new Player();
+        service = new ClienteService();
+
 
         
 
@@ -88,16 +94,7 @@ public class TelaInicial extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == novoJogoButton) {
             
-            player = new Player(); // Inicializa o player
-            this.message = new Message();
-            this.message.setAction(Action.CONNECT);
-            this.service = new ClienteService();
-            this.socket = this.service.connect();
-            Grid grid = new Grid();
-            
-            new Thread(new ListenerSocket(this.socket)).start();
-            System.out.println(player.getNumero());
-            new TelaDeSetup(player, grid, socket, service);
+            new LoginWindow(player, grid, service, this.message);
             dispose();
         }
 
