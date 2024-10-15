@@ -122,7 +122,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
                             message.setAction(Action.VEZ_DO_PLAYER);
                             message.setNumeroDoPlayer(player.getNumero());
                             service.envia(message);
-                            grid.printGrid();
+                            
                             dispose();
                             new TelaIntemediaria(grid, player, service, socket);
                         }

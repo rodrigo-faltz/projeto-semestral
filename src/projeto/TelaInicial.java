@@ -89,12 +89,13 @@ public class TelaInicial extends JFrame implements ActionListener {
         setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 
         System.out.println("Player TelaInicial: "+player.getNumero());
+        
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == novoJogoButton) {
-            
-            new LoginWindow(player, grid, service, this.message);
+            socket = service.connect(); 
+            new TelaLogin(player, grid, service, this.message);
             dispose();
         }
 

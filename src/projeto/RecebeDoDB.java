@@ -12,59 +12,100 @@ public class RecebeDoDB {
 
     // Defina as informações de conexão com o banco de dados
     private static final String URL = "jdbc:mysql://localhost:3306/batalha_naval";
-    private static final String USER = "Batalha";
-    private static final String PASSWORD = "1234";
-    private boolean checaLogin;
+    private static final String USER = "root";
+    private static final String PASSWORD = "password";
+    
 
     // Método para conectar ao banco de dados
-    public RecebeDoDB(String loginUsuario, String senhaUsuario){
-        String Login = "SELECT Users, Password FROM Login WHERE Login = ? && WHERE Password = ?";
+    
+    public RecebeDoDB() {
+        // Initialization code here
+    }
+    
+    
 
+    public boolean checaLogin(String loginUsuario, String senhaUsuario){
+
+        String selectSQL = "SELECT * FROM Users WHERE User = ? AND Password = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
 
+        try {
+            // Estabelece a conexão com o banco de dados
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
-            
-            pstmt = conn.prepareStatement(Login);
+            // Prepara a consulta de seleção
+            pstmt = conn.prepareStatement(selectSQL);
+
+            // Define os parâmetros da consulta
             pstmt.setString(1, loginUsuario);
+            pstmt.setString(2, senhaUsuario);
+
+            // Executa a consulta
             rs = pstmt.executeQuery();
 
+            // Verifica se o usuário existe
             if (rs.next()) {
-                String login = rs.getString("Login");
-                String password = rs.getString("Password");
-                System.out.println("Login: " + login + ", Password: " + password);
-                setChecaLogin(true);
-            } else {
-                System.out.println("Nenhum resultado encontrado.");
-                setChecaLogin(false);
+                return true;
             }
 
         } catch (SQLException se) {
             se.printStackTrace();
+
+
+
+
+            return false;
         } finally {
-            // Fecha os recursos
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
+            // Close resources in the finally block to ensure they are closed even if an exception occurs
+            if (rs != null) try { rs.close(); } catch (SQLException se) { se.printStackTrace(); }
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException se) { se.printStackTrace(); }
+            if (conn != null) try { conn.close(); } catch (SQLException se) { se.printStackTrace(); }
         }
-        
+
+        return false;
     }
 
-    public void setChecaLogin(boolean checaLogin) {
-        this.checaLogin = checaLogin;
-    }
-
-    public boolean getChecaLogin()
+    public int getWins(String loginUsuario)
     {
-        return checaLogin;
-    }
+        String selectSQL = "SELECT Wins FROM Users WHERE User = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Estabelece a conexão com o banco de dados
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            // Prepara a consulta de seleção
+            pstmt = conn.prepareStatement(selectSQL);
+
+            // Define os parâmetros da consulta
+            pstmt.setString(1, loginUsuario);
+
+            // Executa a consulta
+            rs = pstmt.executeQuery();
+
+            // Verifica se o usuário existe
+            if (rs.next()) {
+                return rs.getInt("Wins");
+            }
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+
+            return -1;
+        } finally {
+            // Close resources in the finally block to ensure they are closed even if an exception occurs
+            if (rs != null) try { rs.close(); } catch (SQLException se) { se.printStackTrace(); }
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException se) { se.printStackTrace(); }
+            if (conn != null) try { conn.close(); } catch (SQLException se) { se.printStackTrace(); }
+        }
+
+        return -1;
     
     }
+
+}
 

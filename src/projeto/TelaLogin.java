@@ -15,7 +15,7 @@ import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
 
-public class LoginWindow extends JFrame {
+public class TelaLogin extends JFrame {
     private JLabel loginText, passwordText;
     private JTextField textField;
     private JPasswordField passwordField;
@@ -29,7 +29,7 @@ public class LoginWindow extends JFrame {
     private int controlador = 0;
     private Grid grid; 
 
-    public LoginWindow(Player player, Grid grid, ClienteService service, Message message) {
+    public TelaLogin(Player player, Grid grid, ClienteService service, Message message) {
         super("Login");
 
         this.player = player;
@@ -56,6 +56,7 @@ public class LoginWindow extends JFrame {
         setVisible(true);   
         setLocationRelativeTo(null);  
 
+         
         button1.addActionListener(new ActionListener() {
 
 
@@ -68,16 +69,17 @@ public class LoginWindow extends JFrame {
                 System.out.println(username);
                 System.out.println(password);
                 // envia através da message a senha, o servidor recebe, acessa o banco de dados, compara e devolve
-            
-            //service.envia(message);
+                message.setAction(Action.CONNECT);
+                
             // se a senha digitada for igual a retornada pelo servidor(pelo Thread), instancia a tela de setup
-            message.setAction(Action.CONNECT);
+            
             // service = new ClienteService();
-            socket = service.connect(); 
+            
+            service.envia(message); // envia a mensagem para o servidor
             new Thread(new ListenerSocket(service.getSocket())).start(); // escuta a mensagem recebida do servidor
             System.out.println(player.getNumero());
-            new TelaDeSetup(player, grid, socket, service);
             dispose();
+            
             }
         }); 
 
@@ -136,25 +138,33 @@ public class LoginWindow extends JFrame {
                             message = (Message) input.readObject();
 
                             Action action = message.getAction();
+                            System.out.println("Action received: " + action); // Debug statement
 
                             if(action.equals(Action.ENVIA_PLAYER))
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                new TelaDeSetup(player, grid, socket, service);
                                 break;
                             }
 
-                            if(action.equals(Action.ENVIA_GRID))
+                            if(action.equals(Action.LOGIN_FAIL))
                             {
-                                System.out.println("Recebeu o grid, ta errado");
-                            }
-
-                            if(action.equals(Action.ENVIA_VITORIA))
-                            {
-                                System.out.println("Como que recebe vitória se nem começou?");
-                            }
+                                System.out.println("Login falhou");
+                                JDialog dialog = new JDialog();
+                                dialog.setAlwaysOnTop(true);
+                                dialog.setModal(true);
+                                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                                dialog.setLayout(new FlowLayout());
+                                dialog.add(new JLabel("Login falhou"));
+                                dialog.setSize(200, 100);
+                                dialog.setLocationRelativeTo(null);
+                                dialog.setVisible(true);
+                                new TelaLogin(player, grid, service, message);
+                                break;
 
                         }
+                    }
 
                 }
             catch(IOException e)

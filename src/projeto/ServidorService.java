@@ -26,7 +26,7 @@ public class ServidorService {
     public ServidorService() {
         
         new CriaDBs();
-        new EnviaProDB();
+        
 
         try {
             serverSocket = new ServerSocket(12345);
@@ -67,7 +67,7 @@ public class ServidorService {
             try {
                 this.output = new ObjectOutputStream(socket.getOutputStream());
                 this.input = new ObjectInputStream(socket.getInputStream());
-                connect(); // Envia a mensagem de conexão
+                 // Envia a mensagem de conexão
             } catch (IOException e) {
                 Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -89,16 +89,31 @@ public class ServidorService {
         @Override
         public void run() {
             try {
+                RecebeDoDB receba = null;
                 
-                int i = 0;
                 while (true) {
                     Message message = (Message) input.readObject();
                     Action action = message.getAction();
                     System.out.println("Mensagem recebida: " + action);
-                    System.err.println("Player: "+ message.getNumeroDoPlayer());
-
+                    System.err.println("Player: " + message.getNumeroDoPlayer());
+        
                     if (action.equals(Action.CONNECT)) {
-                        connect(); // Reconecta se necessário
+                        receba = new RecebeDoDB();
+                        System.out.println("Usuario: " + message.getUsuario());
+                        System.out.println("Senha: " + message.getSenha());
+                        boolean teste = receba.checaLogin(message.getUsuario(), message.getSenha());
+                        System.out.println("Teste login: " + teste);
+        
+                        if (teste) {
+                            connect();
+                            message.setAction(Action.ENVIA_PLAYER);
+                            output.writeObject(message);
+                            output.flush();
+                        } else {
+                            message.setAction(Action.LOGIN_FAIL);
+                            output.writeObject(message);
+                            output.flush();
+                        }
                     } else if (action.equals(Action.DISCONNECT)) {
                         // Lógica para desconectar, se necessário
                     } else if (action.equals(Action.ENVIA_GRID)) {
@@ -139,6 +154,7 @@ public class ServidorService {
 
                         if(numDoPlayer == 1)
                         {
+
                             message.setNumeroDoPlayer(2);
                             enviarMensagemParaCliente(2, message);
                         }

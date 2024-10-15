@@ -13,14 +13,39 @@ public class EnviaProDB {
     private static final String PASSWORD = "password";
 
     // Método para conectar ao banco de dados
-    public EnviaProDB() {
-        String insertSQL = "INSERT INTO Users (User, Password) VALUES (?, ?)";
+    public EnviaProDB(){
 
+    }
+
+    public void enviaVitoria(String loginUsuario) {
+
+        String updateSQL = "UPDATE Users SET Wins = Wins + 1 WHERE User = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
-        Grid gridInstance = new Grid();
-        int[][] valoresDoP1 = new int[10][10];
-        System.arraycopy(gridInstance.getGridDoPlayer(), 0, valoresDoP1, 0, valoresDoP1.length); // ESSE EH O GRID DO P1, ONDE OS NAVIOS DO P1 ESTAO
+
+        try {
+            // Estabelece a conexão com o banco de dados
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            // Prepara a consulta de atualização
+            pstmt = conn.prepareStatement(updateSQL);
+
+            // Define os parâmetros da consulta
+            pstmt.setString(1, loginUsuario);
+
+            // Executa a consulta
+            pstmt.executeUpdate();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+}
+    }
+
+    public void enviaCredencial(String loginUsuario, String senhaUsuario) {
+
+        String insertSQL = "INSERT INTO Users (User, Password, Wins) VALUES (?, ?, 0)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
         try {
             // Estabelece a conexão com o banco de dados
@@ -29,29 +54,16 @@ public class EnviaProDB {
             // Prepara a consulta de inserção
             pstmt = conn.prepareStatement(insertSQL);
 
-            // Primeira inserção
-            pstmt.setString(1, "ottock");   // Índice 1 para o primeiro parâmetro (Login)
-            pstmt.setString(2, "sapo");     // Índice 2 para o segundo parâmetro (Password)
-            pstmt.addBatch();               // Adiciona ao batch
+            // Define os parâmetros da consulta
+            pstmt.setString(1, loginUsuario);
+            pstmt.setString(2, senhaUsuario);
 
-            // Segunda inserção
-            pstmt.setString(1, "lafare");   // Índice 1 para o primeiro parâmetro (Login)
-            pstmt.setString(2, "betinha");  // Índice 2 para o segundo parâmetro (Password)
-            pstmt.addBatch();               // Adiciona ao batch
-
-            // Executa as inserções em lote
-            pstmt.executeBatch();
+            // Executa a consulta
+            pstmt.executeUpdate();
 
         } catch (SQLException se) {
             se.printStackTrace();
-        } finally {
-            // Fecha os recursos
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
-        }
+
     }
+}
 }
