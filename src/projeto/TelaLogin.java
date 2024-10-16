@@ -36,6 +36,7 @@ public class TelaLogin extends JFrame {
         this.grid = grid;
         this.service = service;
         this.message = message;
+        this.socket = service.getSocket();
 
         loginText = new JLabel("Login:");
         passwordText = new JLabel("Senha:");
@@ -65,6 +66,7 @@ public class TelaLogin extends JFrame {
                 username = textField.getText();
                 password = new String(passwordField.getPassword());
                 message.setUsuario(username);
+                //TODO: Criptografar a senha aqui 
                 message.setSenha(password);
                 System.out.println(username);
                 System.out.println(password);
@@ -164,6 +166,8 @@ public class TelaLogin extends JFrame {
                                 break;
 
                         }
+                        
+                        
                     }
 
                 }

@@ -95,7 +95,7 @@ public class TelaInicial extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == novoJogoButton) {
             socket = service.connect(); 
-            new TelaLogin(player, grid, service, this.message);
+            new TelaLogin(player, grid, service, message);
             dispose();
         }
 

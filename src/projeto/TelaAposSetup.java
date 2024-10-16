@@ -112,7 +112,7 @@ public class TelaAposSetup {
                     if (action.equals(Action.ENVIA_PLAYER)) {
                         player.setNumero(message.getNumeroDoPlayer());
                         System.out.println("Recebeu o player: " + message.getNumeroDoPlayer());
-                        break;
+                        
                     }
     
                     if (action.equals(Action.ENVIA_GRID)) {

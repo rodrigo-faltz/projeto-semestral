@@ -107,6 +107,7 @@ public class ServidorService {
                         if (teste) {
                             connect();
                             message.setAction(Action.ENVIA_PLAYER);
+                            message.setNumeroDoPlayer(currentPlayerNumber);
                             output.writeObject(message);
                             output.flush();
                         } else {
@@ -138,6 +139,7 @@ public class ServidorService {
                         if (grid1 != null && grid2 != null) {
                             
                             System.out.println("Começar jogo...");
+                            message.setAction(Action.COMECAR_JOGO);
                             enviaComecar(message);
                             
                             // Envia a mensagem de início do jogo para ambos os clientes
