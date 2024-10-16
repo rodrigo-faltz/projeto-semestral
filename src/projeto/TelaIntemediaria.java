@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ResourceBundle;
 
 public class TelaIntemediaria {
 
@@ -17,9 +18,11 @@ public class TelaIntemediaria {
     Socket socket;
     ClienteService service;
 
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
     public TelaIntemediaria(Grid grid, Player player, ClienteService service, Socket socket) {
         Imagens imgs = new Imagens();
-        frame = new JFrame("Batalha Espacial - Transição");
+        frame = new JFrame(bundle.getString("titleIntermediaria"));
         JLabel titulo = new JLabel();
         JPanel painel = new JPanel(new BorderLayout());
         JLabel imagem = new JLabel();
@@ -33,11 +36,11 @@ public class TelaIntemediaria {
         
 
         
-        if(player.getNumero() == 1){
-            msgplayer = "Protejam-se! O Império está atacando!";
+        if(player.getNumero() == 2){
+            msgplayer = bundle.getString("messageIntermediariaImp");
         }
         else{
-            msgplayer = "Protejam-se! Os Rebeldes estão atacando!";
+            msgplayer = bundle.getString("messageIntermediariaRep");
         }
         // Configurações do frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

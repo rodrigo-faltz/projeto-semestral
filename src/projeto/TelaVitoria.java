@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-
+import java.util.ResourceBundle;
 
 
 
@@ -19,6 +19,8 @@ public class TelaVitoria {
             JButton exit = new JButton();
             JLabel imagem = new JLabel();
             int player = quemGanhou;
+
+            ResourceBundle bundle = LanguageManager.getResourceBundle();
             
     
             // Configurações do frame
@@ -39,11 +41,11 @@ public class TelaVitoria {
     
             // Configurações da imagem
             if(player == 1){
-                titulo.setText("Parabéns! Você eliminou o Império" );
+                titulo.setText(bundle.getString("messageVitoria1"));
                 imagem.setIcon(imgs.vitoria1); 
             }
             else{
-                titulo.setText("Parabéns! Você eliminou os Rebeldes" );
+                titulo.setText(bundle.getString("messageVitoria2"));
                 imagem.setIcon(imgs.vitoria2); 
             }
             

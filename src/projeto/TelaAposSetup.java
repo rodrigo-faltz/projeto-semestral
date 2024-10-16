@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.*;
 import projeto.Message.Action;
+import java.util.ResourceBundle;
 
 public class TelaAposSetup {
     private ObjectInputStream in; // Stream de entrada para receber dados do servidor
@@ -19,8 +20,10 @@ public class TelaAposSetup {
     private Socket socket;
     private Player player;
     private ClienteService service;
-    JFrame frame = new JFrame("Batalha Espacial - Aguarde");
     
+    
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+    JFrame frame = new JFrame(bundle.getString("titleApos"));
 
     public TelaAposSetup(Grid grid, Socket socket, ClienteService service, Player player) {
         
@@ -46,7 +49,7 @@ public class TelaAposSetup {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText("Aguarde o outro player colocar as naves" );
+        titulo.setText(bundle.getString("messageApos"));
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem
