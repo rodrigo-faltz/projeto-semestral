@@ -13,12 +13,13 @@ public class CriaDBs {
 
     // Defina as informações de conexão com o banco de dados
     private static final String URL = "jdbc:mysql://localhost:3306/batalha_naval";
-    private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String USER = "login";
+    private static final String PASSWORD = "1234";
     
 
     // Método para conectar ao banco de dados
     public CriaDBs(){
+        
         String criaTabelaDeLogin = "CREATE TABLE IF NOT EXISTS Users ("
             + "User VARCHAR(50) NOT NULL UNIQUE, "
             + "Password VARCHAR(250) NOT NULL, "
@@ -27,8 +28,9 @@ public class CriaDBs {
 
         Connection conn = null;
         PreparedStatement pstmt = null;
+        System.out.println("User = "+USER+" Password = "+PASSWORD);
+        try {  
 
-        try {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
             DatabaseMetaData dado = conn.getMetaData();

@@ -24,7 +24,7 @@ public class ServidorService {
     private Grid grid2;
 
     public ServidorService() {
-        
+        System.out.println("Tesatando");
         new CriaDBs();
         
 
