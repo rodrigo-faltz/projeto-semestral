@@ -12,6 +12,8 @@ import projeto.Message.Action;
 
 import java.awt.*;
 
+import java.util.ResourceBundle;
+
 public class TelaDeAtaque extends JFrame implements ActionListener, MouseListener
 {
 	private JButton botoes[][], botao1;
@@ -27,14 +29,15 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     Socket socket;
     ClienteService service;
     
-
+    
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
     
 
 
 
     public TelaDeAtaque(Grid grid, Player player, ClienteService service, Socket socket)
     {
-		super("Batalha Espacial - Tela de Ataque");
+		setTitle(bundle.getString("titleAtaque")); // muda com o idioma
         System.out.println("Player TelaDeAtaque0.5: "+player.getNumero());
         x = new int[10][10];
         imgs = new Imagens();

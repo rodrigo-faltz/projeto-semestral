@@ -13,6 +13,8 @@ import java.net.*;
 
 import java.util.logging.*;
 
+import java.util.ResourceBundle;
+
 
 public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 {
@@ -31,12 +33,13 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     private Message message;
     
     
-
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
 	
     public TelaDeSetup(Player player, Grid gridInstance, Socket socket, ClienteService service)
     {
         
-		super("Batalha Espacial - Preparação das Naves");
+		setTitle(bundle.getString("titleSetUp")); // muda com o idioma
+        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp1"), bundle.getString("titleMessageSetUp1"), JOptionPane.INFORMATION_MESSAGE);
         this.player = player;
         this.gridInstance = gridInstance;
         this.socket = socket;
@@ -44,7 +47,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
         
         
         
-        JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro");
+        //JOptionPane.showMessageDialog(null, "Coloque as suas naves no tabuleiro");
         imgs = new Imagens();
         x = new int[10][10]; 
         numeroDeNavios = 0; //Numero de navios ja colocados
@@ -107,7 +110,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             
         }
         else if((e.getSource() == botaoDeBaixo)){
-            JOptionPane.showMessageDialog(null, "Coloque todas as naves");
+            JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp2"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
         }
         for (int coluna = 0; coluna<10;coluna++){
         for (int linha = 0; linha<10;linha++){
@@ -123,7 +126,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                         tamnhoDoNavioAtual++;
                     }
                     else if(numeroDeNavios >= 4){
-                        JOptionPane.showMessageDialog(null, "Atingiu o limite de naves");
+                        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp3"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
                     }
                 }
         }
