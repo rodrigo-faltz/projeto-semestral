@@ -5,20 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-
+import java.util.ResourceBundle;
 
 
 
 public class TelaDerrota {
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
+
     TelaDerrota(int quemGanhou)
     {
             Imagens imgs = new Imagens();
-            JFrame frame = new JFrame("Batalha Espacial - Vitória!");
+            JFrame frame = new JFrame(bundle.getString("titleDerrota"));
             JLabel titulo = new JLabel();
             JPanel painel = new JPanel(new BorderLayout());
             JButton exit = new JButton();
             JLabel imagem = new JLabel();
             int player = quemGanhou;
+
+            
             
     
             // Configurações do frame
@@ -39,11 +43,11 @@ public class TelaDerrota {
     
             // Configurações da imagem
             if(player == 2){
-                titulo.setText("Você Falhou... Os Rebeldes Venceram" );
+                titulo.setText(bundle.getString("messageDerrotaImp"));
                 imagem.setIcon(imgs.vitoria1); 
             }
             else{
-                titulo.setText("Você Falhou... O Império Venceu" );
+                titulo.setText(bundle.getString("messageDerrotaRep"));
                 imagem.setIcon(imgs.vitoria2); 
             }
             

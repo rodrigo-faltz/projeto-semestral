@@ -14,6 +14,8 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
+import java.util.ResourceBundle;
+
 
 public class TelaLogin extends JFrame {
     private JLabel loginText, passwordText;
@@ -28,6 +30,7 @@ public class TelaLogin extends JFrame {
     private Message message;
     private int controlador = 0;
     private Grid grid; 
+    ResourceBundle bundle = LanguageManager.getResourceBundle();
 
     public TelaLogin(Player player, Grid grid, ClienteService service, Message message) {
         super("Login");
@@ -38,12 +41,12 @@ public class TelaLogin extends JFrame {
         this.message = message;
         this.socket = service.getSocket();
 
-        loginText = new JLabel("Login:");
-        passwordText = new JLabel("Senha:");
+        loginText = new JLabel(bundle.getString("loginUsuario"));
+        passwordText = new JLabel(bundle.getString("loginSenha"));
         textField = new JTextField(15);
         passwordField = new JPasswordField(15);
-        button1 = new JButton("Prosseguir");
-        button2 = new JButton("Sair");
+        button1 = new JButton(bundle.getString("loginEntrar"));
+        button2 = new JButton(bundle.getString("loginSair"));
 
         setLayout(new GridLayout(3, 2, 10, 10));
         add(loginText);

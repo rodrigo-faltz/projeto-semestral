@@ -33,8 +33,6 @@ public class Imagens {
 
     public Imagens(){
 
-        vitoria1 = new ImageIcon("lib\\img\\\\vitoria2.gif");
-        vitoria2 = new ImageIcon("lib\\img\\\\vitoria1.gif");
         atkRep = new ImageIcon("lib\\img\\\\AtacaRep.gif");
         atkImp = new ImageIcon("lib\\img\\\\AtacaImp.gif");
         loadImages(LanguageManager.getResourceBundle().getLocale()); // Imagens que dependem de idioma
