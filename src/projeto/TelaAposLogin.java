@@ -92,7 +92,7 @@ public class TelaAposLogin {
                 } else {
                     System.out.println("Socket está nulo, não conectado ou fechado.");
                 }
-            }
+        }
         
             
         @Override
@@ -124,10 +124,15 @@ public class TelaAposLogin {
                         service.envia(message);
                         
                     }
-                    if(action.equals(Action.TELA_APOS_LOGIN)){
-                        System.out.println("RECEBEU TELA APOS LOGIN");
+                    if (action.equals(Action.TELA_APOS_LOGIN)) {
+                        System.out.println("Received TELA_APOS_LOGIN");
                         new TelaDeSetup(player, grid, socket, service);
                         frame.dispose();
+                        // SwingUtilities.invokeLater(() -> {
+                        //     new TelaDeSetup(player, grid, socket, service);
+                        //     frame.dispose();
+                        // });
+                        break;
                     }
                 }
             } catch (IOException e) {

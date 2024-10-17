@@ -62,7 +62,7 @@ public class TelaAposSetup {
         frame.setVisible(true);
         System.out.println(player.getNumero());
         
-        new Thread(new ListenerSocket(this.socket, this.service)).start();
+        new Thread(new ListenerSocket(this.socket)).start();
 
        
         
@@ -82,12 +82,12 @@ public class TelaAposSetup {
         private ObjectInputStream input;
         
     
-        public ListenerSocket(Socket socket, ClienteService service2) {
+        public ListenerSocket(Socket socket) {
             
             
                 if (socket != null && socket.isConnected() && !socket.isClosed()) {
                     System.out.println("Criando ObjectInputStream...");
-                    this.input = service2.getInput();
+                    this.input = service.getInput();
                     System.out.println("ObjectInputStream criado com sucesso.");
                 } else {
                     System.out.println("Socket está nulo, não conectado ou fechado.");
@@ -102,6 +102,7 @@ public class TelaAposSetup {
                 return; // Impede que o código continue se o input não for inicializado
             }
             
+
 
             Message message = null;
             try {

@@ -89,6 +89,7 @@ public class ServidorService {
 
         @Override
         public void run() {
+            
             try {
                 RecebeDoDB receba = null;
                 
