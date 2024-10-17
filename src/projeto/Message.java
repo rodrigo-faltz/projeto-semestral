@@ -45,7 +45,9 @@ public class Message implements Serializable {
     }
 
     public enum Action {
-        ENVIA_GRID, ENVIA_PLAYER, ENVIA_VITORIA, CONNECT, DISCONNECT, COMECAR_JOGO, VEZ_DO_PLAYER, ERROU, LOGIN_FAIL
+        ENVIA_GRID, ENVIA_PLAYER, ENVIA_VITORIA, CONNECT, 
+        DISCONNECT, COMECAR_JOGO, VEZ_DO_PLAYER, ERROU, 
+        LOGIN_FAIL, TELA_APOS_LOGIN
     }
 
    public void setUsuario(String usuario) {

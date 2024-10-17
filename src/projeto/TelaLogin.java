@@ -149,7 +149,8 @@ public class TelaLogin extends JFrame {
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
-                                new TelaDeSetup(player, grid, socket, service);
+                                new TelaAposLogin(grid, socket, service, player);
+                                //new TelaDeSetup(player, grid, socket, service);
                                 break;
                             }
 

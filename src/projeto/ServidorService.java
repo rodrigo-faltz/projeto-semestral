@@ -22,6 +22,7 @@ public class ServidorService {
     private static ListenerSocket cliente2 = null;
     private Grid grid1;
     private Grid grid2;
+    private int jogadoresLogados = 0;
 
     public ServidorService() {
         System.out.println("Tesatando");
@@ -105,6 +106,7 @@ public class ServidorService {
                         System.out.println("Teste login: " + teste);
         
                         if (teste) {
+                            System.out.println("ENVIA O PLAYER PORRA");
                             connect();
                             message.setAction(Action.ENVIA_PLAYER);
                             message.setNumeroDoPlayer(currentPlayerNumber);
@@ -147,7 +149,14 @@ public class ServidorService {
                             
                         }
                     } else if (action.equals(Action.ENVIA_PLAYER)) {
-                        // Lógica para enviar jogador
+                        System.out.println("FUNCIONOU MACONHEIRO");
+                        jogadoresLogados++;
+                        if(jogadoresLogados == 2){
+                            System.out.println("Os dois players logaram");
+                            message.setAction(Action.TELA_APOS_LOGIN);
+                            enviarMensagemParaCliente(1, message);
+                            enviarMensagemParaCliente(2, message);
+                        }
                     } else if (action.equals(Action.ENVIA_VITORIA)) {
                         int numDoPlayer = message.getNumeroDoPlayer();
 
