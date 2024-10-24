@@ -107,7 +107,8 @@ public class RecebeDoDB {
     
     }
 
-    public String[][] leaderboard(boolean DerrotaouVitoria) {
+    public String[][] leaderboard(boolean derrotaouVitoria, String intervaloDeTempo) {
+        // Intervalo de tempo dever ser: "day", "week", "month", "year"
         String[][] leaderboard = new String[10][2];
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -115,15 +116,47 @@ public class RecebeDoDB {
         int i = 0;
 
         String selectLeadersSQL = "SELECT jogador, COUNT(*) AS total_vitorias " +
-                    "FROM resultados_partidas " +
-                    "WHERE vitoria = "+ DerrotaouVitoria+" "+
-                    "GROUP BY jogador " +
-                    "ORDER BY total_vitorias DESC " +
-                    "LIMIT 10;";
+        "FROM resultados_partidas " +
+        "WHERE vitoria = ? " +
+        "AND data_jogo >= DATE_FORMAT(CURDATE(), '%Y-%m-01') " +
+        "AND data_jogo < CURDATE() " +
+        "GROUP BY jogador " +
+        "ORDER BY total_vitorias DESC " +
+        "LIMIT 10;";
+
+        if (intervaloDeTempo.equalsIgnoreCase("WEEK")) {
+        selectLeadersSQL = "SELECT jogador, COUNT(*) AS total_vitorias " +
+            "FROM resultados_partidas " +
+            "WHERE vitoria = ? " +
+            "AND WEEK(data_jogo) = WEEK(CURDATE()) " +
+            "AND MONTH(data_jogo) = MONTH(CURDATE()) " +
+            "AND YEAR(data_jogo) = YEAR(CURDATE()) " +
+            "GROUP BY jogador " +
+            "ORDER BY total_vitorias DESC " +
+            "LIMIT 10;";
+        } else if (intervaloDeTempo.equalsIgnoreCase("MONTH")) {
+        selectLeadersSQL = "SELECT jogador, COUNT(*) AS total_vitorias " +
+            "FROM resultados_partidas " +
+            "WHERE vitoria = ? " +
+            "AND MONTH(data_jogo) = MONTH(CURDATE()) " +
+            "AND YEAR(data_jogo) = YEAR(CURDATE()) " +
+            "GROUP BY jogador " +
+            "ORDER BY total_vitorias DESC " +
+            "LIMIT 10;";
+        } else if (intervaloDeTempo.equalsIgnoreCase("YEAR")) {
+        selectLeadersSQL = "SELECT jogador, COUNT(*) AS total_vitorias " +
+            "FROM resultados_partidas " +
+            "WHERE vitoria = ? " +
+            "AND YEAR(data_jogo) = YEAR(CURDATE()) " +
+            "GROUP BY jogador " +
+            "ORDER BY total_vitorias DESC " +
+            "LIMIT 10;";
+        }
 
         try {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             pstmt = conn.prepareStatement(selectLeadersSQL);
+            pstmt.setBoolean(1, derrotaouVitoria);
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
