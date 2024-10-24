@@ -164,8 +164,8 @@ public class TelaInicial extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == continuarButton) {
-            RecebeDoDB receba = new RecebeDoDB();
-            System.out.println(Arrays.deepToString(receba.leaderboard(true, "month")));
+            new TelaLeaderBoard();
+            dispose();
         }
 
         if (e.getSource() == comoJogarButton) {
