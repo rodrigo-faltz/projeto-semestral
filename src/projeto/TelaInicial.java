@@ -14,6 +14,7 @@ import java.util.logging.*;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import java.text.ParseException;
+import java.util.Arrays;
 
 public class TelaInicial extends JFrame implements ActionListener {
     private JButton novoJogoButton, continuarButton, comoJogarButton;
@@ -156,19 +157,15 @@ public class TelaInicial extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == novoJogoButton) {
-            LocaleDate ld = new LocaleDate();
-            try {
-                ld.printDate(LanguageManager.getCurrentLocale());
-            } catch (ParseException e1) {
-                e1.printStackTrace();
-            }
+
             socket = service.connect(); 
             new TelaLogin(player, grid, service, message);
             dispose();
         }
 
         if (e.getSource() == continuarButton) {
-            //TODO: ;
+            RecebeDoDB receba = new RecebeDoDB();
+            System.out.println(Arrays.deepToString(receba.leaderboard(false)));
         }
 
         if (e.getSource() == comoJogarButton) {

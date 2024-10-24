@@ -181,17 +181,26 @@ public class ServidorService {
 
                         System.out.println("Usuario: " + message.getUsuario());
 
-
-
+                        LocaleDate ld = new LocaleDate();
+                        String DataDaPartida = ld.dateString();
+                        EnviaProDB envia = new EnviaProDB();
                         if(numDoPlayer == 1)
                         {
-                            System.out.println("Player"+ Player1 +"ganhou");
+                            // Parte do DB --------
+                            System.out.println("Player "+ Player1 +" ganhou");
+                            envia.enviaPartida(true, Player1, DataDaPartida);
+                            envia.enviaPartida(false, Player2, DataDaPartida);
+                            // Parte do DB --------
                             message.setNumeroDoPlayer(2);
                             enviarMensagemParaCliente(2, message);
                         }
                         else if(numDoPlayer == 2)
                         {
-                            System.out.println("Player"+ Player2 +"ganhou");
+                            // Parte do DB --------
+                            envia.enviaPartida(true, Player2, DataDaPartida);
+                            envia.enviaPartida(false, Player1, DataDaPartida);
+                            // Parte do DB --------
+                            System.out.println("Player "+ Player2 +" ganhou");
                             message.setNumeroDoPlayer(1);
                             enviarMensagemParaCliente(1, message);
                         }

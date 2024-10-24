@@ -107,5 +107,34 @@ public class RecebeDoDB {
     
     }
 
-}
+    public String[][] leaderboard(boolean DerrotaouVitoria) {
+        String[][] leaderboard = new String[10][2];
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int i = 0;
 
+        String selectLeadersSQL = "SELECT jogador, COUNT(*) AS total_vitorias " +
+                    "FROM resultados_partidas " +
+                    "WHERE vitoria = "+ DerrotaouVitoria+" "+
+                    "GROUP BY jogador " +
+                    "ORDER BY total_vitorias DESC " +
+                    "LIMIT 10;";
+
+        try {
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            pstmt = conn.prepareStatement(selectLeadersSQL);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                leaderboard[i][0] = rs.getString("jogador");
+                leaderboard[i][1] = rs.getString("total_vitorias");
+                i++;
+            }
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return leaderboard;
+    }
+}

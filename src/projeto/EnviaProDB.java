@@ -17,29 +17,29 @@ public class EnviaProDB {
 
     }
 
-    public void enviaVitoria(String loginUsuario) {
+    // public void enviaVitoria(String loginUsuario) {
 
-        String updateSQL = "UPDATE Users SET Wins = Wins + 1 WHERE User = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
+    //     String updateSQL = "UPDATE Users SET Wins = Wins + 1 WHERE User = ?";
+    //     Connection conn = null;
+    //     PreparedStatement pstmt = null;
 
-        try {
-            // Estabelece a conexão com o banco de dados
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+    //     try {
+    //         // Estabelece a conexão com o banco de dados
+    //         conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
-            // Prepara a consulta de atualização
-            pstmt = conn.prepareStatement(updateSQL);
+    //         // Prepara a consulta de atualização
+    //         pstmt = conn.prepareStatement(updateSQL);
 
-            // Define os parâmetros da consulta
-            pstmt.setString(1, loginUsuario);
+    //         // Define os parâmetros da consulta
+    //         pstmt.setString(1, loginUsuario);
 
-            // Executa a consulta
-            pstmt.executeUpdate();
+    //         // Executa a consulta
+    //         pstmt.executeUpdate();
 
-        } catch (SQLException se) {
-            se.printStackTrace();
-}
-    }
+    //     } catch (SQLException se) {
+    //         se.printStackTrace();
+    //     }
+    // }
 
     public void enviaCredencial(String loginUsuario, String senhaUsuario) {
 
@@ -64,6 +64,32 @@ public class EnviaProDB {
         } catch (SQLException se) {
             se.printStackTrace();
 
+        }
     }
-}
+
+    public void enviaPartida(boolean Vitoria, String Username, String Data_Jogo) {
+
+        String insertPartidaSQL = "INSERT INTO resultados_partidas (Vitoria, Jogador, Data_Jogo) VALUES (?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Estabelece a conexão com o banco de dados
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            // Prepara a consulta de atualização
+            pstmt = conn.prepareStatement(insertPartidaSQL);
+
+            // Define os parâmetros da consulta
+            pstmt.setBoolean(1, Vitoria);
+            pstmt.setString(2, Username);
+            pstmt.setString(3, Data_Jogo);
+
+            // Executa a consulta
+            pstmt.executeUpdate();
+
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+    }
 }
