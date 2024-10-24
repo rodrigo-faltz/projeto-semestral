@@ -23,6 +23,9 @@ public class ServidorService {
     private Grid grid1;
     private Grid grid2;
     private int jogadoresLogados = 0;
+    private String Player1;
+    private String Player2;
+    private int vezDoPlayer = 1;
 
     public ServidorService() {
         System.out.println("Tesatando");
@@ -98,13 +101,25 @@ public class ServidorService {
                     Action action = message.getAction();
                     System.out.println("Mensagem recebida: " + action);
                     System.err.println("Player: " + message.getNumeroDoPlayer());
-        
+                    System.out.println("PASSOU AQUI 1");
                     if (action.equals(Action.CONNECT)) {
                         receba = new RecebeDoDB();
                         System.out.println("Usuario: " + message.getUsuario());
                         System.out.println("Senha: " + message.getSenha());
                         boolean teste = receba.checaLogin(message.getUsuario(), message.getSenha());
                         System.out.println("Teste login: " + teste);
+
+                        if(vezDoPlayer == 1)
+                        {
+                            Player1 = message.getUsuario();
+                            System.out.println("Teste Player 1: " + Player1);
+                            vezDoPlayer++;
+                        }
+                        else if(vezDoPlayer == 2)
+                        {
+                            System.out.println("Teste Player 2: " + Player2);
+                            Player2 = message.getUsuario();
+                        }
         
                         if (teste) {
                             System.out.println("ENVIA O PLAYER PORRA");
@@ -164,14 +179,19 @@ public class ServidorService {
                         System.out.println("Mensagem recebida: " + action);
                         System.err.println("Player: "+ numDoPlayer);
 
+                        System.out.println("Usuario: " + message.getUsuario());
+
+
+
                         if(numDoPlayer == 1)
                         {
-
+                            System.out.println("Player"+ Player1 +"ganhou");
                             message.setNumeroDoPlayer(2);
                             enviarMensagemParaCliente(2, message);
                         }
                         else if(numDoPlayer == 2)
                         {
+                            System.out.println("Player"+ Player2 +"ganhou");
                             message.setNumeroDoPlayer(1);
                             enviarMensagemParaCliente(1, message);
                         }
