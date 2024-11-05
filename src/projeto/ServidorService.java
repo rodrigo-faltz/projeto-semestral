@@ -102,11 +102,23 @@ public class ServidorService {
                     System.out.println("Mensagem recebida: " + action);
                     System.err.println("Player: " + message.getNumeroDoPlayer());
                     System.out.println("PASSOU AQUI 1");
+                    
                     if (action.equals(Action.CONNECT)) {
                         receba = new RecebeDoDB();
                         System.out.println("Usuario: " + message.getUsuario());
-                        System.out.println("Senha: " + message.getSenha());
-                        boolean teste = receba.checaLogin(message.getUsuario(), message.getSenha());
+                        System.out.println("Senha criptografada: " + message.getSenha());
+                        String senhaDescriptografada = "";
+                        try {
+                            senhaDescriptografada = AESUtil.decrypt(message.getSenha());
+                            System.out.println("Senha Descriptografada: " + senhaDescriptografada);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            message.setAction(Action.LOGIN_FAIL);
+                            output.writeObject(message);
+                            output.flush();
+                            return;
+                        }
+                        boolean teste = receba.checaLogin(message.getUsuario(), senhaDescriptografada);
                         System.out.println("Teste login: " + teste);
 
                         if(vezDoPlayer == 1)

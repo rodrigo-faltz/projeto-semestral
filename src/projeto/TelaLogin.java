@@ -68,23 +68,23 @@ public class TelaLogin extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 username = textField.getText();
                 password = new String(passwordField.getPassword());
-                message.setUsuario(username);
-                //TODO: Criptografar a senha aqui 
-                message.setSenha(password);
+                // message.setSenha(password);
+                try {
+                    message.setUsuario(username);
+                    String senhaCriptografada = AESUtil.encrypt(password);
+                    System.out.println("Senha criptografada: " + senhaCriptografada);
+                    message.setSenha(senhaCriptografada); // Seta a senha criptografada na mensagem
+                    message.setAction(Action.CONNECT);
+                    service.envia(message); // Envia a mensagem com a senha criptografada para o servidor
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 System.out.println(username);
                 System.out.println(password);
-                // envia através da message a senha, o servidor recebe, acessa o banco de dados, compara e devolve
-                message.setAction(Action.CONNECT);
-                
-            // se a senha digitada for igual a retornada pelo servidor(pelo Thread), instancia a tela de setup
-            
-            // service = new ClienteService();
-            
-            service.envia(message); // envia a mensagem para o servidor
-            new Thread(new ListenerSocket(service.getSocket())).start(); // escuta a mensagem recebida do servidor
-            System.out.println(player.getNumero());
-            dispose();
-            
+
+                new Thread(new ListenerSocket(service.getSocket())).start(); // escuta a mensagem recebida do servidor
+                System.out.println(player.getNumero());
+                dispose();
             }
         }); 
 
