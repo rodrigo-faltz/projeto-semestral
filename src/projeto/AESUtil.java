@@ -22,16 +22,18 @@ public class AESUtil {
         // Define o algoritmo de criptografia usado: AES (Advanced Encryption Standard).
         private static final String ALGORITHM = "AES";
         // Um array de bytes que representa a chave secreta usada para criptografar e descriptografar (16 bytes = 128 bits).
-        // private static final byte[] keyValue = "1234567890123456".getBytes();
+        //private static final byte[] keyValue = "1234567890123456".getBytes();
         private static Scanner input; // Scanner para ler o arquivo de texto
-        // private static String chave; 
+        private static String chave; 
             
                 // Método para criptografar uma string de texto.
                 public static String encrypt(String data) throws Exception {
-                    // Gera uma chave aleatória, cria um arquivo chave.txt e armazena a chave nele
-                    geraChave(new File("src/projeto/chave.txt"));
+
+                    // Gera uma chave aleatória, cria um arquivo chave.txt e armazena a chave nele <- IGNORAR
+                    //geraChave(new File("src/projeto/chave.txt")); <- IGNORAR
+
                     // Gera uma chave `SecretKey` usando a função `generateKey`.
-                    SecretKey key = leChaveGerada();
+                    SecretKey key = generateKey();
                     // Cria uma instância do `Cipher` configurada para usar o algoritmo AES.
                     Cipher cipher = Cipher.getInstance(ALGORITHM);
                     // Inicializa o `Cipher` em modo de criptografia (ENCRYPT_MODE) usando a chave fornecida.
@@ -45,7 +47,7 @@ public class AESUtil {
                 // Método para descriptografar uma string que foi criptografada.
                 public static String decrypt(String encryptedData) throws Exception {
                     // Gera novamente a `SecretKey` usando a função `generateKey`.
-                    SecretKey key = leChaveGerada();
+                    SecretKey key = generateKey();
                     // Cria uma instância do `Cipher` configurada para usar o algoritmo AES.
                     Cipher cipher = Cipher.getInstance(ALGORITHM);
                     // Inicializa o `Cipher` em modo de descriptografia (DECRYPT_MODE) usando a mesma chave.
@@ -59,13 +61,20 @@ public class AESUtil {
                 }
             
                 // Método privado que le a chave gravada no chave.txt
-                private static SecretKey leChaveGerada() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, KeyStoreException, IOException, ClassNotFoundException {
+                private static SecretKey generateKey() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, CertificateException, KeyStoreException, IOException, ClassNotFoundException {
+                   // =========================== IGNORAR ===============================================================
+                    // ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/projeto/chave.txt"));
+                    // SecretKey iSim = (SecretKey) ois.readObject();
+                    // byte[] chave = iSim.getEncoded();
+                    // ois.close();
+                    // ==================================================================================================
+
                     // Acessa o arquivo chave.txt para ler a chave que está gravada nele e a retorna
-                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("src/projeto/chave.txt"));
-                    SecretKey iSim = (SecretKey) ois.readObject();
-                    byte[] chave = iSim.getEncoded();
-                    ois.close();
-                    return new SecretKeySpec(chave, ALGORITHM);
+                    openFile();
+                    lerChave();
+                    closeFile();
+                    byte[] keyValue = chave.getBytes();
+                    return new SecretKeySpec(keyValue, ALGORITHM);
                 }
             
             
@@ -87,7 +96,7 @@ public class AESUtil {
                 try {
                     // Continua lendo registros do arquivo enquanto houver dados
                     while (input.hasNext()) {
-                        //chave = input.next();
+                        chave = input.next();
             }
         }
         // Trata exceção caso o arquivo tenha um formato incorreto
@@ -126,10 +135,10 @@ public class AESUtil {
     }
 
     public void setChave(String c) {
-       // chave = c;
+       chave = c;
     }
-    // public String getChave() {
-    //     return chave;
-    // }
+    public String getChave() {
+        return chave;
+    }
 }
 

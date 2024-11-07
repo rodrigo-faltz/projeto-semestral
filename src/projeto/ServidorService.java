@@ -28,7 +28,7 @@ public class ServidorService {
     private int vezDoPlayer = 1;
 
     public ServidorService() {
-        System.out.println("Tesatando");
+        System.out.println("Testando");
         new CriaDBs();
         
 
@@ -134,7 +134,7 @@ public class ServidorService {
                         }
         
                         if (teste) {
-                            System.out.println("ENVIA O PLAYER PORRA");
+                            System.out.println("ENVIA O PLAYER");
                             connect();
                             message.setAction(Action.ENVIA_PLAYER);
                             message.setNumeroDoPlayer(currentPlayerNumber);
@@ -177,7 +177,7 @@ public class ServidorService {
                             
                         }
                     } else if (action.equals(Action.ENVIA_PLAYER)) {
-                        System.out.println("FUNCIONOU MACONHEIRO");
+                        System.out.println("FUNCIONOU");
                         jogadoresLogados++;
                         if(jogadoresLogados == 2){
                             System.out.println("Os dois players logaram");
