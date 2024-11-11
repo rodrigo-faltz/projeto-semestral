@@ -14,6 +14,8 @@ import java.io.*;
 import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.util.ResourceBundle;
 
 
@@ -31,6 +33,7 @@ public class TelaLogin extends JFrame {
     private int controlador = 0;
     private Grid grid; 
     ResourceBundle bundle = LanguageManager.getResourceBundle();
+    
 
     public TelaLogin(Player player, Grid grid, ClienteService service, Message message) {
         super("Login");
@@ -45,8 +48,20 @@ public class TelaLogin extends JFrame {
         passwordText = new JLabel(bundle.getString("loginSenha"));
         textField = new JTextField(15);
         passwordField = new JPasswordField(15);
+        loginText.setForeground(Color.YELLOW);
+        passwordText.setForeground(Color.YELLOW);  // Set text color to red
         button1 = new JButton(bundle.getString("loginEntrar"));
         button2 = new JButton(bundle.getString("loginSair"));
+
+        button1.setBackground(new Color(44, 46, 95));  // Dark red background color
+        button1.setForeground(Color.WHITE);  // White text color for contrast
+        button1.setFocusPainted(false);
+
+        button2.setBackground(new Color(44, 46, 95));  // Dark red background color
+        button2.setForeground(Color.WHITE);  // White text color for contrast
+        button2.setFocusPainted(false);
+
+        getContentPane().setBackground(new Color(7,8,28));
 
         setLayout(new GridLayout(3, 2, 10, 10));
         add(loginText);
@@ -59,8 +74,7 @@ public class TelaLogin extends JFrame {
         pack();
         setVisible(true);   
         setLocationRelativeTo(null);  
-
-         
+        setResizable(false);
         button1.addActionListener(new ActionListener() {
 
 
@@ -150,24 +164,59 @@ public class TelaLogin extends JFrame {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
                                 new TelaAposLogin(grid, socket, service, player);
-                                //new TelaDeSetup(player, grid, socket, service);
                                 break;
                             }
 
                             if(action.equals(Action.LOGIN_FAIL))
                             {
-                                System.out.println("Login falhou");
-                                JDialog dialog = new JDialog();
-                                dialog.setAlwaysOnTop(true);
-                                dialog.setModal(true);
-                                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                                dialog.setLayout(new FlowLayout());
-                                dialog.add(new JLabel("Login falhou"));
-                                dialog.setSize(200, 100);
-                                dialog.setLocationRelativeTo(null);
-                                dialog.setVisible(true);
-                                new TelaLogin(player, grid, service, message);
-                                break;
+                                
+                            System.out.println(bundle.getString("loginEntrar"));
+
+                            // Create and configure the error dialog
+                            JDialog dialog = new JDialog();
+                            dialog.setTitle("Login Error");  // Set the title
+                            dialog.setAlwaysOnTop(true);
+                            dialog.setModal(true);
+                            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                            dialog.setLayout(new GridLayout(2, 1));
+
+                            // Create label with padding and custom text color
+                            JLabel messageLabel = new JLabel(bundle.getString("loginMessageError"));
+                            messageLabel.setForeground(Color.YELLOW);  // Set text color to red
+                            messageLabel.setBorder(new EmptyBorder(10, 20, 10, 20));  // Top, left, bottom, right padding
+
+                            // Set the background color of the dialog content
+                            dialog.getContentPane().setBackground(new Color(7,8,28));  // Light gray background
+
+                            // Create an exit button
+                            JButton exitButton = new JButton("Close");
+                            exitButton.setBackground(new Color(44, 46, 95));  // Dark red background color
+                            exitButton.setForeground(Color.WHITE);  // White text color for contrast
+                            exitButton.setFocusPainted(false);
+                            exitButton.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    dialog.dispose();  // Close the dialog
+                                }
+                            });
+
+                            // Add the label and button to the dialog
+                            dialog.add(messageLabel);
+                            dialog.add(exitButton);
+
+                            // Adjust dialog size to fit its content and padding
+                            dialog.pack();
+                            dialog.setLocationRelativeTo(null);  // Center the dialog on the screen
+
+                            // Show the dialog
+                            dialog.setVisible(true);
+
+                            // Proceed to the login screen
+                            new TelaLogin(player, grid, service, message);
+                            break;
+
+
+
 
                         }
                         

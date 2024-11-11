@@ -100,50 +100,44 @@ public class TelaInicial extends JFrame implements ActionListener {
 
         
 
-        caixa.setLayout(new GridLayout(4, 1));
+        caixa.setLayout(new GridLayout(3, 1));
 
         painel1 = new JPanel(new FlowLayout());
         painel2 = new JPanel(new FlowLayout());
         painel3 = new JPanel(new FlowLayout());
-        painel4 = new JPanel(new FlowLayout());
+  
 
         novoJogoButton = new JButton(imgs.botaoNovoJogo);
-        continuarButton = new JButton(imgs.botaoCarregar);
-        comoJogarButton = new JButton(imgs.botaoComoJogar);
+        continuarButton = new JButton(imgs.botaoLeaderboard);
         vezDeQuem = new JLabel(imgs.batalha);
 
         novoJogoButton.setContentAreaFilled(false);
         novoJogoButton.setBorderPainted(false);
         continuarButton.setContentAreaFilled(false);
         continuarButton.setBorderPainted(false);
-        comoJogarButton.setContentAreaFilled(false);
-        comoJogarButton.setBorderPainted(false);
+
 
         novoJogoButton.setPreferredSize(new Dimension(334, 109));
         continuarButton.setPreferredSize(new Dimension(334, 109));
-        comoJogarButton.setPreferredSize(new Dimension(334, 109));
         vezDeQuem.setPreferredSize(new Dimension(500, 150));
         
         novoJogoButton.addActionListener(this);
         continuarButton.addActionListener(this);
-        comoJogarButton.addActionListener(this);
 
         painel1.add(novoJogoButton);
         painel2.add(continuarButton);
         painel3.add(vezDeQuem);
-        painel4.add(comoJogarButton);
         
         caixa.add(painel3);
         caixa.add(painel1);
         caixa.add(painel2);
-        caixa.add(painel4);
+
 
         painel1.setBackground(imgs.corDoFundo);
         painel2.setBackground(imgs.corDoFundo);
         painel3.setBackground(imgs.corDoFundo);
-        painel4.setBackground(imgs.corDoFundo);
 
-        setSize(500, 800);
+        setSize(500, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
@@ -161,17 +155,12 @@ public class TelaInicial extends JFrame implements ActionListener {
             socket = service.connect(); 
             new TelaLogin(player, grid, service, message);
             dispose();
+
         }
 
         if (e.getSource() == continuarButton) {
             new TelaLeaderBoard();
             dispose();
-        }
-
-        if (e.getSource() == comoJogarButton) {
-            
-            //TODO: ;
-        
         }
     }
 
@@ -243,8 +232,7 @@ public class TelaInicial extends JFrame implements ActionListener {
 
         // Atualiza os botões e labels com as novas imagens
         novoJogoButton.setIcon(imgs.botaoNovoJogo);
-        continuarButton.setIcon(imgs.botaoCarregar);
-        comoJogarButton.setIcon(imgs.botaoComoJogar);
+        continuarButton.setIcon(imgs.botaoLeaderboard);
         vezDeQuem.setIcon(imgs.batalha);
 
         repaint(); // Repinta a janela para refletir as mudanças visuais

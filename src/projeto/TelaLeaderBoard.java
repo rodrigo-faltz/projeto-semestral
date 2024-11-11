@@ -2,6 +2,8 @@ package projeto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,12 +36,27 @@ public class TelaLeaderBoard extends JFrame {
         tableModel = new DefaultTableModel(new Object[][]{}, initialColumnNames);
         table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
+
+        table.setBackground(new Color(230, 240, 255));      // Light blue background for cells
+        table.setForeground(Color.BLACK);                   // Black text color for cells
+        table.setSelectionBackground(new Color(70, 130, 180)); // Steel blue background for selected cells
+        table.setSelectionForeground(Color.WHITE);          // White text color for selected cells
+        table.setGridColor(new Color(200, 200, 200));       // Light gray grid color
+
+        // Customize header colors
+        JTableHeader header = table.getTableHeader();
+        header.setBackground(new Color(44, 46, 95));        // Dark blue background for header
+        header.setForeground(Color.WHITE);   
+
         // Add JTable to the center (BorderLayout.CENTER)
         add(tableScrollPane, BorderLayout.CENTER);
 
         // Create a JButton
         JButton button = new JButton("Voltar");
-        // Add JButton to the bottom (BorderLayout.SOUTH)
+        button.setBackground(new Color(44, 46, 95));  // Dark red background color
+        button.setForeground(Color.WHITE);  // White text color for contrast
+        button.setFocusPainted(false);;
+        // AddJButton to the bottom (BorderLayout.SOUTH)
         add(button, BorderLayout.SOUTH);
 
         comboBox.setSelectedItem("Vitorias por Ano");  // Start with "Vitorias por Ano"
@@ -66,6 +83,7 @@ public class TelaLeaderBoard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
         setVisible(true);
+        
     }
 
     // Method to update the table data and column names based on the selected item in the combo box

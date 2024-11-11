@@ -49,7 +49,7 @@ public class TelaAposSetup {
         titulo.setFont(new Font("Dialog", Font.BOLD, 18));
         titulo.setForeground(new Color(255, 235, 15));
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
-        titulo.setText(bundle.getString("messageApos"));
+        titulo.setText(bundle.getString("messageAposSetup"));
         titulo.setPreferredSize(new Dimension(600, 50));
 
         // Configurações da imagem

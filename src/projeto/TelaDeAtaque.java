@@ -54,29 +54,20 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         Container caixa = getContentPane();
         caixa.setLayout(new BorderLayout());
         painel1 = new JPanel(new GridLayout(10,10));
-        painel2 = new JPanel(new FlowLayout());
+
         botoes = new JButton[10][10];
         criaGrid(botoes, painel1, x);
-        botao1 = new JButton(imgs.botaoSalvar);
-        botao1.setContentAreaFilled(false);
-        botao1.setBorderPainted(false);
-
-
-        botao1.setPreferredSize(new Dimension(170, 50));
-        painel2.add(botao1);
-        botao1.addActionListener(this);
-        botao1.addMouseListener(this);
 
         caixa.add(painel1, BorderLayout.CENTER);
-        caixa.add(painel2, BorderLayout.SOUTH);
 
-        setSize(900,900);
+
+        setSize(900,850);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
 
         painel1.setBackground(imgs.corDoFundo);
-        painel2.setBackground(imgs.corDoFundo);
+
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);

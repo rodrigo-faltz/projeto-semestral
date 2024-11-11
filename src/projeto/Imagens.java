@@ -27,7 +27,7 @@ public class Imagens {
     impNave3HorizontalD[], impNave3Vertical1D, impNave3Vertical2D, impNave3Vertical3D, impNave3VerticalD[], impNave4Vertical1D, impNave4Vertical2D, impNave4Vertical3D,
     impNave4Vertical4D, impNave4VerticalD[], impNave4Horizontal1D, impNave4Horizontal2D, impNave4Horizontal3D, impNave4Horizontal4D, impNave4HorizontalD[],
     impNave5Horizontal1D, impNave5Horizontal2D, impNave5Horizontal3D, impNave5Horizontal4D, impNave5Horizontal5D, impNave5HorizontalD[], impNave5Vertical1D, impNave5Vertical2D,
-    impNave5Vertical3D, impNave5Vertical4D, impNave5Vertical5D, impNave5VerticalD[], atkRep, atkImp;
+    impNave5Vertical3D, impNave5Vertical4D, impNave5Vertical5D, impNave5VerticalD[], atkRep, atkImp, botaoLeaderboard;
 
     public Color corDoFundo;
 
@@ -232,16 +232,6 @@ public class Imagens {
         String selectedLanguage = selectedLocale.getLanguage();
         //System.out.println(selectedLanguage);
 
-        comojogar = new ImageIcon[] {
-            comojogar1 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogarTelaInicial.jpg"),
-            comojogar2 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar2.jpg"),
-            comojogar3 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar3.jpg"),
-            comojogar4 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar4.jpg"),
-            comojogar5 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar5.jpg"),
-            comojogar6 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar6.jpg"),
-            comojogar7 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar7.jpg"),
-            comojogar8 = new ImageIcon("lib\\" + selectedLanguage + "\\ComoJogar8.jpg")
-        };
 
         batalha = new ImageIcon("lib\\" + selectedLanguage + "\\Bataalha.jpg");
         botaoSair = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoSair.png");
@@ -251,6 +241,7 @@ public class Imagens {
         botaoNovoJogo = new ImageIcon("lib\\" + selectedLanguage + "\\novoJogoButton.png");
         botaoComoJogar = new ImageIcon("lib\\" + selectedLanguage + "\\comoJogarButton.png");
         botaoProsseguir = new ImageIcon("lib\\" + selectedLanguage + "\\BotaoProsseguir.png");
+        botaoLeaderboard = new ImageIcon("lib\\" + selectedLanguage + "\\Leaderboard.png");
 
         corDoFundo = new Color(7,8,28);
     }
