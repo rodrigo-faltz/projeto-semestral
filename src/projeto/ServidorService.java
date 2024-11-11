@@ -116,24 +116,25 @@ public class ServidorService {
                             message.setAction(Action.LOGIN_FAIL);
                             output.writeObject(message);
                             output.flush();
-                            return;
+                            //return;
                         }
                         boolean teste = receba.checaLogin(message.getUsuario(), senhaDescriptografada);
                         System.out.println("Teste login: " + teste);
 
-                        if(vezDoPlayer == 1)
-                        {
-                            Player1 = message.getUsuario();
-                            System.out.println("Teste Player 1: " + Player1);
-                            vezDoPlayer++;
-                        }
-                        else if(vezDoPlayer == 2)
-                        {
-                            System.out.println("Teste Player 2: " + Player2);
-                            Player2 = message.getUsuario();
-                        }
         
                         if (teste) {
+                            
+                            if(vezDoPlayer == 1)
+                            {
+                                Player1 = message.getUsuario();
+                                System.out.println("Teste Player 1: " + Player1);
+                                vezDoPlayer++;
+                            }
+                            else if(vezDoPlayer == 2)
+                            {
+                                System.out.println("Teste Player 2: " + Player2);
+                                Player2 = message.getUsuario();
+                            }
                             System.out.println("ENVIA O PLAYER");
                             connect();
                             message.setAction(Action.ENVIA_PLAYER);

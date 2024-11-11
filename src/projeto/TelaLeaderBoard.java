@@ -1,9 +1,11 @@
 package projeto;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,53 +18,96 @@ public class TelaLeaderBoard extends JFrame {
     private RecebeDoDB receba = new RecebeDoDB();
 
     public TelaLeaderBoard() {
-        
-        // Set the title of the window
-        
-        setTitle("Leaderboard");
 
-        // Set the layout for the frame (BorderLayout)
+        // Set the title and layout for the frame
+        setTitle("Leaderboard");
         setLayout(new BorderLayout());
 
-        // Create a JComboBox and add some items
+        // Create a JComboBox for leaderboard filters and set its initial selection
         String[] comboBoxItems = {"Vitorias por Ano", "Vitorias por Mes", "Vitorias por Semana",
-                                    "Derrotas por Ano", "Derrotas por Mes", "Derrotas por Semana"};
+                                  "Derrotas por Ano", "Derrotas por Mes", "Derrotas por Semana"};
         JComboBox<String> comboBox = new JComboBox<>(comboBoxItems);
-        // Add JComboBox to the top (BorderLayout.NORTH)
+
+// Style the JComboBox
+        comboBox.setBackground(new Color(7, 8, 28));             // Dark background
+        comboBox.setForeground(Color.WHITE);                     // White text color
+        comboBox.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); // Border matches other components
+        comboBox.setFocusable(false);                            // Remove focus border for a cleaner look
+
+        // Custom UI to ensure dropdown button matches color scheme
+        comboBox.setUI(new BasicComboBoxUI() {
+            @Override
+            protected JButton createArrowButton() {
+                JButton button = super.createArrowButton();
+                button.setBackground(new Color(44, 46, 95));     // Dark blue background for arrow button
+                button.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); // Matching border
+                return button;
+            }
+        });
+
+        comboBox.setSelectedItem("Vitorias por Ano");
         add(comboBox, BorderLayout.NORTH);
 
-        // Create a JTable with an empty data model
+        // Initialize JTable with an empty model and add it to a scroll pane
         String[] initialColumnNames = {"Jogador", "Qtd de Vitorias"};
-        tableModel = new DefaultTableModel(new Object[][]{}, initialColumnNames);
+        tableModel = new DefaultTableModel(new Object[][]{}, initialColumnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;  // All cells are non-editable
+            }
+        };
+        
+        // Create the JTable with the non-editable model
         table = new JTable(tableModel);
+        table.setFillsViewportHeight(true); // Make the table fill the scroll pane area
+        table.setRowHeight(29); // Set the row height to 30 pixels (adjust as needed)
+
+        // Set font size and style for the table cells
+        table.setFont(new Font("SansSerif", Font.PLAIN, 16)); // 16-point font size
+
+        // Center-align text in each cell
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        table.setDefaultRenderer(Object.class, centerRenderer);
+
         JScrollPane tableScrollPane = new JScrollPane(table);
 
-        table.setBackground(new Color(230, 240, 255));      // Light blue background for cells
-        table.setForeground(Color.BLACK);                   // Black text color for cells
-        table.setSelectionBackground(new Color(70, 130, 180)); // Steel blue background for selected cells
-        table.setSelectionForeground(Color.WHITE);          // White text color for selected cells
-        table.setGridColor(new Color(200, 200, 200));       // Light gray grid color
+        // Set the background behind the table
+        tableScrollPane.getViewport().setBackground(new Color(7, 8, 28));
 
-        // Customize header colors
+        // Remove or customize the border of the JScrollPane
+        tableScrollPane.setBorder(BorderFactory.createLineBorder(new Color(7, 8, 28)));
+
+        // Style table cell colors
+        table.setBackground(new Color(7, 8, 28));            // Dark background for cells
+        table.setForeground(Color.WHITE);                    // White text color for cells
+        table.setSelectionBackground(new Color(44, 46, 95)); // Dark blue for selected cells
+        table.setSelectionForeground(Color.WHITE);           // White text for selected cells
+        table.setGridColor(new Color(44, 46, 95));           // Dark blue grid color
+
+        // Customize header colors and remove border
         JTableHeader header = table.getTableHeader();
-        header.setBackground(new Color(44, 46, 95));        // Dark blue background for header
-        header.setForeground(Color.WHITE);   
+        header.setBackground(new Color(44, 46, 95));         // Dark blue background for header
+        header.setForeground(Color.WHITE);                   // White text color for header
+        header.setBorder(new LineBorder(new Color(44, 46, 95))); // Border matches header color
 
-        // Add JTable to the center (BorderLayout.CENTER)
+        // Add table to the center
         add(tableScrollPane, BorderLayout.CENTER);
 
-        // Create a JButton
+        // Create and style the "Voltar" button
         JButton button = new JButton("Voltar");
-        button.setBackground(new Color(44, 46, 95));  // Dark red background color
-        button.setForeground(Color.WHITE);  // White text color for contrast
-        button.setFocusPainted(false);;
-        // AddJButton to the bottom (BorderLayout.SOUTH)
+        button.setBackground(new Color(44, 46, 95));
+        // Dark blue background for button
+        button.setForeground(Color.WHITE);                   // White text color for button
+        button.setFocusPainted(false);
+        button.setBorder(new LineBorder(new Color(44, 46, 95))); // Border matches button color
+
         add(button, BorderLayout.SOUTH);
 
-        comboBox.setSelectedItem("Vitorias por Ano");  // Start with "Vitorias por Ano"
+        // Load initial table data
         updateTableData("Vitorias por Ano");
 
-        // Add ActionListener to JComboBox to update table data and column names when selection changes
+        // Add action listener to JComboBox to update table data on selection change
         comboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,6 +116,7 @@ public class TelaLeaderBoard extends JFrame {
             }
         });
 
+        // Add action listener to "Voltar" button to return to initial screen
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,11 +125,11 @@ public class TelaLeaderBoard extends JFrame {
             }
         });
 
-        // Set default close operation and window size
+        // Set default close operation and frame size, then display the frame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(600, 400);
         setVisible(true);
-        
+        setLocationRelativeTo(null);
     }
 
     // Method to update the table data and column names based on the selected item in the combo box
@@ -91,7 +137,7 @@ public class TelaLeaderBoard extends JFrame {
         Object[][] data = new Object[][]{};
         String[] columnNames = new String[]{};
 
-        // Change the data and column names based on the selected option
+        // Update data and column names based on the selected option
         switch (selectedOption) {
             case "Vitorias por Ano":
                 partidas = receba.leaderboard(true, "year");
