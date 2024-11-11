@@ -2,6 +2,7 @@ package projeto;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -23,14 +24,14 @@ public class TelaLeaderBoard extends JFrame {
         setTitle("Leaderboard");
         setLayout(new BorderLayout());
 
-        // Create a JComboBox for leaderboard filters and set its initial selection
         String[] comboBoxItems = {"Vitorias por Ano", "Vitorias por Mes", "Vitorias por Semana",
-                                  "Derrotas por Ano", "Derrotas por Mes", "Derrotas por Semana"};
+                                "Derrotas por Ano", "Derrotas por Mes", "Derrotas por Semana"};
         JComboBox<String> comboBox = new JComboBox<>(comboBoxItems);
 
-// Style the JComboBox
+        // Style the JComboBox
         comboBox.setBackground(new Color(7, 8, 28));             // Dark background
         comboBox.setForeground(Color.WHITE);                     // White text color
+        comboBox.setFont(new Font("SansSerif", Font.PLAIN, 16)); // Set a larger font size
         comboBox.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); // Border matches other components
         comboBox.setFocusable(false);                            // Remove focus border for a cleaner look
 
@@ -45,8 +46,32 @@ public class TelaLeaderBoard extends JFrame {
             }
         });
 
-        comboBox.setSelectedItem("Vitorias por Ano");
-        add(comboBox, BorderLayout.NORTH);
+// Center-align text in each item in the combo box dropdown and ensure background consistency
+comboBox.setRenderer(new DefaultListCellRenderer() {
+    @Override
+    public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        label.setHorizontalAlignment(SwingConstants.CENTER); // Center-align text
+        label.setBackground(isSelected ? new Color(44, 46, 95) : new Color(7, 8, 28)); // Dark background
+        label.setForeground(Color.WHITE); // White text color
+        return label;
+    }
+});
+
+// Update the ComboBox editor to set its background and alignment
+comboBox.setEditor(new BasicComboBoxEditor() {
+    @Override
+    protected JTextField createEditorComponent() {
+        JTextField editor = super.createEditorComponent();
+        editor.setBackground(new Color(7, 8, 28)); // Dark background
+        editor.setForeground(Color.WHITE); // White text color
+        editor.setHorizontalAlignment(SwingConstants.CENTER); // Center-align text
+        return editor;
+    }
+});
+comboBox.setEditable(true); // Make ComboBox editable to apply the editor customization
+comboBox.setSelectedItem("Vitorias por Ano");
+add(comboBox, BorderLayout.NORTH);
 
         // Initialize JTable with an empty model and add it to a scroll pane
         String[] initialColumnNames = {"Jogador", "Qtd de Vitorias"};
@@ -60,7 +85,7 @@ public class TelaLeaderBoard extends JFrame {
         // Create the JTable with the non-editable model
         table = new JTable(tableModel);
         table.setFillsViewportHeight(true); // Make the table fill the scroll pane area
-        table.setRowHeight(29); // Set the row height to 30 pixels (adjust as needed)
+        table.setRowHeight(28); // Set the row height to 30 pixels (adjust as needed)
 
         // Set font size and style for the table cells
         table.setFont(new Font("SansSerif", Font.PLAIN, 16)); // 16-point font size
