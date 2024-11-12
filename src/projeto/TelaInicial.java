@@ -28,72 +28,72 @@ public class TelaInicial extends JFrame implements ActionListener {
 
 
 
-    JMenuItem pt, en, es, ja, de;
-    JMenu idioma;
-    JMenuBar menuBar;
-    ResourceBundle bundle = LanguageManager.getResourceBundle();
+    // JMenuItem pt, en, es, ja, de;
+    // JMenu idioma;
+    // JMenuBar menuBar;
+    // ResourceBundle bundle = LanguageManager.getResourceBundle();
 
 
         // 
     public TelaInicial(Grid grid, Player player, ClienteService service, Socket socket) {
-        setTitle(bundle.getString("titleInicio"));
+        // setTitle(bundle.getString("titleInicio"));
 
         this.service = service;
         this.player = player;
         this.grid = grid;
         this.socket = socket;
         
-        menuBar = new JMenuBar();
-        idioma = new JMenu(bundle.getString("selectLanguage")); // muda com o idioma
-        pt = new JMenuItem("Português");
-        en = new JMenuItem("English");
-        es = new JMenuItem("Español");
-        ja = new JMenuItem("日本語");
-        de = new JMenuItem("Deutsch");
+        // menuBar = new JMenuBar();
+        // idioma = new JMenu(bundle.getString("selectLanguage")); // muda com o idioma
+        // pt = new JMenuItem("Português");
+        // en = new JMenuItem("English");
+        // es = new JMenuItem("Español");
+        // ja = new JMenuItem("日本語");
+        // de = new JMenuItem("Deutsch");
 
-        pt.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLanguage(0);
-            }
-        });
+        // pt.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         updateLanguage(0);
+        //     }
+        // });
 
-        en.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLanguage(1);
-            }
-        });
+        // en.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         updateLanguage(1);
+        //     }
+        // });
 
-        es.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLanguage(2);
-            }
-        });
+        // es.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         updateLanguage(2);
+        //     }
+        // });
 
-        ja.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLanguage(3);
-            }
-        });
+        // ja.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         updateLanguage(3);
+        //     }
+        // });
 
-        de.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLanguage(4);
-            }
-        });
+        // de.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         updateLanguage(4);
+        //     }
+        // });
 
-        idioma.add(pt);
-        idioma.add(en);
-        idioma.add(es);
-        idioma.add(ja);
-        idioma.add(de);
+        // idioma.add(pt);
+        // idioma.add(en);
+        // idioma.add(es);
+        // idioma.add(ja);
+        // idioma.add(de);
 
-        menuBar.add(idioma);
-        setJMenuBar(menuBar);
+        // menuBar.add(idioma);
+        // setJMenuBar(menuBar);
 
         imgs = new Imagens();
         Container caixa = getContentPane();
@@ -170,77 +170,77 @@ public class TelaInicial extends JFrame implements ActionListener {
         }
     }
 
-    private class ListenerSocket implements Runnable
-    {
-        private ObjectInputStream input;
+    // private class ListenerSocket implements Runnable
+    // {
+    //     private ObjectInputStream input;
 
-        public ListenerSocket(Socket socket)
-        {
+    //     public ListenerSocket(Socket socket)
+    //     {
             
-            this.input = service.getInput();
+    //         this.input = service.getInput();
            
-        }
+    //     }
 
-        @Override
-        public void run()
-        {
-            Message message = null;
-            try
-                {
-                    while ((message = (Message) input.readObject())!=null)
-                        {
-                            Action action = message.getAction();
+    //     @Override
+    //     public void run()
+    //     {
+    //         Message message = null;
+    //         try
+    //             {
+    //                 while ((message = (Message) input.readObject())!=null)
+    //                     {
+    //                         Action action = message.getAction();
 
-                            if(action.equals(Action.ENVIA_PLAYER))
-                            {
-                                player.setNumero(message.getNumeroDoPlayer());
-                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
-                                break;
-                            }
+    //                         if(action.equals(Action.ENVIA_PLAYER))
+    //                         {
+    //                             player.setNumero(message.getNumeroDoPlayer());
+    //                             System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+    //                             break;
+    //                         }
 
-                            if(action.equals(Action.ENVIA_GRID))
-                            {
-                                System.out.println("Recebeu o grid, ta errado");
-                                break;
-                            }
+    //                         if(action.equals(Action.ENVIA_GRID))
+    //                         {
+    //                             System.out.println("Recebeu o grid, ta errado");
+    //                             break;
+    //                         }
 
-                            if(action.equals(Action.ENVIA_VITORIA))
-                            {
-                                System.out.println("Como que recebe vitória se nem começou?");
-                                break;
-                            }
+    //                         if(action.equals(Action.ENVIA_VITORIA))
+    //                         {
+    //                             System.out.println("Como que recebe vitória se nem começou?");
+    //                             break;
+    //                         }
 
-                        }
+    //                     }
 
-                }
-            catch(IOException e)
-            {
-                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
-            }
-            catch(ClassNotFoundException e)
-            {
-                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
-            }
+    //             }
+    //         catch(IOException e)
+    //         {
+    //             Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+    //         }
+    //         catch(ClassNotFoundException e)
+    //         {
+    //             Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+    //         }
 
-        }
-    }
+    //     }
+    // }
 
-    private void updateLanguage(int languageIndex) {
-        Locale selectedLocale = LanguageManager.getSupportedLocales()[languageIndex];
-        LanguageManager.setCurrentLocale(selectedLocale);
-        ResourceBundle messages = LanguageManager.getResourceBundle();
+    // private void updateLanguage(int languageIndex) {
+    //     Locale selectedLocale = LanguageManager.getSupportedLocales()[languageIndex];
+    //     LanguageManager.setCurrentLocale(selectedLocale);
+    //     ResourceBundle messages = LanguageManager.getResourceBundle();
 
-        setTitle(messages.getString("titleInicio"));
-        idioma.setText(messages.getString("selectLanguage"));
+    //     setTitle(messages.getString("titleInicio"));
+    //     idioma.setText(messages.getString("selectLanguage"));
 
-        // Atualiza as imagens conforme o novo idioma
-        imgs.loadImages(selectedLocale);
+    //     // Atualiza as imagens conforme o novo idioma
+    //     imgs.loadImages(selectedLocale);
 
-        // Atualiza os botões e labels com as novas imagens
-        novoJogoButton.setIcon(imgs.botaoNovoJogo);
-        continuarButton.setIcon(imgs.botaoLeaderboard);
-        vezDeQuem.setIcon(imgs.batalha);
+    //     // Atualiza os botões e labels com as novas imagens
+    //     novoJogoButton.setIcon(imgs.botaoNovoJogo);
+    //     continuarButton.setIcon(imgs.botaoLeaderboard);
+    //     vezDeQuem.setIcon(imgs.batalha);
 
-        repaint(); // Repinta a janela para refletir as mudanças visuais
-    } 
+    //     repaint(); // Repinta a janela para refletir as mudanças visuais
+    // } 
 }

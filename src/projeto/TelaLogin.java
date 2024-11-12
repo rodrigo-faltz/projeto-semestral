@@ -16,6 +16,7 @@ import java.util.logging.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
@@ -33,16 +34,130 @@ public class TelaLogin extends JFrame {
     private int controlador = 0;
     private Grid grid; 
     ResourceBundle bundle = LanguageManager.getResourceBundle();
+    private boolean running = true;
     
+    JMenuItem pt, en, es, ja, de;
+    JMenu idioma;
+    JMenuBar menuBar;
 
     public TelaLogin(ClienteService service, Socket socket) {
-        super("Login");
+        setTitle(bundle.getString("titleInicio"));
 
         grid = new Grid();
         message = new Message();
         player = new Player();
         this.service = service;
         this.socket = socket;
+
+        // Initialize the menu bar and language menu
+        menuBar = new JMenuBar();
+        menuBar.setBackground(new Color(7, 8, 28));                // Dark background for menu bar
+        menuBar.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); // Border to match theme
+
+        idioma = new JMenu(bundle.getString("selectLanguage"));
+        idioma.setForeground(Color.WHITE);                         // White text color for menu
+        idioma.setBackground(new Color(7, 8, 28));                 // Dark background for menu
+
+        // Portuguese Menu Item
+        pt = new JMenuItem("Português");
+        pt.setBackground(new Color(7, 8, 28));                     // Dark background for menu item
+        pt.setForeground(Color.WHITE);                             // White text color
+        pt.setFont(new Font("SansSerif", Font.PLAIN, 14));         // Font style and size
+        pt.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); // Matching border
+        pt.setOpaque(true);
+        pt.addChangeListener(e -> pt.setBackground(pt.isArmed() ? new Color(44, 46, 95) : new Color(7, 8, 28))); // Highlight color
+
+        // English Menu Item
+        en = new JMenuItem("English");
+        en.setBackground(new Color(7, 8, 28));                     
+        en.setForeground(Color.WHITE);                             
+        en.setFont(new Font("SansSerif", Font.PLAIN, 14));         
+        en.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); 
+        en.setOpaque(true);
+        en.addChangeListener(e -> en.setBackground(en.isArmed() ? new Color(44, 46, 95) : new Color(7, 8, 28)));
+
+        // Spanish Menu Item
+        es = new JMenuItem("Español");
+        es.setBackground(new Color(7, 8, 28));                     
+        es.setForeground(Color.WHITE);                             
+        es.setFont(new Font("SansSerif", Font.PLAIN, 14));         
+        es.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); 
+        es.setOpaque(true);
+        es.addChangeListener(e -> es.setBackground(es.isArmed() ? new Color(44, 46, 95) : new Color(7, 8, 28)));
+
+        // Japanese Menu Item
+        ja = new JMenuItem("日本語");
+        ja.setBackground(new Color(7, 8, 28));                     
+        ja.setForeground(Color.WHITE);                             
+        ja.setFont(new Font("SansSerif", Font.PLAIN, 14));         
+        ja.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); 
+        ja.setOpaque(true);
+        ja.addChangeListener(e -> ja.setBackground(ja.isArmed() ? new Color(44, 46, 95) : new Color(7, 8, 28)));
+
+        // German Menu Item
+        de = new JMenuItem("Deutsch");
+        de.setBackground(new Color(7, 8, 28));                     
+        de.setForeground(Color.WHITE);                             
+        de.setFont(new Font("SansSerif", Font.PLAIN, 14));         
+        de.setBorder(BorderFactory.createLineBorder(new Color(44, 46, 95))); 
+        de.setOpaque(true);
+        de.addChangeListener(e -> de.setBackground(de.isArmed() ? new Color(44, 46, 95) : new Color(7, 8, 28)));
+
+        // Add each menu item to the language menu
+        idioma.add(pt);
+        idioma.add(en);
+        idioma.add(es);
+        idioma.add(ja);
+        idioma.add(de);
+
+        // Add the language menu to the menu bar
+        menuBar.add(idioma);
+        setJMenuBar(menuBar);
+
+
+        pt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(0);
+            }
+        });
+
+        en.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(1);
+            }
+        });
+
+        es.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(2);
+            }
+        });
+
+        ja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(3);
+            }
+        });
+
+        de.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateLanguage(4);
+            }
+        });
+
+        idioma.add(pt);
+        idioma.add(en);
+        idioma.add(es);
+        idioma.add(ja);
+        idioma.add(de);
+
+        menuBar.add(idioma);
+        setJMenuBar(menuBar);
 
         loginText = new JLabel(bundle.getString("loginUsuario"));
         passwordText = new JLabel(bundle.getString("loginSenha"));
@@ -98,7 +213,8 @@ public class TelaLogin extends JFrame {
                 System.out.println(username);
                 System.out.println(password);
 
-                new Thread(new ListenerSocket(service.getSocket())).start(); // escuta a mensagem recebida do servidor
+                Thread thread = new Thread(new ListenerSocket(service.getSocket()));
+                thread.start(); // escuta a mensagem recebida do servidor
                 System.out.println(player.getNumero());
                 dispose();
             }
@@ -153,7 +269,7 @@ public class TelaLogin extends JFrame {
             Message message = null;
             try
                 {
-                    while (true)
+                    while (running)
                         {
 
                             message = (Message) input.readObject();
@@ -166,6 +282,7 @@ public class TelaLogin extends JFrame {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
                                 new TelaInicial(grid, player, service, socket);
+                                running = false;
                                 break;
                             }
 
@@ -191,7 +308,7 @@ public class TelaLogin extends JFrame {
                             dialog.getContentPane().setBackground(new Color(7,8,28));  // Light gray background
 
                             // Create an exit button
-                            JButton exitButton = new JButton("Close");
+                            JButton exitButton = new JButton(bundle.getString("voltar"));
                             exitButton.setBackground(new Color(44, 46, 95));  // Dark red background color
                             exitButton.setForeground(Color.WHITE);  // White text color for contrast
                             exitButton.setFocusPainted(false);
@@ -237,4 +354,20 @@ public class TelaLogin extends JFrame {
 
         }
     }
+
+        private void updateLanguage(int languageIndex) {
+        Locale selectedLocale = LanguageManager.getSupportedLocales()[languageIndex];
+        LanguageManager.setCurrentLocale(selectedLocale);
+        ResourceBundle messages = LanguageManager.getResourceBundle();
+
+        setTitle(messages.getString("titleInicio"));
+        idioma.setText(messages.getString("selectLanguage"));
+        button1.setText(messages.getString("loginEntrar"));
+        button2.setText(messages.getString("loginSair"));
+        loginText.setText(messages.getString("loginUsuario"));
+        passwordText.setText(messages.getString("loginSenha"));
+
+
+        repaint(); // Repinta a janela para refletir as mudanças visuais
+    } 
 }

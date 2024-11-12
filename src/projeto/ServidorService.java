@@ -130,14 +130,14 @@ public class ServidorService {
                             
                             if(vezDoPlayer == 1)
                             {
-                                Player1 = message.getUsuario();
+                                Player1 = usuarioDescriptografado;
                                 System.out.println("Teste Player 1: " + Player1);
                                 vezDoPlayer++;
                             }
                             else if(vezDoPlayer == 2)
                             {
                                 System.out.println("Teste Player 2: " + Player2);
-                                Player2 = message.getUsuario();
+                                Player2 = usuarioDescriptografado;
                             }
                             System.out.println("ENVIA O PLAYER");
                             connect();
