@@ -158,6 +158,15 @@ add(comboBox, BorderLayout.NORTH);
         // Load initial table data
         updateTableData("Vitorias por Ano");
 
+        // Set default close operation and frame size, then display the frame
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 400);
+        setVisible(true);
+        setLocationRelativeTo(null);
+
+        // Create a new thread to listen for incoming messages from the server
+        Thread thread = new Thread(new ListenerSocket(socket));
+
         // Add action listener to JComboBox to update table data on selection change
         comboBox.addActionListener(new ActionListener() {
             @Override
@@ -175,16 +184,14 @@ add(comboBox, BorderLayout.NORTH);
                 message.setAction(Message.Action.SAIU_LEADERBOARD);
                 service.envia(message);
                 new TelaInicial(grid, player, service, socket);
+                thread.interrupt();
                 dispose();
+                
             }
         });
 
-        // Set default close operation and frame size, then display the frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
-        setVisible(true);
-        setLocationRelativeTo(null);
-        new Thread(new ListenerSocket(service.getSocket())).start();;
+        
+        
         
         
     }

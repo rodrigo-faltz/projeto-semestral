@@ -61,7 +61,9 @@ public class TelaAposLogin {
         frame.pack();
         frame.setVisible(true);
         System.out.println(player.getNumero());
-        
+        Message message = new Message();
+        message.setAction(Action.ENVIA_PLAYER);
+        service.envia(message);
         new Thread(new ListenerSocket(this.socket)).start();
 
        
@@ -120,8 +122,7 @@ public class TelaAposLogin {
                     if (action.equals(Action.ENVIA_PLAYER)) {
                         
                         System.out.println("Testando: " + message.getNumeroDoPlayer());
-                        message.setAction(Action.ENVIA_PLAYER);
-                        service.envia(message);
+                        
                         
                     }
                     if (action.equals(Action.TELA_APOS_LOGIN)) {
