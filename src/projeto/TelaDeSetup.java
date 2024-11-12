@@ -39,7 +39,9 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
     {
         
 		setTitle(bundle.getString("titleSetUp")); // muda com o idioma
-        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp1"), bundle.getString("titleMessageSetUp1"), JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp1"), bundle.getString("titleMessageSetUp1"), JOptionPane.INFORMATION_MESSAGE);
+        JoptionpaneFalso jpane1 = new JoptionpaneFalso(this, bundle.getString("titleMessageSetUp1"), bundle.getString("messageSetUp1"));
+        jpane1.setVisible(true);
         this.player = player;
         this.gridInstance = gridInstance;
         this.socket = socket;
@@ -110,7 +112,9 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
             
         }
         else if((e.getSource() == botaoDeBaixo)){
-            JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp2"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
+            //JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp2"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
+            JoptionpaneFalso jpane2 = new JoptionpaneFalso(this, bundle.getString("titleMessageSetupErro"), bundle.getString("messageSetUp2"));
+            jpane2.setVisible(true);
         }
         for (int coluna = 0; coluna<10;coluna++){
         for (int linha = 0; linha<10;linha++){
@@ -126,7 +130,9 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                         tamnhoDoNavioAtual++;
                     }
                     else if(numeroDeNavios >= 4){
-                        JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp3"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
+                        JoptionpaneFalso jpane3 = new JoptionpaneFalso(this, bundle.getString("titleMessageSetupErro"), bundle.getString("messageSetUp3"));
+                        jpane3.setVisible(true);
+                        //JOptionPane.showMessageDialog(null, bundle.getString("messageSetUp3"), bundle.getString("titleMessageSetupErro"), JOptionPane.ERROR_MESSAGE);
                     }
                 }
         }
