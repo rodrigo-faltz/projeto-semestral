@@ -1,6 +1,7 @@
 package projeto;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -10,6 +11,18 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Socket;
+import projeto.Message.Action;
+
+
+import java.io.*;
+import java.lang.reflect.Array;
+import java.net.*;
+import java.util.logging.*;
+import java.util.Arrays;
+
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 public class TelaLeaderBoard extends JFrame {
 
@@ -18,8 +31,21 @@ public class TelaLeaderBoard extends JFrame {
     private String[][] partidas;
     private RecebeDoDB receba = new RecebeDoDB();
 
-    public TelaLeaderBoard() {
+    Player player;
+    Grid grid;
+    Socket socket;
+    ClienteService service;
 
+    Object[][] data = new Object[][]{};
+    String[] columnNames = new String[]{};
+
+    public TelaLeaderBoard(Grid grid, Player player, ClienteService service, Socket socket) {
+
+        this.service = service;
+        this.player = player;
+        this.grid = grid;
+        this.socket = socket;
+        
         // Set the title and layout for the frame
         setTitle("Leaderboard");
         setLayout(new BorderLayout());
@@ -145,7 +171,10 @@ add(comboBox, BorderLayout.NORTH);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new TelaInicial();
+                Message message = new Message();
+                message.setAction(Message.Action.SAIU_LEADERBOARD);
+                service.envia(message);
+                new TelaInicial(grid, player, service, socket);
                 dispose();
             }
         });
@@ -155,48 +184,125 @@ add(comboBox, BorderLayout.NORTH);
         setSize(600, 400);
         setVisible(true);
         setLocationRelativeTo(null);
+        new Thread(new ListenerSocket(service.getSocket())).start();;
+        
+        
     }
 
     // Method to update the table data and column names based on the selected item in the combo box
     private void updateTableData(String selectedOption) {
-        Object[][] data = new Object[][]{};
-        String[] columnNames = new String[]{};
-
+        Message message = new Message();
         // Update data and column names based on the selected option
         switch (selectedOption) {
             case "Vitorias por Ano":
-                partidas = receba.leaderboard(true, "year");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_ANO_VITORIA);
+                service.envia(message);
                 break;
             case "Vitorias por Mes":
-                partidas = receba.leaderboard(true, "month");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_MES_VITORIA);
+                service.envia(message);
                 break;
             case "Vitorias por Semana":
-                partidas = receba.leaderboard(true, "week");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_SEMANA_VITORIA);
+                service.envia(message);
                 break;
             case "Derrotas por Ano":
-                partidas = receba.leaderboard(false, "year");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_ANO_DERROTA);
+                service.envia(message);
                 break;
             case "Derrotas por Mes":
-                partidas = receba.leaderboard(false, "month");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_MES_DERROTA);
+                service.envia(message);
                 break;
             case "Derrotas por Semana":
-                partidas = receba.leaderboard(false, "week");
-                data = partidas;
-                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                message.setAction(Message.Action.TELA_LEADERBOARD_SEMANA_DERROTA);
+                service.envia(message);
                 break;
         }
 
-        // Update the table model with new data and column names
-        tableModel.setDataVector(data, columnNames);
+    }
+    
+        private class ListenerSocket implements Runnable
+    {
+        private ObjectInputStream input;
+
+        public ListenerSocket(Socket socket)
+        {
+            
+            this.input = service.getInput();
+            
+        }
+
+        @Override
+        public void run()
+        {
+            Message message = null;
+            try
+                {
+                    while (true)
+                        {
+
+                            message = (Message) input.readObject();
+
+                            Action action = message.getAction();
+                            System.out.println("Action received: " + action); // Debug statement
+
+                            if(action.equals(Action.TELA_LEADERBOARD_ANO_VITORIA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+                            if(action.equals(Action.TELA_LEADERBOARD_MES_VITORIA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+                            if(action.equals(Action.TELA_LEADERBOARD_SEMANA_VITORIA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+                            if(action.equals(Action.TELA_LEADERBOARD_ANO_DERROTA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+                            if(action.equals(Action.TELA_LEADERBOARD_MES_DERROTA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+                            if(action.equals(Action.TELA_LEADERBOARD_SEMANA_DERROTA))
+                            {
+                                partidas = message.getLeaderboard();
+                                data = partidas;
+                                columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
+                                tableModel.setDataVector(data, columnNames);
+                            }
+
+                        
+                    }
+
+                }
+            catch(IOException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+            catch(ClassNotFoundException e)
+            {
+                Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
+            }
+
+        }
     }
 }

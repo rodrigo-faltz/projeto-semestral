@@ -21,12 +21,12 @@ public class TelaInicial extends JFrame implements ActionListener {
     private JPanel painel1, painel2, painel3, painel4;
     private JLabel vezDeQuem;
     Imagens imgs;
+    Player player;
+    Grid grid;
+    Socket socket;
+    ClienteService service;
 
-    private Player player;
-    private Socket socket;
-    private Message message;
-    private ClienteService service; 
-    private Grid grid;
+
 
     JMenuItem pt, en, es, ja, de;
     JMenu idioma;
@@ -34,9 +34,14 @@ public class TelaInicial extends JFrame implements ActionListener {
     ResourceBundle bundle = LanguageManager.getResourceBundle();
 
 
-
-    public TelaInicial() {
+        // 
+    public TelaInicial(Grid grid, Player player, ClienteService service, Socket socket) {
         setTitle(bundle.getString("titleInicio"));
+
+        this.service = service;
+        this.player = player;
+        this.grid = grid;
+        this.socket = socket;
         
         menuBar = new JMenuBar();
         idioma = new JMenu(bundle.getString("selectLanguage")); // muda com o idioma
@@ -92,10 +97,7 @@ public class TelaInicial extends JFrame implements ActionListener {
 
         imgs = new Imagens();
         Container caixa = getContentPane();
-        grid = new Grid();
-        message = new Message();
-        player = new Player();
-        service = new ClienteService();
+
 
 
         
@@ -152,14 +154,18 @@ public class TelaInicial extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == novoJogoButton) {
 
-            socket = service.connect(); 
-            new TelaLogin(player, grid, service, message);
+            
+            new TelaAposLogin(grid, socket, service, player);
             dispose();
 
         }
 
         if (e.getSource() == continuarButton) {
-            new TelaLeaderBoard();
+            Message message = new Message();
+            message.setAction(Action.TELA_LEADERBOARD);
+            service.envia(message);
+            
+            new TelaLeaderBoard(grid, player, service, socket); 
             dispose();
         }
     }

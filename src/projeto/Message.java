@@ -10,6 +10,7 @@ public class Message implements Serializable {
     private int numeroDoPlayer = 0;
     private String usuario;
     private String senha;
+    private String[][] leaderboard = new String[10][2];
 
     public void setNumeroDoPlayer(int numeroDoPlayer) {
         this.numeroDoPlayer = numeroDoPlayer;
@@ -47,7 +48,11 @@ public class Message implements Serializable {
     public enum Action {
         ENVIA_GRID, ENVIA_PLAYER, ENVIA_VITORIA, CONNECT, 
         DISCONNECT, COMECAR_JOGO, VEZ_DO_PLAYER, ERROU, 
-        LOGIN_FAIL, TELA_APOS_LOGIN
+        LOGIN_FAIL, TELA_APOS_LOGIN, TELA_LEADERBOARD ,
+        TELA_LEADERBOARD_ANO_VITORIA, TELA_LEADERBOARD_MES_VITORIA,
+        TELA_LEADERBOARD_SEMANA_VITORIA, TELA_LEADERBOARD_ANO_DERROTA,
+        TELA_LEADERBOARD_MES_DERROTA, TELA_LEADERBOARD_SEMANA_DERROTA,
+        SAIU_LEADERBOARD,
     }
 
    public void setUsuario(String usuario) {
@@ -57,6 +62,9 @@ public class Message implements Serializable {
    public void setSenha(String senha) {
        this.senha = senha;
    }
+   public void setLeaderboard(String[][] leaderboard) {
+       this.leaderboard = leaderboard;
+   }    
 
    public String getUsuario() {
        return usuario;
@@ -64,6 +72,9 @@ public class Message implements Serializable {
 
    public String getSenha() {
        return senha;
+   }
+   public String[][] getLeaderboard() {
+       return leaderboard;
    }
 
 

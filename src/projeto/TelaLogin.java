@@ -35,14 +35,14 @@ public class TelaLogin extends JFrame {
     ResourceBundle bundle = LanguageManager.getResourceBundle();
     
 
-    public TelaLogin(Player player, Grid grid, ClienteService service, Message message) {
+    public TelaLogin(ClienteService service, Socket socket) {
         super("Login");
 
-        this.player = player;
-        this.grid = grid;
+        grid = new Grid();
+        message = new Message();
+        player = new Player();
         this.service = service;
-        this.message = message;
-        this.socket = service.getSocket();
+        this.socket = socket;
 
         loginText = new JLabel(bundle.getString("loginUsuario"));
         passwordText = new JLabel(bundle.getString("loginSenha"));
@@ -163,7 +163,7 @@ public class TelaLogin extends JFrame {
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
                                 System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
-                                new TelaAposLogin(grid, socket, service, player);
+                                new TelaInicial(grid, player, service, socket);
                                 break;
                             }
 
@@ -212,7 +212,7 @@ public class TelaLogin extends JFrame {
                             dialog.setVisible(true);
 
                             // Proceed to the login screen
-                            new TelaLogin(player, grid, service, message);
+                            new TelaLogin(service, socket);
                             break;
 
 

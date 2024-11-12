@@ -231,7 +231,41 @@ public class ServidorService {
                             enviarMensagemParaCliente(1, message);
                         }
                     }
-                    
+                    else if (action.equals(Action.TELA_LEADERBOARD)) {
+                        receba = new RecebeDoDB();
+                    } else if (action.equals(Action.TELA_LEADERBOARD_ANO_VITORIA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(true, "year"));
+                        output.writeObject(message);
+                        output.flush();
+                    } else if (action.equals(Action.TELA_LEADERBOARD_MES_VITORIA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(true, "month"));
+                        output.writeObject(message);
+                        output.flush();  
+                    } else if (action.equals(Action.TELA_LEADERBOARD_SEMANA_VITORIA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(true, "week"));
+                        output.writeObject(message);
+                        output.flush();  
+                    } else if (action.equals(Action.TELA_LEADERBOARD_ANO_DERROTA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(false, "year"));
+                        output.writeObject(message);
+                        output.flush();  
+                    } else if (action.equals(Action.TELA_LEADERBOARD_MES_DERROTA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(false, "month"));
+                        output.writeObject(message);
+                        output.flush();  
+                    } else if (action.equals(Action.TELA_LEADERBOARD_SEMANA_DERROTA)) {
+                        receba = new RecebeDoDB();
+                        message.setLeaderboard(receba.leaderboard(false, "week"));
+                        output.writeObject(message);
+                        output.flush();
+                    } else if (action.equals(Action.SAIU_LEADERBOARD)) {
+                        message.setAction(Action.ENVIA_PLAYER);
+                    }
                 }
             } catch (EOFException e) {
                 System.out.println("Cliente " + currentPlayerNumber + " desconectado.");
