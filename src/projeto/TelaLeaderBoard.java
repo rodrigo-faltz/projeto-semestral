@@ -30,6 +30,7 @@ public class TelaLeaderBoard extends JFrame {
     private DefaultTableModel tableModel;
     private String[][] partidas;
     private RecebeDoDB receba = new RecebeDoDB();
+    private volatile boolean running = true;
 
     Player player;
     Grid grid;
@@ -166,6 +167,7 @@ add(comboBox, BorderLayout.NORTH);
 
         // Create a new thread to listen for incoming messages from the server
         Thread thread = new Thread(new ListenerSocket(socket));
+        thread.start();
 
         // Add action listener to JComboBox to update table data on selection change
         comboBox.addActionListener(new ActionListener() {
@@ -180,11 +182,9 @@ add(comboBox, BorderLayout.NORTH);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Message message = new Message();
-                message.setAction(Message.Action.SAIU_LEADERBOARD);
-                service.envia(message);
                 new TelaInicial(grid, player, service, socket);
                 thread.interrupt();
+                stop();
                 dispose();
                 
             }
@@ -232,6 +232,7 @@ add(comboBox, BorderLayout.NORTH);
         private class ListenerSocket implements Runnable
     {
         private ObjectInputStream input;
+        
 
         public ListenerSocket(Socket socket)
         {
@@ -246,19 +247,23 @@ add(comboBox, BorderLayout.NORTH);
             Message message = null;
             try
                 {
-                    while (true)
+                    while (running)
                         {
 
                             message = (Message) input.readObject();
+
 
                             Action action = message.getAction();
                             System.out.println("Action received: " + action); // Debug statement
 
                             if(action.equals(Action.TELA_LEADERBOARD_ANO_VITORIA))
                             {
+                                
+                                System.out.println("ENTRO");
                                 partidas = message.getLeaderboard();
                                 data = partidas;
                                 columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
+                                System.out.println(Arrays.deepToString(data));
                                 tableModel.setDataVector(data, columnNames);
                             }
                             if(action.equals(Action.TELA_LEADERBOARD_MES_VITORIA))
@@ -311,5 +316,9 @@ add(comboBox, BorderLayout.NORTH);
             }
 
         }
+
+    }
+    public void stop() {
+        running = false;
     }
 }

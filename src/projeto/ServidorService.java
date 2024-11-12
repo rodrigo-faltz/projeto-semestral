@@ -238,6 +238,7 @@ public class ServidorService {
                         message.setLeaderboard(receba.leaderboard(true, "year"));
                         output.writeObject(message);
                         output.flush();
+                        System.out.println("ENVIEI ESSE DAQUIIII");
                     } else if (action.equals(Action.TELA_LEADERBOARD_MES_VITORIA)) {
                         receba = new RecebeDoDB();
                         message.setLeaderboard(receba.leaderboard(true, "month"));
