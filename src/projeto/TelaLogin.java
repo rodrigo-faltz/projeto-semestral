@@ -200,22 +200,22 @@ public class TelaLogin extends JFrame {
                 // message.setSenha(password);
                 try {
                     String usuarioCriptografado = AESUtil.encrypt(username);
-                    System.out.println("Usuário criptografada: " + usuarioCriptografado);
+                    //System.out.println("Usuário criptografada: " + usuarioCriptografado);
                     message.setUsuario(usuarioCriptografado); //Seta o usuário criptografado
                     String senhaCriptografada = AESUtil.encrypt(password);
-                    System.out.println("Senha criptografada: " + senhaCriptografada);
+                    //System.out.println("Senha criptografada: " + senhaCriptografada);
                     message.setSenha(senhaCriptografada); // Seta a senha criptografada na mensagem
                     message.setAction(Action.CONNECT);
                     service.envia(message); // Envia a mensagem com a senha criptografada para o servidor
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                System.out.println(username);
-                System.out.println(password);
+                //System.out.println(username);
+                //System.out.println(password);
 
                 Thread thread = new Thread(new ListenerSocket(service.getSocket()));
                 thread.start(); // escuta a mensagem recebida do servidor
-                System.out.println(player.getNumero());
+                //System.out.println(player.getNumero());
                 dispose();
             }
         }); 
@@ -275,12 +275,12 @@ public class TelaLogin extends JFrame {
                             message = (Message) input.readObject();
 
                             Action action = message.getAction();
-                            System.out.println("Action received: " + action); // Debug statement
+                            //System.out.println("Action received: " + action); // Debug statement
 
                             if(action.equals(Action.ENVIA_PLAYER))
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
-                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                //System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
                                 new TelaInicial(grid, player, service, socket);
                                 running = false;
                                 break;
@@ -289,7 +289,7 @@ public class TelaLogin extends JFrame {
                             if(action.equals(Action.LOGIN_FAIL))
                             {
                                 
-                            System.out.println(bundle.getString("loginEntrar"));
+                            //System.out.println(bundle.getString("loginEntrar"));
 
                             // Create and configure the error dialog
                             JDialog dialog = new JDialog();

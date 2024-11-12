@@ -38,7 +38,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
     public TelaDeAtaque(Grid grid, Player player, ClienteService service, Socket socket)
     {
 		setTitle(bundle.getString("titleAtaque")); // muda com o idioma
-        System.out.println("Player TelaDeAtaque0.5: "+player.getNumero());
+        //System.out.println("Player TelaDeAtaque0.5: "+player.getNumero());
         x = new int[10][10];
         imgs = new Imagens();
         numeroDeNavios = 0;
@@ -72,7 +72,7 @@ public class TelaDeAtaque extends JFrame implements ActionListener, MouseListene
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
 
-        System.out.println("Player TelaDeAtaque: "+player.getNumero());
+        //System.out.println("Player TelaDeAtaque: "+player.getNumero());
     }    
 
     public void actionPerformed(ActionEvent e)

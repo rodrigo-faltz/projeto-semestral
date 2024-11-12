@@ -60,7 +60,7 @@ public class TelaAposSetup {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
-        System.out.println(player.getNumero());
+        //System.out.println(player.getNumero());
         
         new Thread(new ListenerSocket(this.socket)).start();
 
@@ -68,14 +68,14 @@ public class TelaAposSetup {
         
         
 
-        if (this.grid == null) {
+        /*if (this.grid == null) {
             System.out.println("Grid recebido está vazio.");
         } else {
             System.out.println("Grid recebido: ");
         }
         
 
-        System.out.println("Player TelaAposSetup: "+player.getNumero());
+        System.out.println("Player TelaAposSetup: "+player.getNumero());*/
     }
 
     private class ListenerSocket implements Runnable {
@@ -86,9 +86,9 @@ public class TelaAposSetup {
             
             
                 if (socket != null && socket.isConnected() && !socket.isClosed()) {
-                    System.out.println("Criando ObjectInputStream...");
+                    //System.out.println("Criando ObjectInputStream...");
                     this.input = service.getInput();
-                    System.out.println("ObjectInputStream criado com sucesso.");
+                    //System.out.println("ObjectInputStream criado com sucesso.");
                 } else {
                     System.out.println("Socket está nulo, não conectado ou fechado.");
                 }
@@ -107,40 +107,40 @@ public class TelaAposSetup {
             Message message = null;
             try {
                 while ((message = (Message) input.readObject()) != null) {
-                    System.out.println(service.getSocket().isClosed());
-                    System.out.println(player.getNumero());
+                    //System.out.println(service.getSocket().isClosed());
+                    //System.out.println(player.getNumero());
                     //message = (Message) input.readObject();
                     
                     Action action = message.getAction();
-                    System.out.println("Mensagem recebida: " + action);
+                    //System.out.println("Mensagem recebida: " + action);
     
                     if (action.equals(Action.ENVIA_PLAYER)) {
                         player.setNumero(message.getNumeroDoPlayer());
-                        System.out.println("Recebeu o player: " + message.getNumeroDoPlayer());
+                        //System.out.println("Recebeu o player: " + message.getNumeroDoPlayer());
                         
                     }
     
                     if (action.equals(Action.ENVIA_GRID)) {
                         grid = message.getGrid();
-                        System.out.println("Grid recebido.");
+                        //System.out.println("Grid recebido.");
                         message.setAction(Action.COMECAR_JOGO); // band aid
                         
                     }
     
                     if (action.equals(Action.ENVIA_VITORIA)) {
-                        System.out.println("Recebeu vitória.");
+                        //System.out.println("Recebeu vitória.");
 
                         break;
                     }
 
                     if(action.equals(Action.COMECAR_JOGO))
                     {
-                        System.out.println(player.getNumero());
+                        //System.out.println(player.getNumero());
                         if(player.getNumero() == 1)
                         {
                             //System.out.println(grid.getGridDoPlayer());
                             new TelaDeAtaque(grid, player, service, socket);
-                            System.out.println("Player 1 recebeu começar jogo");
+                            //System.out.println("Player 1 recebeu começar jogo");
                             frame.dispose();
                             break;
                         }
@@ -148,7 +148,7 @@ public class TelaAposSetup {
                         if(player.getNumero() == 2)
                         {
                             new TelaIntemediaria(grid, player, service, socket);
-                            System.out.println("Player 2 recebeu começar jogo");
+                            //System.out.println("Player 2 recebeu começar jogo");
                             frame.dispose();
                             break;
                         }
@@ -156,10 +156,10 @@ public class TelaAposSetup {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("Erro na leitura de objeto: " + e.getMessage());
+                //System.out.println("Erro na leitura de objeto: " + e.getMessage());
                 Logger.getLogger(TelaAposSetup.class.getName()).log(Level.SEVERE, "Erro na leitura de objeto", e);
             } catch (ClassNotFoundException e) {
-                System.out.println("Classe não encontrada: " + e.getMessage());
+                //System.out.println("Classe não encontrada: " + e.getMessage());
                 Logger.getLogger(TelaAposSetup.class.getName()).log(Level.SEVERE, "Classe não encontrada", e);
             }
         }

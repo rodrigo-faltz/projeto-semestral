@@ -147,7 +147,7 @@ public class TelaInicial extends JFrame implements ActionListener {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 
-        System.out.println("Player TelaInicial: "+player.getNumero());
+        //System.out.println("Player TelaInicial: "+player.getNumero());
         
     }
 

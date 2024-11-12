@@ -259,16 +259,16 @@ add(comboBox, BorderLayout.NORTH);
 
 
                             Action action = message.getAction();
-                            System.out.println("Action received: " + action); // Debug statement
+                            //System.out.println("Action received: " + action); // Debug statement
 
                             if(action.equals(Action.TELA_LEADERBOARD_ANO_VITORIA))
                             {
                                 
-                                System.out.println("ENTRO");
+                                //System.out.println("ENTRO");
                                 partidas = message.getLeaderboard();
                                 data = partidas;
                                 columnNames = new String[]{"Jogador", "Qtd de Vitorias"};
-                                System.out.println(Arrays.deepToString(data));
+                                //System.out.println(Arrays.deepToString(data));
                                 tableModel.setDataVector(data, columnNames);
                             }
                             if(action.equals(Action.TELA_LEADERBOARD_MES_VITORIA))
@@ -310,10 +310,10 @@ add(comboBox, BorderLayout.NORTH);
                             if(action.equals(Action.TELA_LEADERBOARD))
                             {
                                 running = false;
-                                System.out.println("RECEBA"+running);
+                                //System.out.println("RECEBA"+running);
                                 break;
                             }
-                            System.out.println("RECEBA"+running);
+                            //System.out.println("RECEBA"+running);
                     }
 
                 }

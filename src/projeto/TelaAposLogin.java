@@ -60,7 +60,7 @@ public class TelaAposLogin {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
-        System.out.println(player.getNumero());
+        //System.out.println(player.getNumero());
         Message message = new Message();
         message.setAction(Action.ENVIA_PLAYER);
         service.envia(message);
@@ -70,14 +70,14 @@ public class TelaAposLogin {
         
         
 
-        if (this.grid == null) {
+        /*if (this.grid == null) {
             System.out.println("Grid recebido está vazio.");
         } else {
             System.out.println("Grid recebido: ");
         }
         
 
-        System.out.println("Player TelaAposSetup: "+player.getNumero());
+        System.out.println("Player TelaAposSetup: "+player.getNumero());*/
     }
 
     private class ListenerSocket implements Runnable {
@@ -88,9 +88,9 @@ public class TelaAposLogin {
             
             
                 if (socket != null && socket.isConnected() && !socket.isClosed()) {
-                    System.out.println("Criando ObjectInputStream...");
+                    //System.out.println("Criando ObjectInputStream...");
                     this.input = service.getInput();
-                    System.out.println("ObjectInputStream criado com sucesso.");
+                    //System.out.println("ObjectInputStream criado com sucesso.");
                 } else {
                     System.out.println("Socket está nulo, não conectado ou fechado.");
                 }
@@ -112,21 +112,21 @@ public class TelaAposLogin {
 
             try {
                 while ((message = (Message) input.readObject()) != null) {
-                    System.out.println(service.getSocket().isClosed());
-                    System.out.println(player.getNumero());
+                    //System.out.println(service.getSocket().isClosed());
+                    //System.out.println(player.getNumero());
                     //message = (Message) input.readObject();
                     
                     Action action = message.getAction();
-                    System.out.println("Mensagem recebida: " + action);
+                    //System.out.println("Mensagem recebida: " + action);
     
                     if (action.equals(Action.ENVIA_PLAYER)) {
                         
-                        System.out.println("Testando: " + message.getNumeroDoPlayer());
+                        //System.out.println("Testando: " + message.getNumeroDoPlayer());
                         
                         
                     }
                     if (action.equals(Action.TELA_APOS_LOGIN)) {
-                        System.out.println("Received TELA_APOS_LOGIN");
+                        //System.out.println("Received TELA_APOS_LOGIN");
                         new TelaDeSetup(player, grid, socket, service);
                         frame.dispose();
                         // SwingUtilities.invokeLater(() -> {
@@ -137,10 +137,10 @@ public class TelaAposLogin {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("Erro na leitura de objeto: " + e.getMessage());
+                //System.out.println("Erro na leitura de objeto: " + e.getMessage());
                 Logger.getLogger(TelaAposLogin.class.getName()).log(Level.SEVERE, "Erro na leitura de objeto", e);
             } catch (ClassNotFoundException e) {
-                System.out.println("Classe não encontrada: " + e.getMessage());
+                //System.out.println("Classe não encontrada: " + e.getMessage());
                 Logger.getLogger(TelaAposLogin.class.getName()).log(Level.SEVERE, "Classe não encontrada", e);
             }
         }

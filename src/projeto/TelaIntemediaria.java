@@ -84,7 +84,7 @@ public class TelaIntemediaria {
         frame.add(painel);
         frame.pack();
         frame.setVisible(true);
-        System.out.println("Teste 0.4");
+        //System.out.println("Teste 0.4");
         new Thread(new ListenerSocket(service.getSocket())).start();
 
         
@@ -107,17 +107,17 @@ public class TelaIntemediaria {
             Message message = null;
             try
                 {
-                    System.out.println("Teste 1");
+                    //System.out.println("Teste 1");
                     while (true)
                         {
                             message = (Message) input.readObject();
-                            System.out.println("Teste 2");
+                            //System.out.println("Teste 2");
                             Action action = message.getAction();
-                            System.out.println(action);
+                            //System.out.println(action);
                             if(action.equals(Action.ENVIA_PLAYER))
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
-                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                //System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
                                 break;
                             }
 
@@ -126,7 +126,7 @@ public class TelaIntemediaria {
                             if(action.equals(Action.ENVIA_VITORIA))
                             {
                                 
-                                System.out.println("Perdeu");
+                                //System.out.println("Perdeu");
                                 new TelaDerrota(message.getNumeroDoPlayer()); // Criar tela de derrota
                                 frame.dispose();
                                 break;
@@ -134,7 +134,7 @@ public class TelaIntemediaria {
 
                             if(action.equals(Action.VEZ_DO_PLAYER))
                             {   
-                                System.out.println(message.getAction());
+                                //System.out.println(message.getAction());
                                 new TelaDeAtaque(grid, player, service, socket);
                                 frame.dispose();
                                 break;

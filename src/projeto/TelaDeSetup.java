@@ -88,7 +88,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(dim.width/2-this.getSize().width/2, 0);
 
-        System.out.println("Player TelaSetup: "+player.getNumero());
+        //System.out.println("Player TelaSetup: "+player.getNumero());
     }    
 
     public void actionPerformed(ActionEvent e)
@@ -505,7 +505,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
                             if(action.equals(Action.ENVIA_PLAYER))
                             {
                                 player.setNumero(message.getNumeroDoPlayer());
-                                System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
+                                //System.out.println("Recebeu o player: "+message.getNumeroDoPlayer());
                                 break;
                             }
 
@@ -517,7 +517,7 @@ public class TelaDeSetup extends JFrame implements ActionListener, MouseListener
 
                             if(action.equals(Action.ENVIA_VITORIA))
                             {
-                                System.out.println("Como que recebe vitória se nem começou?");
+                                //System.out.println("Como que recebe vitória se nem começou?");
                                 break;
                             }
 
