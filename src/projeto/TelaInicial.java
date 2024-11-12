@@ -161,10 +161,7 @@ public class TelaInicial extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == continuarButton) {
-            Message message = new Message();
-            message.setAction(Action.TELA_LEADERBOARD);
-            service.envia(message);
-            
+
             new TelaLeaderBoard(grid, player, service, socket); 
             dispose();
         }

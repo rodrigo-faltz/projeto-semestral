@@ -236,7 +236,10 @@ public class ServidorService {
                         }
                     }
                     else if (action.equals(Action.TELA_LEADERBOARD)) {
-                        receba = new RecebeDoDB();
+                        message.setAction(Action.TELA_LEADERBOARD);
+                        output.writeObject(message);
+                        output.flush();
+                        
                     } else if (action.equals(Action.TELA_LEADERBOARD_ANO_VITORIA)) {
                         receba = new RecebeDoDB();
                         message.setLeaderboard(receba.leaderboard(true, "year"));

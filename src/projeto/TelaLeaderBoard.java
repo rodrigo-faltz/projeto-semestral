@@ -183,6 +183,9 @@ add(comboBox, BorderLayout.NORTH);
             @Override
             public void actionPerformed(ActionEvent e) {
                 new TelaInicial(grid, player, service, socket);
+                Message message = new Message();
+                message.setAction(Action.TELA_LEADERBOARD);
+                service.envia(message);
                 thread.interrupt();
                 stop();
                 dispose();
@@ -249,7 +252,9 @@ add(comboBox, BorderLayout.NORTH);
                 {
                     while (running)
                         {
-
+                            if (Thread.currentThread().isInterrupted()) {
+                                break; // Sai do loop se a thread for interrompida
+                            }
                             message = (Message) input.readObject();
 
 
@@ -296,13 +301,19 @@ add(comboBox, BorderLayout.NORTH);
                             }
                             if(action.equals(Action.TELA_LEADERBOARD_SEMANA_DERROTA))
                             {
+                            
                                 partidas = message.getLeaderboard();
                                 data = partidas;
                                 columnNames = new String[]{"Jogador", "Qtd de Derrotas"};
                                 tableModel.setDataVector(data, columnNames);
                             }
-
-                        
+                            if(action.equals(Action.TELA_LEADERBOARD))
+                            {
+                                running = false;
+                                System.out.println("RECEBA"+running);
+                                break;
+                            }
+                            System.out.println("RECEBA"+running);
                     }
 
                 }
@@ -314,7 +325,7 @@ add(comboBox, BorderLayout.NORTH);
             {
                 Logger.getLogger(ServidorService.class.getName()).log(Level.SEVERE, null, e);
             }
-
+            
         }
 
     }
