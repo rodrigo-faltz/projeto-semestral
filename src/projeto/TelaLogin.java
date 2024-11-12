@@ -84,7 +84,9 @@ public class TelaLogin extends JFrame {
                 password = new String(passwordField.getPassword());
                 // message.setSenha(password);
                 try {
-                    message.setUsuario(username);
+                    String usuarioCriptografado = AESUtil.encrypt(username);
+                    System.out.println("Usuário criptografada: " + usuarioCriptografado);
+                    message.setUsuario(usuarioCriptografado); //Seta o usuário criptografado
                     String senhaCriptografada = AESUtil.encrypt(password);
                     System.out.println("Senha criptografada: " + senhaCriptografada);
                     message.setSenha(senhaCriptografada); // Seta a senha criptografada na mensagem

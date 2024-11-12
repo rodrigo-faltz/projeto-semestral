@@ -105,10 +105,13 @@ public class ServidorService {
                     
                     if (action.equals(Action.CONNECT)) {
                         receba = new RecebeDoDB();
-                        System.out.println("Usuario: " + message.getUsuario());
+                        System.out.println("Usuario criptografado: " + message.getUsuario());
                         System.out.println("Senha criptografada: " + message.getSenha());
+                        String usuarioDescriptografado = "";
                         String senhaDescriptografada = "";
                         try {
+                            usuarioDescriptografado = AESUtil.decrypt(message.getUsuario());
+                            System.out.println("Usuário Descriptografado: " + usuarioDescriptografado);
                             senhaDescriptografada = AESUtil.decrypt(message.getSenha());
                             System.out.println("Senha Descriptografada: " + senhaDescriptografada);
                         } catch (Exception e) {
@@ -118,7 +121,8 @@ public class ServidorService {
                             output.flush();
                             //return;
                         }
-                        boolean teste = receba.checaLogin(message.getUsuario(), senhaDescriptografada);
+
+                        boolean teste = receba.checaLogin(usuarioDescriptografado, senhaDescriptografada);
                         System.out.println("Teste login: " + teste);
 
         
